@@ -32,14 +32,14 @@ void IO::read(const std::string& path, std::vector<float>& data, float& sr)
 
 void IO::write(const std::string& path, const std::vector<float>& data, const float sr)
 {
-  const float* rawdata = data.data();
-  const drwav_uint64 samples = static_cast<drwav_uint64>(data.size());
+  std::vector<drwav_int32> rawdata(data.size());
+  drwav_f32_to_s32(rawdata.data(), data.data(), data.size());
 
   drwav wav;
 
   drwav_data_format format;
   format.container = drwav_container_riff;
-  format.format = DR_WAVE_FORMAT_IEEE_FLOAT;
+  format.format = DR_WAVE_FORMAT_PCM;
   format.bitsPerSample = 32;
   format.channels = 1;
   format.sampleRate = static_cast<drwav_uint32>(sr);
@@ -50,7 +50,7 @@ void IO::write(const std::string& path, const std::vector<float>& data, const fl
       "Unable to write " + path + "!");
   }
 
-  if (drwav_write_pcm_frames(&wav, samples, rawdata) != samples)
+  if (drwav_write_pcm_frames(&wav, rawdata.size(), rawdata.data()) != rawdata.size())
   {
     throw std::runtime_error(
       "Unable to write " + path + "!");
