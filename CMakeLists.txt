@@ -6,7 +6,20 @@ include("smb/CMakeLists.txt")
 
 project(smbPitchShift)
 
-add_executable(smbPitchShift main.cpp)
-target_link_libraries(smbPitchShift dr_libs pocketfft smb)
+add_executable(smbPitchShift
+  main.cpp
+  IO.h IO.cpp
+)
 
-set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT smbPitchShift)
+target_link_libraries(smbPitchShift
+  dr_libs pocketfft smb
+)
+
+target_include_directories(smbPitchShift
+  INTERFACE "${CMAKE_CURRENT_LIST_DIR}"
+)
+
+set_property(
+  DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+  PROPERTY VS_STARTUP_PROJECT smbPitchShift
+)
