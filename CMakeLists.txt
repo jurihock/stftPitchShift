@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.19)
 
+include("anyoption/CMakeLists.txt")
 include("dr_libs/CMakeLists.txt")
 include("pocketfft/CMakeLists.txt")
 include("smb/CMakeLists.txt")
@@ -14,7 +15,7 @@ add_executable(smbPitchShift
 )
 
 target_link_libraries(smbPitchShift
-  dr_libs pocketfft smb
+  anyoption dr_libs pocketfft smb
 )
 
 target_include_directories(smbPitchShift
