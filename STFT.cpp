@@ -1,22 +1,20 @@
 #include <STFT.h>
 
 #include <cassert>
-#include <cmath>
 
 #include <pocketfft/pocketfft_hdronly.h>
-
-const double PI = std::acos(-1.0);
 
 STFT::STFT(const size_t framesize, const size_t hopsize) :
   framesize(framesize),
   hopsize(hopsize)
 {
+  assert(framesize && !(framesize & (framesize - 1)));
+
   window.resize(framesize);
 
   for (size_t i = 0; i < window.size(); ++i)
   {
-    window[i] = static_cast<float>(
-      0.5 - 0.5 * std::cos(2.0 * PI * i / window.size()));
+    window[i] = 0.5f - 0.5f * std::cos(PI2 * i / window.size());
   }
 
   unitygain = 0;
@@ -36,10 +34,10 @@ void STFT::operator()(const std::vector<float>& input, std::vector<float>& outpu
 
   const std::vector<float> scalers =
   {
-    1.0f * unitygain,
-    1.0f / dft.size(),
-    1.0f,
-    1.0f * unitygain
+    1.0f * unitygain,  // analysis window
+    1.0f / dft.size(), // forward fft
+    1.0f,              // backward fft
+    1.0f * unitygain   // synthesis window
   };
 
   for (size_t hop = 0; (hop + framesize) < input.size(); hop += hopsize)
@@ -58,7 +56,9 @@ void STFT::operator()(const std::vector<float>& input, std::vector<float>& outpu
 
 void STFT::reject(const std::vector<float>& input, std::vector<float>& frame, const size_t hop)
 {
-  frame.assign(input.data() + hop, input.data() + (hop + frame.size()));
+  frame.assign(
+    input.data() + hop,
+    input.data() + (hop + frame.size()));
 }
 
 void STFT::inject(std::vector<float>& output, const std::vector<float>& frame, const size_t hop)
@@ -88,12 +88,28 @@ void STFT::fft(const std::vector<float>& frame, std::vector<std::complex<float>>
 {
   assert(frame.size() / 2 + 1 == dft.size());
 
-  pocketfft::r2c({ frame.size() }, { sizeof(float) }, { sizeof(std::complex<float>) }, 0, true, frame.data(), dft.data(), scale);
+  pocketfft::r2c(
+    { frame.size() },
+    { sizeof(float) },
+    { sizeof(std::complex<float>) },
+    0,
+    true,
+    frame.data(),
+    dft.data(),
+    scale);
 }
 
 void STFT::ifft(const std::vector<std::complex<float>>& dft, std::vector<float>& frame, const float scale)
 {
   assert(dft.size() == frame.size() / 2 + 1);
 
-  pocketfft::c2r({ frame.size() }, { sizeof(std::complex<float>) }, { sizeof(float) }, 0, false, dft.data(), frame.data(), scale);
+  pocketfft::c2r(
+    { frame.size() },
+    { sizeof(std::complex<float>) },
+    { sizeof(float) },
+    0,
+    false,
+    dft.data(),
+    frame.data(),
+    scale);
 }

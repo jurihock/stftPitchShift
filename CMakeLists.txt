@@ -9,6 +9,8 @@ project(smbPitchShift)
 add_executable(smbPitchShift
   main.cpp
   IO.h IO.cpp
+  STFT.h STFT.cpp
+  Vocoder.h Vocoder.cpp
 )
 
 target_link_libraries(smbPitchShift

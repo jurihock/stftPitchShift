@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cmath>
 #include <complex>
 #include <functional>
 #include <vector>
@@ -15,6 +16,8 @@ public:
 
 private:
 
+  const float PI2 = 2.0f * std::acos(-1.0f);
+
   const size_t framesize;
   const size_t hopsize;
 
@@ -26,4 +29,5 @@ private:
   static void weight(std::vector<float>& frame, const std::vector<float>& window, const float scale);
   static void fft(const std::vector<float>& frame, std::vector<std::complex<float>>& dft, const float scale);
   static void ifft(const std::vector<std::complex<float>>& dft, std::vector<float>& frame, const float scale);
+
 };
