@@ -3,7 +3,7 @@
 #define DR_WAV_IMPLEMENTATION
 #include <dr_libs/dr_wav.h>
 
-#include "smbPitchShift.h"
+#include <smb/smbPitchShift.h>
 
 int main()
 {
