@@ -22,6 +22,10 @@ target_include_directories(smbPitchShift
   INTERFACE "${CMAKE_CURRENT_LIST_DIR}"
 )
 
+target_compile_features(smbPitchShift
+  PRIVATE cxx_std_11
+)
+
 set_property(
   DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
   PROPERTY VS_STARTUP_PROJECT smbPitchShift
