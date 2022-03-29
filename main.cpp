@@ -1,12 +1,11 @@
 #include <iostream>
 
 #include <anyoption/anyoption.h>
+#include <smb/smbPitchShift.h>
 
 #include <IO.h>
 #include <STFT.h>
 #include <Vocoder.h>
-
-#include <smb/smbPitchShift.h>
 
 int main(int argc, char** argv)
 {
