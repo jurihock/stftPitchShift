@@ -24,7 +24,7 @@ STFT::STFT(const size_t framesize, const size_t hopsize) :
     unitygain += window[i] * window[i];
   }
 
-  unitygain = std::sqrt(hopsize / unitygain);
+  unitygain = hopsize / unitygain;
 }
 
 void STFT::operator()(const std::vector<float>& input, std::vector<float>& output, const std::function<void(std::vector<std::complex<float>>& dft)> callback) const
@@ -32,9 +32,9 @@ void STFT::operator()(const std::vector<float>& input, std::vector<float>& outpu
   std::vector<float> frame(framesize);
   std::vector<std::complex<float>> dft(framesize / 2 + 1);
 
-  const std::vector<float> scalers =
+  const float scalers[4] =
   {
-    1.0f * unitygain,  // analysis window
+    1.0f,              // analysis window
     1.0f / dft.size(), // forward fft
     1.0f,              // backward fft
     1.0f * unitygain   // synthesis window
