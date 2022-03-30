@@ -1,7 +1,5 @@
 #include <Vocoder.h>
 
-#include <cassert>
-
 Vocoder::Vocoder(const size_t framesize, const size_t hopsize, const float samplerate) :
   framesize(framesize),
   hopsize(hopsize),
@@ -14,8 +12,6 @@ Vocoder::Vocoder(const size_t framesize, const size_t hopsize, const float sampl
 
 void Vocoder::encode(std::vector<std::complex<float>>& dft)
 {
-  assert(dft.size() == encode_phase_buffer.size());
-
   double magnitude,
          frequency,
          phase,
@@ -41,8 +37,6 @@ void Vocoder::encode(std::vector<std::complex<float>>& dft)
 
 void Vocoder::decode(std::vector<std::complex<float>>& dft)
 {
-  assert(dft.size() == decode_phase_buffer.size());
-
   double magnitude,
          frequency,
          phase,

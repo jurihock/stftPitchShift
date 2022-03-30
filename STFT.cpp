@@ -1,15 +1,11 @@
 #include <STFT.h>
 
-#include <cassert>
-
 #include <pocketfft/pocketfft_hdronly.h>
 
 STFT::STFT(const size_t framesize, const size_t hopsize) :
   framesize(framesize),
   hopsize(hopsize)
 {
-  assert(framesize && !(framesize & (framesize - 1)));
-
   window.resize(framesize);
 
   for (size_t i = 0; i < window.size(); ++i)
@@ -76,8 +72,6 @@ void STFT::inject(std::vector<float>& output, const std::vector<float>& frame, c
 
 void STFT::weight(std::vector<float>& frame, const std::vector<float>& window, const float scale)
 {
-  assert(frame.size() == window.size());
-
   for (size_t i = 0; i < frame.size(); ++i)
   {
     frame[i] *= window[i] * scale;
@@ -86,8 +80,6 @@ void STFT::weight(std::vector<float>& frame, const std::vector<float>& window, c
 
 void STFT::fft(const std::vector<float>& frame, std::vector<std::complex<float>>& dft, const float scale)
 {
-  assert(frame.size() / 2 + 1 == dft.size());
-
   pocketfft::r2c(
     { frame.size() },
     { sizeof(float) },
@@ -101,8 +93,6 @@ void STFT::fft(const std::vector<float>& frame, std::vector<std::complex<float>>
 
 void STFT::ifft(const std::vector<std::complex<float>>& dft, std::vector<float>& frame, const float scale)
 {
-  assert(dft.size() == frame.size() / 2 + 1);
-
   pocketfft::c2r(
     { frame.size() },
     { sizeof(std::complex<float>) },
