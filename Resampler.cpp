@@ -42,3 +42,18 @@ void Resampler::linear(const std::vector<std::complex<float>>& x, std::vector<st
     y[m].imag(y0.imag() * (1 - i) + y1.imag() * i);
   }
 }
+
+void Resampler::bilinear(const std::vector<std::complex<float>>& x0, const std::vector<std::complex<float>>& x1, std::vector<std::complex<float>>& y) const
+{
+  std::vector<std::complex<float>> y0(x0.size());
+  std::vector<std::complex<float>> y1(x1.size());
+
+  linear(x0, y0);
+  linear(x1, y1);
+
+  for (size_t i = 0; i < y.size(); ++i)
+  {
+    y[i].real(0.5f * y0[i].real() + 0.5f * y1[i].real());
+    y[i].imag(0.5f * y0[i].imag() + 0.5f * y1[i].imag());
+  }
+}

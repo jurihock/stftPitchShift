@@ -14,3 +14,10 @@ def linear(x, factor):
     y.resize(x.shape)
 
     return y
+
+def bilinear(x0, x1, factor):
+
+    y0 = linear(x0, factor)
+    y1 = linear(x1, factor)
+
+    return (y0 + y1) / 2
