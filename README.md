@@ -3,6 +3,7 @@
 This is an interpretation of the Stephan M. Bernsee [smbPitchShift.cpp](https://blogs.zynaptiq.com/bernsee/download):
 
 * `Vocoder.cpp` Spectral data processing according to the original algorithm
+* `Resampler.cpp` Vector resampling routines
 * `STFT.cpp` Short-Time Fourier Transform implementation
 * `IO.cpp` Audio file import and export
 

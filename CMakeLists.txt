@@ -10,6 +10,7 @@ project(smbPitchShift)
 add_executable(smbPitchShift
   main.cpp
   IO.h IO.cpp
+  Resampler.h Resampler.cpp
   STFT.h STFT.cpp
   Vocoder.h Vocoder.cpp
 )

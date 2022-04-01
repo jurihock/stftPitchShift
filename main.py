@@ -1,13 +1,14 @@
 from IO import read, write
+from Resampler import linear as resample
 from STFT import stft, istft
-from Vocoder import encode, decode, resample
+from Vocoder import encode, decode
 
 import numpy as np
 
 
 x, sr = read('voice')
 
-factor = 0.5
+factor = 1
 framesize = 1024
 hopsize = framesize // 32
 

@@ -4,6 +4,7 @@
 #include <smb/smbPitchShift.h>
 
 #include <IO.h>
+#include <Resampler.h>
 #include <STFT.h>
 #include <Vocoder.h>
 
@@ -112,6 +113,7 @@ int main(int argc, char** argv)
     {
       STFT stft(framesize, framesize / hoprate);
       Vocoder vocoder(framesize, framesize / hoprate, samplerate);
+      Resampler resample(factor);
 
       stft(indata, outdata, [&](std::vector<std::complex<float>>& src)
       {
@@ -119,15 +121,11 @@ int main(int argc, char** argv)
 
         vocoder.encode(src);
 
-        for (size_t i = 0; i < src.size(); ++i)
+        resample.linear(src, dst);
+
+        for (size_t i = 0; i < dst.size(); ++i)
         {
-          const size_t j = i * factor;
-
-          if (j >= src.size())
-            continue;
-
-          dst[j].real(dst[j].real() + std::real(src[i]));
-          dst[j].imag(std::imag(src[i]) * factor);
+          dst[i].imag(dst[i].imag() * factor);
         }
 
         vocoder.decode(dst);
