@@ -2,29 +2,29 @@
 
 This is an interpretation of the Stephan M. Bernsee [smbPitchShift.cpp](https://blogs.zynaptiq.com/bernsee/download):
 
-* `Vocoder.cpp` Spectral data processing according to the original algorithm
-* `Resampler.cpp` Vector resampling routines
-* `STFT.cpp` Short-Time Fourier Transform implementation
-* `IO.cpp` Audio file import and export
+* `Vocoder` Spectral data processing according to the original algorithm
+* `Resampler` Vector resampling routines
+* `STFT` Short-Time Fourier Transform implementation
+* `IO` Audio file import and export
 
 ## Usage
 
 ```
--h,?  --help     print this help
+-h  --help     print this help
 
--i    --input    input .wav file name
--o    --output   output .wav file name
+-i  --input    input .wav file name
+-o  --output   output .wav file name
 
--p    --pitch    pitch shifting factor
-                 (default 1.0)
+-p  --pitch    pitch shifting factor
+               (default 1.0)
 
--w    --window   sfft window size
-                 (default 1024)
+-w  --window   sfft window size
+               (default 1024)
 
--v    --overlap  stft window overlap
-                 (default 32)
+-v  --overlap  stft window overlap
+               (default 32)
 
-      --smb      enable original algorithm
+    --smb      enable original algorithm
 ```
 
 ## Credits

@@ -14,21 +14,21 @@ int main(int argc, char** argv)
 
   args.addUsage("Usage:");
   args.addUsage("");
-  args.addUsage("-h,?  --help     print this help");
+  args.addUsage("-h  --help     print this help");
   args.addUsage("");
-  args.addUsage("-i    --input    input .wav file name");
-  args.addUsage("-o    --output   output .wav file name");
+  args.addUsage("-i  --input    input .wav file name");
+  args.addUsage("-o  --output   output .wav file name");
   args.addUsage("");
-  args.addUsage("-p    --pitch    pitch shifting factor");
-  args.addUsage("                 (default 1.0)");
+  args.addUsage("-p  --pitch    pitch shifting factor");
+  args.addUsage("               (default 1.0)");
   args.addUsage("");
-  args.addUsage("-w    --window   sfft window size");
-  args.addUsage("                 (default 1024)");
+  args.addUsage("-w  --window   sfft window size");
+  args.addUsage("               (default 1024)");
   args.addUsage("");
-  args.addUsage("-v    --overlap  stft window overlap");
-  args.addUsage("                 (default 32)");
+  args.addUsage("-v  --overlap  stft window overlap");
+  args.addUsage("               (default 32)");
   args.addUsage("");
-  args.addUsage("      --smb      enable original algorithm");
+  args.addUsage("    --smb      enable original algorithm");
 
   args.setFlag("help");
   args.setFlag('h');
