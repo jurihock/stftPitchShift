@@ -1,24 +1,28 @@
 # smbPitchShift
 
-This is a reimplementation of the Stephan M. Bernsee [smbPitchShift.cpp](https://blogs.zynaptiq.com/bernsee/download), a pitch shifting algorithm using the Short-Time Fourier Transform ([STFT](https://en.wikipedia.org/wiki/Short-time_Fourier_transform)).
+This is a reimplementation of the Stephan M. Bernsee [smbPitchShift.cpp](https://blogs.zynaptiq.com/bernsee/download), a pitch shifting algorithm using the Short-Time Fourier Transform ([STFT](https://www.audiolabs-erlangen.de/resources/MIR/FMP/C2/C2_STFT-Basic.html)).
 
 This repository features two analogical algorithm implementations, [C++](main.cpp) and [Python](main.py). Both of them contains following modules of the same name (but different file extension, of course).
 
 ### Vocoder
 
-The Vocoder module transforms the DFT spectral data according to the original algorithm. The particular `encode` function replaces the input DFT values by the `magnitude + j * frequency` complex numbers. The `decode` function does an inverse transformation back to the original DFT complex numbers.
+The *Vocoder* module transforms the DFT spectral data according to the original algorithm, which is actually the [instantaneous frequency estimation](https://www.audiolabs-erlangen.de/resources/MIR/FMP/C8/C8S2_InstantFreqEstimation.html) technique.
+
+The particular `encode` function replaces the input DFT values by the `magnitude + j * frequency` complex numbers, representing the phase error based frequency estimation in the imaginary part.
+
+The `decode` function does an inverse transformation back to the original DFT complex numbers, by replacing eventually modified frequency value by the reconstructed phase value.
 
 ### Resampler
 
-The Resampler module provides `linear` and `bilinear` functions, to actually perform the pitch shifting, based on the Vocoder DFT transform.
+The *Resampler* module provides `linear` and `bilinear` interpolation routines, to actually perform pitch shifting, based on the *Vocoder* DFT transform.
 
 ### STFT
 
-As the name of this module already implies, it performs the comprehensive STFT analysis and synthesis steps.
+As the name of this module already implies, it performs the comprehensive *STFT* analysis and synthesis steps.
 
 ### IO
 
-The IO module provides a simple possibility to read and write `.wav` audio files.
+The *IO* module provides a simple possibility to read and write `.wav` audio files.
 
 ## Usage
 
