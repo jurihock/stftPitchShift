@@ -32,9 +32,9 @@ Use [CMake](http://cmake.org) to build the C++ program, e.g. `mkdir build && cma
 
 The Python program, depending only on `click`, `matplotlib` and `numpy`, can be executed directly via `python3 main.py`.
 
-Both programs C++ and Python provides a similar set of command line arguments.
-
 ## Usage
+
+Both programs C++ and Python provides a similar set of command line arguments:
 
 ```
 -h  --help     print this help
