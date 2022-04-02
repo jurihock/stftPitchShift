@@ -30,13 +30,13 @@ def main(input, output, pitch, window, overlap, debug):
 
     for i in range(len(frames)):
 
-        envelope = np.real(frames[i])
+        magnitudes = np.real(frames[i])
         frequencies = np.imag(frames[i])
 
-        envelope = resample(envelope, factor)
+        magnitudes = resample(magnitudes, factor)
         frequencies = resample(frequencies, factor)
 
-        frames[i] = envelope + 1j * frequencies * factor
+        frames[i] = magnitudes + 1j * frequencies * factor
 
     frames = decode(frames, framesize, hopsize, sr)
     frames1 = frames.copy() if debug else None
