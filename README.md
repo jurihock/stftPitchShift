@@ -37,6 +37,9 @@ The IO module provides a simple possibility to read and write `.wav` audio files
 -v  --overlap  stft window overlap
                (default 32)
 
+-d  --debug    plot spectrograms before and after processing
+               (only available in the Python version)
+
     --smb      enable original algorithm
                (only available in the C++ version)
 ```
