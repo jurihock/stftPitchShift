@@ -24,6 +24,8 @@ As the name of this module already implies, it performs the comprehensive *STFT*
 
 The *IO* module provides a simple possibility to read and write `.wav` audio files.
 
+Currently only mono `.wav` files are supported. Please use e.g. [Audacity](http://www.audacityteam.org) or [SoX](http://sox.sourceforge.net) to prepare your audio files for pitch shifting.
+
 ## Build
 
 Use [CMake](http://cmake.org) to build the C++ program, e.g. `mkdir build && cmake .. && cmake --build .`.
@@ -55,8 +57,6 @@ Both programs C++ and Python provides a similar set of command line arguments.
     --smb      enable original algorithm
                (only available in the C++ version)
 ```
-
-Currently only mono .wav files are supported. Please use e.g. [Audacity](http://www.audacityteam.org) or [SoX](http://sox.sourceforge.net) to prepare your audio files for pitch shifting.
 
 ## Further reading
 
