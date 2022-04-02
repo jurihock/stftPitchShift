@@ -48,6 +48,8 @@ The *IO* module provides a simple possibility to read and write `.wav` audio fil
                (only available in the C++ version)
 ```
 
+Currently only mono .wav files are supported. Please use e.g. [Audacity](http://www.audacityteam.org) or [SoX](http://sox.sourceforge.net) to prepare your audio files for pitch shifting.
+
 ## Further reading
 
 * [Fundamentals of Music Processing](http://www.music-processing.de) by Meinard Müller (section 8.2.1 in the second edition or [online](https://www.audiolabs-erlangen.de/resources/MIR/FMP/C8/C8S2_InstantFreqEstimation.html))
