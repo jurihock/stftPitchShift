@@ -3,7 +3,7 @@ from numpy.lib.stride_tricks import sliding_window_view
 import numpy as np
 
 
-def stft(x, framesize, hopsize, wola=True):
+def stft(x, framesize, hopsize):
 
     frames = sliding_window_view(x, framesize, writeable=False)[::hopsize]
 
@@ -11,10 +11,7 @@ def stft(x, framesize, hopsize, wola=True):
 
     data = np.zeros((M, N//2+1), complex)
 
-    if wola:
-        w = np.hanning(framesize + 1)[:-1]
-    else:
-        w = np.hanning(framesize)
+    w = 0.5 - 0.5 * np.cos(2 * np.pi * np.arange(framesize) / framesize)
 
     for i, frame in enumerate(frames):
 
@@ -23,7 +20,7 @@ def stft(x, framesize, hopsize, wola=True):
     return data
 
 
-def istft(frames, framesize, hopsize, wola=True):
+def istft(frames, framesize, hopsize):
 
     M, N = frames.shape
 
@@ -31,11 +28,8 @@ def istft(frames, framesize, hopsize, wola=True):
 
     data = sliding_window_view(y, framesize, writeable=True)[::hopsize]
 
-    if wola:
-        w = np.hanning(framesize + 1)[:-1]
-        w *= hopsize / np.sum(w**2)
-    else:
-        w = np.hanning(framesize)
+    w = 0.5 - 0.5 * np.cos(2 * np.pi * np.arange(framesize) / framesize)
+    w *= hopsize / np.sum(w**2)
 
     for i, frame in enumerate(frames):
 
