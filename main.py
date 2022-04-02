@@ -58,6 +58,7 @@ def main(input, output, pitch, window, overlap, debug):
         spectrogram0.get_shared_x_axes().join(spectrogram0, spectrogram1)
         spectrogram0.get_shared_y_axes().join(spectrogram0, spectrogram1)
 
+        plot.tight_layout()
         plot.show()
 
 
