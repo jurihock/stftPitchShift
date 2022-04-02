@@ -2,7 +2,7 @@
 
 This is a reimplementation of the Stephan M. Bernsee [smbPitchShift.cpp](https://blogs.zynaptiq.com/bernsee/download), a pitch shifting algorithm using the Short-Time Fourier Transform ([STFT](https://www.audiolabs-erlangen.de/resources/MIR/FMP/C2/C2_STFT-Basic.html)).
 
-This repository features two analogical algorithm implementations, [C++](main.cpp) and [Python](main.py). Both of them contains following modules of the same name (but different file extension, of course).
+This repository features two analogical algorithm implementations, [main.cpp](main.cpp) (C++) and [main.py](main.py) (Python). Both of them contains following modules of the same name (but different file extension, of course).
 
 ### Vocoder
 
@@ -50,8 +50,8 @@ The *IO* module provides a simple possibility to read and write `.wav` audio fil
 
 ## Further reading
 
-* [Fundamentals of Music Processing](http://www.music-processing.de) by Meinard Müller (Section 8.2.1 or [online](https://www.audiolabs-erlangen.de/resources/MIR/FMP/C8/C8S2_InstantFreqEstimation.html))
-* [Digital Audio Effects](http://www.dafx.de) by Udo Zölzer (Sections 7.3.1 and 7.3.5)
+* [Fundamentals of Music Processing](http://www.music-processing.de) by Meinard Müller (section 8.2.1 in the second edition or [online](https://www.audiolabs-erlangen.de/resources/MIR/FMP/C8/C8S2_InstantFreqEstimation.html))
+* [Digital Audio Effects](http://www.dafx.de) by Udo Zölzer (sections 7.3.1 and 7.3.5 in the second edition)
 
 ## Credits
 
