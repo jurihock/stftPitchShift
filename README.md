@@ -24,6 +24,14 @@ As the name of this module already implies, it performs the comprehensive *STFT*
 
 The *IO* module provides a simple possibility to read and write `.wav` audio files.
 
+## Build
+
+Use [CMake](http://cmake.org) to build the C++ program, e.g. `mkdir build && cmake .. && cmake --build .`.
+
+The Python program, depending only on `click`, `matplotlib` and `numpy`, can be executed directly via `python3 main.py`.
+
+Both programs C++ and Python provides a similar set of command line arguments.
+
 ## Usage
 
 ```
