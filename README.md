@@ -50,8 +50,8 @@ The *IO* module provides a simple possibility to read and write `.wav` audio fil
 
 ## Further reading
 
-* [Fundamentals of Music Processing](https://www.audiolabs-erlangen.de/fau/professor/mueller/bookFMP) by Meinard Müller (Chapter 8.2.1)
-* [Digital Audio Effects](http://dafx.de/DAFX_Book_Page_2nd_edition/index.html) by Udo Zölzer (Chapters 7.3.1 and 7.3.5)
+* [Fundamentals of Music Processing](http://www.music-processing.de) by Meinard Müller (Section 8.2.1 or [online](https://www.audiolabs-erlangen.de/resources/MIR/FMP/C8/C8S2_InstantFreqEstimation.html))
+* [Digital Audio Effects](http://www.dafx.de) by Udo Zölzer (Sections 7.3.1 and 7.3.5)
 
 ## Credits
 
