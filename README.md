@@ -48,6 +48,11 @@ The *IO* module provides a simple possibility to read and write `.wav` audio fil
                (only available in the C++ version)
 ```
 
+## Further reading
+
+* [Fundamentals of Music Processing](https://www.audiolabs-erlangen.de/fau/professor/mueller/bookFMP) by Meinard Müller (Chapter 8.2.1)
+* [Digital Audio Effects](http://dafx.de/DAFX_Book_Page_2nd_edition/index.html) by Udo Zölzer (Chapters 7.3.1 and 7.3.5)
+
 ## Credits
 
 * [anyoption](https://github.com/hackorama/AnyOption) by Kishan Thomas
