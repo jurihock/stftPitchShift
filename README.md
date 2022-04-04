@@ -4,6 +4,8 @@ This is a reimplementation of the Stephan M. Bernsee [smbPitchShift.cpp](https:/
 
 This repository features two analogical algorithm implementations, [main.cpp](main.cpp) (C++) and [main.py](main.py) (Python). Both of them contains following modules of the same name (but different file extension, of course).
 
+In addition to the base algorithm, it also features a spectral multi pitch shifting extension, which is described in the later section.
+
 ### Vocoder
 
 The *Vocoder* module transforms the DFT spectral data according to the original algorithm, which is actually the [instantaneous frequency estimation](https://www.audiolabs-erlangen.de/resources/MIR/FMP/C8/C8S2_InstantFreqEstimation.html) technique.
@@ -25,6 +27,10 @@ As the name of this module already implies, it performs the comprehensive *STFT*
 The *IO* module provides a simple possibility to read and write `.wav` audio files.
 
 Currently only mono `.wav` files are supported. Please use e.g. [Audacity](http://www.audacityteam.org) or [SoX](http://sox.sourceforge.net) to prepare your audio files for pitch shifting.
+
+## Multi pitch shifting
+
+Will soon appear...
 
 ## Build
 
