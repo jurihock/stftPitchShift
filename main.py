@@ -11,7 +11,7 @@ import numpy as np
 @click.command(context_settings=dict(help_option_names=['-h', '--help']))
 @click.option('-i', '--input', required=True, help='input .wav file name')
 @click.option('-o', '--output', required=True, help='output .wav file name')
-@click.option('-p', '--pitch', default=1.0, show_default=True, help='pitch shifting factor')
+@click.option('-p', '--pitch', default='1.0', show_default=True, help='fractional pitch shifting factors separated by comma')
 @click.option('-w', '--window', default=1024, show_default=True, help='sfft window size')
 @click.option('-v', '--overlap', default=32, show_default=True, help='stft window overlap')
 @click.option('-d', '--debug', is_flag=True, default=False, help='plot spectrograms before and after processing')
@@ -19,7 +19,7 @@ def main(input, output, pitch, window, overlap, debug):
 
     x, sr = read(input)
 
-    factor = pitch
+    factors = [float(factor) for factor in pitch.split(',')]
     framesize = window
     hopsize = window // overlap
 
@@ -33,10 +33,15 @@ def main(input, output, pitch, window, overlap, debug):
         magnitudes = np.real(frames[i])
         frequencies = np.imag(frames[i])
 
-        magnitudes = resample(magnitudes, factor)
-        frequencies = resample(frequencies, factor)
+        magnitudes = np.vstack([resample(magnitudes, factor) for factor in factors])
+        frequencies = np.vstack([resample(frequencies, factor) * factor for factor in factors])
 
-        frames[i] = magnitudes + 1j * frequencies * factor
+        mask = np.argmax(magnitudes, axis=0)
+
+        magnitudes = np.amax(magnitudes, axis=0)
+        frequencies = np.take_along_axis(frequencies, mask[None,:], axis=0)
+
+        frames[i] = magnitudes + 1j * frequencies
 
     frames = decode(frames, framesize, hopsize, sr)
     frames1 = frames.copy() if debug else None
