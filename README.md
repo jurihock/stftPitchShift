@@ -2,7 +2,7 @@
 
 This is a reimplementation of the Stephan M. Bernsee [smbPitchShift.cpp](https://blogs.zynaptiq.com/bernsee/download), a pitch shifting algorithm using the Short-Time Fourier Transform ([STFT](https://www.audiolabs-erlangen.de/resources/MIR/FMP/C2/C2_STFT-Basic.html)).
 
-This repository features two analogical algorithm implementations, [main.cpp](main.cpp) (C++) and [main.py](main.py) (Python). Both of them contains following modules of the same name (but different file extension, of course).
+This repository features two analogical algorithm implementations, [main.cpp](main.cpp) (C++) and [main.py](main.py) (Python). Both of them contains a set of modules of the same name (but different file extension, of course).
 
 In addition to the base algorithm implementation, it also features a spectral multi pitch shifting extension, which will be described in the later section.
 
