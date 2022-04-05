@@ -50,7 +50,7 @@ Both programs C++ and Python provides a similar set of command line arguments:
 -i  --input    input .wav file name
 -o  --output   output .wav file name
 
--p  --pitch    pitch shifting factor
+-p  --pitch    fractional pitch shifting factors separated by comma
                (default 1.0)
 
 -w  --window   sfft window size
@@ -65,6 +65,8 @@ Both programs C++ and Python provides a similar set of command line arguments:
     --smb      enable original algorithm
                (only available in the C++ version)
 ```
+
+To apply multiple pitch shifts at once, separate each factor by a comma, e.g. `-p 0.5,1,2`.
 
 ## Further reading
 
