@@ -4,7 +4,7 @@ This is a reimplementation of the Stephan M. Bernsee [smbPitchShift.cpp](https:/
 
 This repository features two analogical algorithm implementations, [main.cpp](main.cpp) (C++) and [main.py](main.py) (Python). Both of them contain a set of modules of the same name (but different file extension, of course).
 
-In addition to the base algorithm implementation, it also features a spectral *multi pitch shifting* extension, which will be described in the later section.
+In addition to the base algorithm implementation, it also features a spectral *multi pitch shifting* extension, which will be introduced in the later section.
 
 ## Modules
 
@@ -34,21 +34,21 @@ Currently only mono `.wav` files are supported. Please use e.g. [Audacity](http:
 
 ### Single pitch
 
-Since the *Vocoder* module transforms the original DFT complex values `real + j * imag` into `magnitude + j * frequency` representation, the single pitch shifting is a quiet simple task. Both `magnitude` and `frequency` vectors are to be resampled according to the desired pitch shifting factor:
+Since the *Vocoder* module transforms the original DFT complex values `real + j * imag` into `magnitude + j * frequency` representation, the single pitch shifting is a comparatively easy task. Both `magnitude` and `frequency` vectors are to be resampled according to the desired pitch shifting factor:
 
 * The factor `1` means no change.
 * The factor `<1` means downsampling.
 * The factor `>1` means upsampling.
 
-A fractional resampling factor like `0.5` requires interpolation. In the simplest case, linear interpolation will be sufficient. Otherwise, bilinear interpolation can also be applied, to smooth values between two consecutive STFT hops.
+Any fractional resampling factor such as `0.5` requires interpolation. In the simplest case, linear interpolation will be sufficient. Otherwise, bilinear interpolation can also be applied to smooth values between two consecutive STFT hops.
 
-Due to frequency vector alteration, the resampled frequency values needs to be additionally multiplied by the resampling factor.
+Due to frequency vector alteration, the resampled frequency values needs also be multiplied by the resampling factor.
 
 ### Multi pitch
 
 In terms of multi pitch shifting, multiple differently resampled `magnitude` and `frequency` vectors are to be combined together. For example, the magnitude vectors can easily be averaged. But what about the frequency vectors?
 
-The basic concept of the algorithm extension is to only keep the frequency value of the strongest magnitude value. Since the *strongest* magnitude will mask the *weakest* one. Thus, all the remaining *masked* frequency values would be *inaudible* and can therefore be omitted.
+The basic concept of this algorithm extension is to only keep the frequency value of the strongest magnitude value. Since the *strongest* magnitude will mask the *weakest* one. Thus, all remaining *masked* frequency values would be *inaudible* and can therefore be omitted.
 
 In this way, the multi pitch shifting can be performed spectral in the same STFT frame. There is no need to build a separate STFT pipeline for different pitch variations to superimpose the synthesized signals in the time domain.
 
