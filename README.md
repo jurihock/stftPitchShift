@@ -46,9 +46,9 @@ Due to frequency vector alteration, the resampled frequency values needs to be a
 
 ### Multi
 
-In terms of multi pitch shifting, multiple differently resampled `magnitude` and `frequency` vectors are to be combined together. For example, the magnitude vectors can be averaged. But what about the frequency vectors?
+In terms of multi pitch shifting, multiple differently resampled `magnitude` and `frequency` vectors are to be combined together. For example, the magnitude vectors can be simply averaged. But what about the frequency vectors?
 
-The basic concept of the algorithm extension is to keep the frequency value of the strongest magnitude value. Since the strongest magnitude will mask the weakest one. Thus, the remaining frequency values can be omitted.
+The basic concept of the algorithm extension is to only keep the frequency value of the strongest magnitude value. Since the strongest magnitude will mask the weakest one. Thus, the remaining masked frequency values are inaudible and can be omitted.
 
 ## Build
 
