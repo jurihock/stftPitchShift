@@ -30,9 +30,23 @@ The *IO* module provides a simple possibility to read and write `.wav` audio fil
 
 Currently only mono `.wav` files are supported. Please use e.g. [Audacity](http://www.audacityteam.org) or [SoX](http://sox.sourceforge.net) to prepare your audio files for pitch shifting.
 
-## Multi pitch shifting
+## Pitch shifting
 
-Will soon appear...
+### Single
+
+Since the *Vocoder* module transforms the original DFT complex values `real + j * imag` into `magnitude + j * frequency` representation, the single pitch shifting is a quiet simple task. Both `magnitude` and `frequency` vectors are to be resampled according to the desired pitch shifting factor:
+
+* The factor `1` means no change.
+* The factor `<1` means downsampling.
+* The factor `>1` means upsampling.
+
+A fractional resampling factor like `0.5` requires interpolation. In the simplest case, linear interpolation will be sufficient. Otherwise, bilinear interpolation can also be applied, to smooth values between two consecutive STFT time points.
+
+Due to frequency vector alteration, the resampled frequency values needs to be additionally multiplied by the resampling factor.
+
+### Multi
+
+...
 
 ## Build
 
