@@ -10,7 +10,7 @@ In addition to the base algorithm implementation, it also features a spectral mu
 
 ### Vocoder
 
-The *Vocoder* module transforms the DFT spectral data according to the original algorithm, which is actually the [instantaneous frequency estimation](https://www.audiolabs-erlangen.de/resources/MIR/FMP/C8/C8S2_InstantFreqEstimation.html) technique.
+The *Vocoder* module transforms the DFT spectral data according to the original algorithm, which is actually the *instantaneous frequency estimation* technique. See also [further reading](#further-reading) for more details.
 
 The particular `encode` function replaces the input DFT values by the `magnitude + j * frequency` complex numbers, representing the phase error based frequency estimation in the imaginary part.
 
