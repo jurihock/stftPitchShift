@@ -54,7 +54,7 @@ In this way, the multi pitch shifting can be performed spectral in the same DFT 
 
 ## Build
 
-Use [CMake](http://cmake.org) to build the C++ program, e.g. `mkdir build && cmake .. && cmake --build .`.
+Use [CMake](http://cmake.org) to build the C++ program, e.g. `mkdir build && cd build && cmake .. && cmake --build .`.
 
 The Python program, depending only on `click`, `matplotlib` and `numpy`, can be executed directly via `python3 main.py`.
 
