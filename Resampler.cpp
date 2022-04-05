@@ -48,13 +48,12 @@ void Resampler::linear(const std::vector<std::complex<float>>& x, std::vector<st
       continue;
     }
 
-    const float i = (n - n0) / (n1 - n0);
-
     const std::complex<float> y0 = x[static_cast<size_t>(n0)];
     const std::complex<float> y1 = x[static_cast<size_t>(n1)];
 
-    y[m].real(y0.real() * (1 - i) + y1.real() * i);
-    y[m].imag(y0.imag() * (1 - i) + y1.imag() * i);
+    const float i = (n - n0) / (n1 - n0);
+
+    y[m] = y0 * (1 - i) + y1 * i;
   }
 }
 
@@ -68,7 +67,6 @@ void Resampler::bilinear(const std::vector<std::complex<float>>& x0, const std::
 
   for (size_t i = 0; i < y.size(); ++i)
   {
-    y[i].real(0.5f * y0[i].real() + 0.5f * y1[i].real());
-    y[i].imag(0.5f * y0[i].imag() + 0.5f * y1[i].imag());
+    y[i] = (y0[i] + y1[i]) / 2.0f;
   }
 }
