@@ -40,13 +40,15 @@ Since the *Vocoder* module transforms the original DFT complex values `real + j 
 * The factor `<1` means downsampling.
 * The factor `>1` means upsampling.
 
-A fractional resampling factor like `0.5` requires interpolation. In the simplest case, linear interpolation will be sufficient. Otherwise, bilinear interpolation can also be applied, to smooth values between two consecutive STFT time points.
+A fractional resampling factor like `0.5` requires interpolation. In the simplest case, linear interpolation will be sufficient. Otherwise, bilinear interpolation can also be applied, to smooth values between two consecutive STFT hops.
 
 Due to frequency vector alteration, the resampled frequency values needs to be additionally multiplied by the resampling factor.
 
 ### Multi
 
-...
+In terms of multi pitch shifting, multiple differently resampled `magnitude` and `frequency` vectors are to be combined together. For example, the magnitude vectors can be averaged. But what about the frequency vectors?
+
+The basic concept of the algorithm extension is to keep the frequency value of the strongest magnitude value. Since the strongest magnitude will mask the weakest one. Thus, the remaining frequency values can be omitted.
 
 ## Build
 
