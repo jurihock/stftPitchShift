@@ -40,7 +40,7 @@
 #include <math.h>
 #include <stdio.h>
 
-#define M_PI 3.14159265358979323846
+#define PI 3.14159265358979323846
 #define MAX_FRAME_LENGTH 8192
 
 void smbFft(float *fftBuffer, long fftFrameSize, long sign);
@@ -78,7 +78,7 @@ void smbPitchShift(float pitchShift, long numSampsToProcess, long fftFrameSize, 
 	fftFrameSize2 = fftFrameSize/2;
 	stepSize = fftFrameSize/osamp;
 	freqPerBin = sampleRate/(double)fftFrameSize;
-	expct = 2.*M_PI*(double)stepSize/(double)fftFrameSize;
+	expct = 2.*PI*(double)stepSize/(double)fftFrameSize;
 	inFifoLatency = fftFrameSize-stepSize;
 	if (gRover == false) gRover = inFifoLatency;
 
@@ -109,7 +109,7 @@ void smbPitchShift(float pitchShift, long numSampsToProcess, long fftFrameSize, 
 
 			/* do windowing and re,im interleave */
 			for (k = 0; k < fftFrameSize;k++) {
-				window = -.5*cos(2.*M_PI*(double)k/(double)fftFrameSize)+.5;
+				window = -.5*cos(2.*PI*(double)k/(double)fftFrameSize)+.5;
 				gFFTworksp[2*k] = gInFIFO[k] * window;
 				gFFTworksp[2*k+1] = 0.;
 			}
@@ -138,13 +138,13 @@ void smbPitchShift(float pitchShift, long numSampsToProcess, long fftFrameSize, 
 				tmp -= (double)k*expct;
 
 				/* map delta phase into +/- Pi interval */
-				qpd = tmp/M_PI;
+				qpd = tmp/PI;
 				if (qpd >= 0) qpd += qpd&1;
 				else qpd -= qpd&1;
-				tmp -= M_PI*(double)qpd;
+				tmp -= PI*(double)qpd;
 
 				/* get deviation from bin frequency from the +/- Pi interval */
-				tmp = osamp*tmp/(2.*M_PI);
+				tmp = osamp*tmp/(2.*PI);
 
 				/* compute the k-th partials' true frequency */
 				tmp = (double)k*freqPerBin + tmp*freqPerBin;
@@ -182,7 +182,7 @@ void smbPitchShift(float pitchShift, long numSampsToProcess, long fftFrameSize, 
 				tmp /= freqPerBin;
 
 				/* take osamp into account */
-				tmp = 2.*M_PI*tmp/osamp;
+				tmp = 2.*PI*tmp/osamp;
 
 				/* add the overlap phase advance back in */
 				tmp += (double)k*expct;
@@ -204,7 +204,7 @@ void smbPitchShift(float pitchShift, long numSampsToProcess, long fftFrameSize, 
 
 			/* do windowing and add to output accumulator */ 
 			for(k=0; k < fftFrameSize; k++) {
-				window = -.5*cos(2.*M_PI*(double)k/(double)fftFrameSize)+.5;
+				window = -.5*cos(2.*PI*(double)k/(double)fftFrameSize)+.5;
 				gOutputAccum[k] += 2.*window*gFFTworksp[2*k]/(fftFrameSize2*osamp);
 			}
 			for (k = 0; k < stepSize; k++) gOutFIFO[k] = gOutputAccum[k];
@@ -255,7 +255,7 @@ void smbFft(float *fftBuffer, long fftFrameSize, long sign)
 		le2 = le>>1;
 		ur = 1.0;
 		ui = 0.0;
-		arg = M_PI / (le2>>1);
+		arg = PI / (le2>>1);
 		wr = cos(arg);
 		wi = sign*sin(arg);
 		for (j = 0; j < le2; j += 2) {
@@ -304,7 +304,7 @@ double smbAtan2(double x, double y)
   else signx = -1.;
   
   if (x == 0.) return 0.;
-  if (y == 0.) return signx * M_PI / 2.;
+  if (y == 0.) return signx * PI / 2.;
   
   return atan2(x, y);
 }
