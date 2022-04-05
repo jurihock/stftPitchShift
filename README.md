@@ -32,7 +32,7 @@ Currently only mono `.wav` files are supported. Please use e.g. [Audacity](http:
 
 ## Pitch shifting
 
-### Single
+### Single pitch
 
 Since the *Vocoder* module transforms the original DFT complex values `real + j * imag` into `magnitude + j * frequency` representation, the single pitch shifting is a quiet simple task. Both `magnitude` and `frequency` vectors are to be resampled according to the desired pitch shifting factor:
 
@@ -44,7 +44,7 @@ A fractional resampling factor like `0.5` requires interpolation. In the simples
 
 Due to frequency vector alteration, the resampled frequency values needs to be additionally multiplied by the resampling factor.
 
-### Multi
+### Multi pitch
 
 In terms of multi pitch shifting, multiple differently resampled `magnitude` and `frequency` vectors are to be combined together. For example, the magnitude vectors can be simply averaged. But what about the frequency vectors?
 
