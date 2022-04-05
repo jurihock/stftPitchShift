@@ -50,7 +50,7 @@ In terms of multi pitch shifting, multiple differently resampled `magnitude` and
 
 The basic concept of this algorithm extension is to only keep the frequency value of the strongest magnitude value. Since the *strongest* magnitude will mask the *weakest* one. Thus, all remaining *masked* frequency values would be *inaudible* and can therefore be omitted.
 
-In this way, the multi pitch shifting can be performed spectral in the same DFT frame. There is no need to build a separate STFT pipeline for different pitch variations to superimpose the synthesized signals in the time domain.
+In this way, the multi pitch shifting can be performed *simultaneously* in the same DFT frame. There is no need to build a separate STFT pipeline for different pitch variations to superimpose the synthesized signals in the time domain.
 
 ## Build
 
