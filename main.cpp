@@ -1,4 +1,7 @@
 #include <iostream>
+#include <limits>
+#include <map>
+#include <vector>
 
 #include <anyoption/anyoption.h>
 #include <smb/smbPitchShift.h>
@@ -7,6 +10,21 @@
 #include <Resampler.h>
 #include <STFT.h>
 #include <Vocoder.h>
+
+std::vector<std::string> split(const std::string& value, const char delimiter)
+{
+  std::vector<std::string> values;
+
+  std::stringstream lines(value);
+  std::string line;
+
+  while (std::getline(lines, line, delimiter))
+  {
+    values.push_back(line);
+  }
+
+  return values;
+}
 
 int main(int argc, char** argv)
 {
@@ -19,7 +37,7 @@ int main(int argc, char** argv)
   args.addUsage("-i  --input    input .wav file name");
   args.addUsage("-o  --output   output .wav file name");
   args.addUsage("");
-  args.addUsage("-p  --pitch    pitch shifting factor");
+  args.addUsage("-p  --pitch    fractional pitch shifting factors separated by comma");
   args.addUsage("               (default 1.0)");
   args.addUsage("");
   args.addUsage("-w  --window   sfft window size");
@@ -53,7 +71,7 @@ int main(int argc, char** argv)
   std::string infile = "";
   std::string outfile = "";
 
-  float factor = 1.0;
+  std::vector<float> factors = { 1 };
 
   int framesize = 1024;
   int hoprate = 32;
@@ -75,7 +93,17 @@ int main(int argc, char** argv)
 
   if (args.getValue("pitch") || args.getValue('p'))
   {
-    factor = std::stof(args.getValue("pitch"));
+    const auto values = split(args.getValue("pitch"), ',');
+    
+    if (!values.empty())
+    {
+      factors.clear();
+      
+      for (const auto& value : values)
+      {
+        factors.push_back(std::stof(value));
+      }
+    }
   }
 
   if (args.getValue("window") || args.getValue('w'))
@@ -100,37 +128,82 @@ int main(int argc, char** argv)
 
     if (smb)
     {
-      smbPitchShift(
-        factor,
-        indata.size(),
-        framesize,
-        hoprate,
-        samplerate,
-        indata.data(),
-        outdata.data());
+      for (auto factor : factors)
+      {
+        smbPitchShift(
+          factor,
+          indata.size(),
+          framesize,
+          hoprate,
+          samplerate,
+          indata.data(),
+          outdata.data());
+        
+        for (size_t i = 0; i < outdata.size(); ++i)
+        {
+          outdata[i] /= factors.size();
+        }
+      }
     }
     else
     {
       STFT stft(framesize, framesize / hoprate);
       Vocoder vocoder(framesize, framesize / hoprate, samplerate);
-      Resampler resample(factor);
 
-      stft(indata, outdata, [&](std::vector<std::complex<float>>& src)
+      std::map<float, Resampler> resample;
+      std::map<float, std::vector<std::complex<float>>> buffer;
+      std::vector<float> mask;
+      bool prepare = true;
+
+      stft(indata, outdata, [&](std::vector<std::complex<float>>& frame)
       {
-        std::vector<std::complex<float>> dst(src.size());
-
-        vocoder.encode(src);
-
-        resample.linear(src, dst);
-
-        for (size_t i = 0; i < dst.size(); ++i)
+        if (prepare)
         {
-          dst[i].imag(dst[i].imag() * factor);
+          for (float factor : factors)
+          {
+            resample[factor] = Resampler(factor);
+            buffer[factor].resize(frame.size());
+          }
+          
+          mask.resize(frame.size());
+          
+          prepare = false;
+        }
+        
+        vocoder.encode(frame);
+
+        for (float factor : factors)
+        {
+          resample[factor].linear(frame, buffer[factor]);
+          
+          for (size_t i = 0; i < frame.size(); ++i)
+          {
+            buffer[factor][i].imag(buffer[factor][i].imag() * factor);
+          }
         }
 
-        vocoder.decode(dst);
+        for (size_t i = 0; i < frame.size(); ++i)
+        {
+          float maximum = std::numeric_limits<float>::lowest();
 
-        src = dst;
+          for (float factor : factors)
+          {
+            const float current = buffer[factor][i].real();
+
+            if (current > maximum)
+            {
+              maximum = current;
+              mask[i] = factor;
+            }
+          }
+        }
+        
+        for (size_t i = 0; i < frame.size(); ++i)
+        {
+          frame[i] = buffer[mask[i]][i];
+        }
+
+        vocoder.decode(frame);
       });
     }
 
