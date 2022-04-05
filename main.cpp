@@ -1,16 +1,12 @@
 #include <iostream>
-#include <limits>
-#include <map>
-#include <string>
-#include <vector>
 
 #include <anyoption/anyoption.h>
 #include <smb/smbPitchShift.h>
 
 #include <IO.h>
-#include <Resampler.h>
 #include <STFT.h>
 #include <Vocoder.h>
+#include <Pitcher.h>
 
 std::vector<std::string> split(const std::string& value, const char delimiter)
 {
@@ -150,60 +146,12 @@ int main(int argc, char** argv)
     {
       STFT stft(framesize, framesize / hoprate);
       Vocoder vocoder(framesize, framesize / hoprate, samplerate);
-
-      std::map<float, Resampler> resample;
-      std::map<float, std::vector<std::complex<float>>> buffer;
-      std::vector<float> mask;
-      bool prepare = true;
+      Pitcher pitcher(factors);
 
       stft(indata, outdata, [&](std::vector<std::complex<float>>& frame)
       {
-        if (prepare)
-        {
-          for (float factor : factors)
-          {
-            resample[factor] = Resampler(factor);
-            buffer[factor].resize(frame.size());
-          }
-          
-          mask.resize(frame.size());
-          
-          prepare = false;
-        }
-        
         vocoder.encode(frame);
-
-        for (float factor : factors)
-        {
-          resample[factor].linear(frame, buffer[factor]);
-          
-          for (size_t i = 0; i < frame.size(); ++i)
-          {
-            buffer[factor][i].imag(buffer[factor][i].imag() * factor);
-          }
-        }
-
-        for (size_t i = 0; i < frame.size(); ++i)
-        {
-          float maximum = std::numeric_limits<float>::lowest();
-
-          for (float factor : factors)
-          {
-            const float current = buffer[factor][i].real();
-
-            if (current > maximum)
-            {
-              maximum = current;
-              mask[i] = factor;
-            }
-          }
-        }
-        
-        for (size_t i = 0; i < frame.size(); ++i)
-        {
-          frame[i] = buffer[mask[i]][i];
-        }
-
+        pitcher.shiftpitch(frame);
         vocoder.decode(frame);
       });
     }

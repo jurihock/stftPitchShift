@@ -1,11 +1,10 @@
 from IO import read, write
-from Resampler import linear as resample
 from STFT import stft, istft, spectrogram
 from Vocoder import encode, decode
+from Pitcher import shiftpitch
 
 import click
 import matplotlib.pyplot as plot
-import numpy as np
 
 
 @click.command(context_settings=dict(help_option_names=['-h', '--help']))
@@ -27,22 +26,7 @@ def main(input, output, pitch, window, overlap, debug):
 
     frames0 = frames.copy() if debug else None
     frames = encode(frames, framesize, hopsize, sr)
-
-    for i in range(len(frames)):
-
-        magnitudes = np.real(frames[i])
-        frequencies = np.imag(frames[i])
-
-        magnitudes = np.vstack([resample(magnitudes, factor) for factor in factors])
-        frequencies = np.vstack([resample(frequencies, factor) * factor for factor in factors])
-
-        mask = np.argmax(magnitudes, axis=0)
-
-        magnitudes = np.amax(magnitudes, axis=0)
-        frequencies = np.take_along_axis(frequencies, mask[None,:], axis=0)
-
-        frames[i] = magnitudes + 1j * frequencies
-
+    frames = shiftpitch(frames, factors)
     frames = decode(frames, framesize, hopsize, sr)
     frames1 = frames.copy() if debug else None
 

@@ -8,6 +8,10 @@ In addition to the base algorithm implementation, it also features a spectral *m
 
 ## Modules
 
+### Pitcher
+
+The *Pitcher* module performs single or multi pitch shifting of the encoded DFT frame depending on the specified fractional factors.
+
 ### Vocoder
 
 The *Vocoder* module transforms the DFT spectral data according to the original algorithm, which is actually the *instantaneous frequency estimation* technique. See also [further reading](#further-reading) for more details.
