@@ -100,7 +100,7 @@ void smbPitchShift(float pitchShift, long numSampsToProcess, long fftFrameSize, 
 
 		/* As long as we have not yet collected enough data just read in */
 		gInFIFO[gRover] = indata[i];
-		outdata[i] = gOutFIFO[gRover-inFifoLatency];
+		outdata[i] += gOutFIFO[gRover-inFifoLatency];
 		gRover++;
 
 		/* now we have enough data for processing */
