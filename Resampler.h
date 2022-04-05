@@ -9,7 +9,10 @@ class Resampler
 
 public:
 
-  Resampler(const double factor);
+  Resampler(const double factor = 1.0);
+  Resampler(const Resampler& other);
+  
+  Resampler& operator=(const Resampler& other);
 
   void linear(const std::vector<std::complex<float>>& x,
               std::vector<std::complex<float>>& y) const;
@@ -20,6 +23,6 @@ public:
 
 private:
 
-  const double factor;
+  double factor;
 
 };

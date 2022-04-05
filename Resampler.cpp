@@ -5,6 +5,21 @@ Resampler::Resampler(const double factor) :
 {
 }
 
+Resampler::Resampler(const Resampler& other) :
+  factor(other.factor)
+{
+}
+
+Resampler& Resampler::operator=(const Resampler& other)
+{
+  if(this != &other)
+  {
+    this->factor = other.factor;
+  }
+
+  return *this;
+}
+
 void Resampler::linear(const std::vector<std::complex<float>>& x, std::vector<std::complex<float>>& y) const
 {
   const size_t N = x.size();
