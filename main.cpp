@@ -145,18 +145,18 @@ int main(int argc, char** argv)
     else
     {
       Timer<std::chrono::microseconds> timer;
-      
+
       STFT stft(framesize, framesize / hoprate);
       Vocoder vocoder(framesize, framesize / hoprate, samplerate);
       Pitcher pitcher(factors);
 
       stft(indata, outdata, [&](std::vector<std::complex<float>>& frame)
       {
-        timer.tic();
+        // timer.tic();
         vocoder.encode(frame);
         pitcher.shiftpitch(frame);
         vocoder.decode(frame);
-        timer.toc();
+        // timer.toc();
       });
 
       // std::cout << timer.str() << std::endl;
