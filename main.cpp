@@ -4,9 +4,10 @@
 #include <smb/smbPitchShift.h>
 
 #include <IO.h>
-#include <STFT.h>
-#include <Vocoder.h>
 #include <Pitcher.h>
+#include <STFT.h>
+#include <Timer.h>
+#include <Vocoder.h>
 
 std::vector<std::string> split(const std::string& value, const char delimiter)
 {
@@ -47,7 +48,6 @@ int main(int argc, char** argv)
 
   args.setFlag("help");
   args.setFlag('h');
-  args.setFlag('?');
   args.setFlag("smb");
   args.setOption("input", 'i');
   args.setOption("output", 'o');
@@ -57,7 +57,7 @@ int main(int argc, char** argv)
 
   args.processCommandArgs(argc, argv);
 
-  if (!args.hasOptions() || args.getFlag("help") || args.getFlag('h') || args.getFlag('?'))
+  if (!args.hasOptions() || args.getFlag("help") || args.getFlag('h'))
   {
     args.printUsage();
     return 0;
@@ -144,16 +144,22 @@ int main(int argc, char** argv)
     }
     else
     {
+      Timer<std::chrono::microseconds> timer;
+      
       STFT stft(framesize, framesize / hoprate);
       Vocoder vocoder(framesize, framesize / hoprate, samplerate);
       Pitcher pitcher(factors);
 
       stft(indata, outdata, [&](std::vector<std::complex<float>>& frame)
       {
+        timer.tic();
         vocoder.encode(frame);
         pitcher.shiftpitch(frame);
         vocoder.decode(frame);
+        timer.toc();
       });
+
+      // std::cout << timer.str() << std::endl;
     }
 
     IO::write(outfile, outdata, samplerate);

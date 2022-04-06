@@ -13,6 +13,7 @@ add_executable(smbPitchShift
   Pitcher.h Pitcher.cpp
   Resampler.h Resampler.cpp
   STFT.h STFT.cpp
+  Timer.h
   Vocoder.h Vocoder.cpp
 )
 
