@@ -16,7 +16,7 @@ public:
 
   Pitcher(const std::vector<float>& factors);
 
-  void shiftpitch(std::vector<std::complex<float>>& frame);
+  void shiftpitch(std::vector<std::complex<float>>& dft);
 
 private:
 

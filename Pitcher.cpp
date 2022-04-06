@@ -5,46 +5,57 @@ Pitcher::Pitcher(const std::vector<float>& factors) :
 {
 }
 
-void Pitcher::shiftpitch(std::vector<std::complex<float>>& frame)
+void Pitcher::shiftpitch(std::vector<std::complex<float>>& dft)
 {
   if (prepare)
   {
-    for (float factor : factors)
+    for (const float factor : factors)
     {
       resample[factor] = Resampler(factor);
-      buffer[factor].resize(frame.size());
+      buffer[factor].resize(dft.size());
     }
 
-    mask.resize(frame.size());
+    mask.resize(dft.size());
 
     prepare = false;
   }
 
-  for (float factor : factors)
+  if (factors.size() == 1)
   {
-    resample[factor].linear(frame, buffer[factor]);
+    const float factor = factors.front();
 
-    for (size_t i = 0; i < frame.size(); ++i)
+    if (factor == 1)
+    {
+      return;
+    }
+
+    resample[factor].linear(dft, buffer[factor]);
+
+    for (size_t i = 0; i < dft.size(); ++i)
+    {
+      buffer[factor][i].imag(buffer[factor][i].imag() * factor);
+    }
+    
+    dft = buffer[factor];
+    
+    return;
+  }
+
+  for (const float factor : factors)
+  {
+    resample[factor].linear(dft, buffer[factor]);
+
+    for (size_t i = 0; i < dft.size(); ++i)
     {
       buffer[factor][i].imag(buffer[factor][i].imag() * factor);
     }
   }
 
-  if (factors.size() == 1)
-  {
-    std::copy(
-      buffer[factors.front()].begin(),
-      buffer[factors.front()].end(),
-      frame.begin());
-
-    return;
-  }
-
-  for (size_t i = 0; i < frame.size(); ++i)
+  for (size_t i = 0; i < dft.size(); ++i)
   {
     float maximum = std::numeric_limits<float>::lowest();
 
-    for (float factor : factors)
+    for (const float factor : factors)
     {
       const float current = buffer[factor][i].real();
 
@@ -56,8 +67,8 @@ void Pitcher::shiftpitch(std::vector<std::complex<float>>& frame)
     }
   }
 
-  for (size_t i = 0; i < frame.size(); ++i)
+  for (size_t i = 0; i < dft.size(); ++i)
   {
-    frame[i] = buffer[mask[i]][i];
+    dft[i] = buffer[mask[i]][i];
   }
 }

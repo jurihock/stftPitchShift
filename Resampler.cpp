@@ -22,6 +22,12 @@ Resampler& Resampler::operator=(const Resampler& other)
 
 void Resampler::linear(const std::vector<std::complex<float>>& x, std::vector<std::complex<float>>& y) const
 {
+  if (factor == 1)
+  {
+    y = x;
+    return;
+  }
+
   const size_t N = x.size();
   const size_t M = static_cast<size_t>(std::round(N * factor));
 
