@@ -9,66 +9,66 @@ void Pitcher::shiftpitch(std::vector<std::complex<float>>& dft)
 {
   if (prepare)
   {
-    for (const float factor : factors)
-    {
-      resample[factor] = Resampler(factor);
-      buffer[factor].resize(dft.size());
-    }
-
+    resample.resize(factors.size());
+    buffer.resize(factors.size());
     mask.resize(dft.size());
+
+    for (size_t i = 0; i < factors.size(); ++i)
+    {
+      resample[i] = Resampler(factors[i]);
+      buffer[i].resize(dft.size());
+    }
 
     prepare = false;
   }
 
   if (factors.size() == 1)
   {
-    const float factor = factors.front();
-
-    if (factor == 1)
+    if (factors[0] == 1)
     {
       return;
     }
 
-    resample[factor].linear(dft, buffer[factor]);
+    resample[0].linear(dft, buffer[0]);
 
-    for (size_t i = 0; i < dft.size(); ++i)
+    for (size_t j = 0; j < dft.size(); ++j)
     {
-      buffer[factor][i].imag(buffer[factor][i].imag() * factor);
+      buffer[0][j].imag(buffer[0][j].imag() * factors[0]);
     }
-    
-    dft = buffer[factor];
+
+    dft = buffer[0];
     
     return;
   }
 
-  for (const float factor : factors)
+  for (size_t i = 0; i < factors.size(); ++i)
   {
-    resample[factor].linear(dft, buffer[factor]);
-
-    for (size_t i = 0; i < dft.size(); ++i)
+    resample[i].linear(dft, buffer[i]);
+    
+    for (size_t j = 0; j < dft.size(); ++j)
     {
-      buffer[factor][i].imag(buffer[factor][i].imag() * factor);
+      buffer[i][j].imag(buffer[i][j].imag() * factors[i]);
     }
   }
 
-  for (size_t i = 0; i < dft.size(); ++i)
+  for (size_t j = 0; j < dft.size(); ++j)
   {
     float maximum = std::numeric_limits<float>::lowest();
 
-    for (const float factor : factors)
+    for (size_t i = 0; i < factors.size(); ++i)
     {
-      const float current = buffer[factor][i].real();
+      const float current = buffer[i][j].real();
 
       if (current > maximum)
       {
         maximum = current;
-        mask[i] = factor;
+        mask[j] = i;
       }
     }
   }
 
-  for (size_t i = 0; i < dft.size(); ++i)
+  for (size_t j = 0; j < dft.size(); ++j)
   {
-    dft[i] = buffer[mask[i]][i];
+    dft[j] = buffer[mask[j]][j];
   }
 }

@@ -4,7 +4,6 @@
 #include <cmath>
 #include <complex>
 #include <limits>
-#include <map>
 #include <vector>
 
 #include <Resampler.h>
@@ -22,9 +21,9 @@ private:
 
   const std::vector<float> factors;
 
-  std::map<float, Resampler> resample;
-  std::map<float, std::vector<std::complex<float>>> buffer;
-  std::vector<float> mask;
+  std::vector<Resampler> resample;
+  std::vector<std::vector<std::complex<float>>> buffer;
+  std::vector<size_t> mask;
 
   bool prepare = true;
 
