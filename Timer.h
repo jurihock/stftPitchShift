@@ -1,6 +1,7 @@
 #pragma once
 
 #include <chrono>
+#include <map>
 #include <numeric>
 #include <sstream>
 #include <string>
@@ -16,6 +17,11 @@ public:
   {
     data.reserve(capacity);
   }
+
+  void reset()
+  {
+    data.clear();
+  }
   
   void tic()
   {
@@ -30,8 +36,18 @@ public:
     data.push_back(std::chrono::duration_cast<T>(duration).count());
   }
 
-  std::string str()
+  std::string str(const std::streamsize precision = 3)
   {
+    const std::map<intmax_t, std::string> units =
+    {
+      { 1000000000, "ns" },
+      { 1000000, "us" },
+      { 1000, "ms" },
+      { 1, "s" }
+    };
+
+    const std::string unit = units.at(T::period::num * T::period::den);
+
     const double sum = std::accumulate(data.begin(), data.end(), 0.0);
     const double sumsum = std::inner_product(data.begin(), data.end(), data.begin(), 0.0);
 
@@ -39,8 +55,8 @@ public:
     const double stdev = std::sqrt(sumsum / data.size() - mean * mean);
 
     std::ostringstream result;
-    result.precision(3);
-    result << mean << " ± " << stdev;
+    result.precision(precision);
+    result << mean << " ± " << stdev << " " << unit;
 
     return result.str();
   }
