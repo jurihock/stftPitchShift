@@ -15,7 +15,7 @@ def shiftpitch(frames, factors):
 
         mask = np.argmax(magnitudes, axis=0)
 
-        magnitudes = np.amax(magnitudes, axis=0)
+        magnitudes = np.take_along_axis(magnitudes, mask[None,:], axis=0)
         frequencies = np.take_along_axis(frequencies, mask[None,:], axis=0)
 
         frames[i] = magnitudes + 1j * frequencies
