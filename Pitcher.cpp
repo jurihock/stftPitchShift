@@ -11,7 +11,6 @@ void Pitcher::shiftpitch(std::vector<std::complex<float>>& dft)
   {
     resample.resize(factors.size());
     buffer.resize(factors.size());
-    mask.resize(dft.size());
 
     for (size_t i = 0; i < factors.size(); ++i)
     {
@@ -54,6 +53,7 @@ void Pitcher::shiftpitch(std::vector<std::complex<float>>& dft)
   for (size_t j = 0; j < dft.size(); ++j)
   {
     float maximum = std::numeric_limits<float>::lowest();
+    size_t mask = 0;
 
     for (size_t i = 0; i < factors.size(); ++i)
     {
@@ -62,13 +62,10 @@ void Pitcher::shiftpitch(std::vector<std::complex<float>>& dft)
       if (current > maximum)
       {
         maximum = current;
-        mask[j] = i;
+        mask = i;
       }
     }
-  }
 
-  for (size_t j = 0; j < dft.size(); ++j)
-  {
-    dft[j] = buffer[mask[j]][j];
+    dft[j] = buffer[mask][j];
   }
 }

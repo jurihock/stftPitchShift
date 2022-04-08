@@ -22,7 +22,6 @@ private:
 
   std::vector<Resampler> resample;
   std::vector<std::vector<std::complex<float>>> buffer;
-  std::vector<size_t> mask;
 
   bool prepare = true;
 
