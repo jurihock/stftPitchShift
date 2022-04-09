@@ -13,7 +13,7 @@ add_executable(TheStftPitchShift
 )
 
 set_target_properties(TheStftPitchShift
-  PROPERTIES OUTPUT_NAME "StftPitchShift"
+  PROPERTIES OUTPUT_NAME "stftpitchshift"
 )
 
 target_include_directories(TheStftPitchShift
