@@ -24,6 +24,17 @@ StftPitchShift::StftPitchShift(
 void StftPitchShift::shiftpitch(
   const std::vector<float>& input,
   std::vector<float>& output,
+  const float factor,
+  const float quefrency)
+{
+  const std::vector<float> factors = { factor };
+
+  shiftpitch(input, output, factors, quefrency);
+}
+
+void StftPitchShift::shiftpitch(
+  const std::vector<float>& input,
+  std::vector<float>& output,
   const std::vector<float>& factors,
   const float quefrency)
 {

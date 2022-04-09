@@ -15,7 +15,13 @@ public:
   void shiftpitch(
     const std::vector<float>& input,
     std::vector<float>& output,
-    const std::vector<float>& factors = {1},
+    const float factor = 1,
+    const float quefrency = 0);
+
+  void shiftpitch(
+    const std::vector<float>& input,
+    std::vector<float>& output,
+    const std::vector<float>& factors,
     const float quefrency = 0);
 
 private:
