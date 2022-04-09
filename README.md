@@ -56,6 +56,10 @@ The basic concept of this algorithm extension is to only keep the frequency valu
 
 In this way, the multi pitch shifting can be performed *simultaneously* in the same DFT frame. There is no need to build a separate STFT pipeline for different pitch variations to superimpose the synthesized signals in the time domain.
 
+## Formant preservation
+
+Will soon appear...
+
 ## Build
 
 Use [CMake](http://cmake.org) to build the C++ program, e.g. `mkdir build && cd build && cmake .. && cmake --build .`.
