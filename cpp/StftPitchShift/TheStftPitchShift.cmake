@@ -16,7 +16,7 @@ set_target_properties(TheStftPitchShift
 )
 
 target_include_directories(TheStftPitchShift
-  INTERFACE "${CMAKE_CURRENT_LIST_DIR}"
+  INTERFACE "${CMAKE_CURRENT_LIST_DIR}/.."
 )
 
 target_link_libraries(TheStftPitchShift

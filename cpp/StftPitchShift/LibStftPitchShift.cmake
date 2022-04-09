@@ -20,7 +20,7 @@ set_target_properties(LibStftPitchShift
 
 target_include_directories(LibStftPitchShift
   PRIVATE "${CMAKE_CURRENT_LIST_DIR}"
-  PUBLIC "${CMAKE_CURRENT_LIST_DIR}"
+  PUBLIC "${CMAKE_CURRENT_LIST_DIR}/.."
 )
 
 target_link_libraries(LibStftPitchShift

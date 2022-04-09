@@ -6,8 +6,8 @@
 #include <anyoption/anyoption.h>
 #include <smb/smbPitchShift.h>
 
-#include <IO.h>
-#include <StftPitchShift.h>
+#include <StftPitchShift/IO.h>
+#include <StftPitchShift/StftPitchShift.h>
 
 std::vector<std::string> split(const std::string& value, const char delimiter)
 {
