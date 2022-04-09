@@ -81,7 +81,7 @@ def read(path):
     return data.flatten() if channels == 1 else data, sr
 
 
-def write(path, data, sr, bits=24):
+def write(path, data, sr, bits=32):
     """
     Writes a .wav file.
 
