@@ -3,6 +3,7 @@
 #include <anyoption/anyoption.h>
 #include <smb/smbPitchShift.h>
 
+#include <Cepstrum.h>
 #include <IO.h>
 #include <Pitcher.h>
 #include <STFT.h>
@@ -38,6 +39,9 @@ int main(int argc, char** argv)
   args.addUsage("-p  --pitch    fractional pitch shifting factors separated by comma");
   args.addUsage("               (default 1.0)");
   args.addUsage("");
+  args.addUsage("-f  --formant  optional formant lifter quefrency in milliseconds");
+  args.addUsage("               (default 0.0)");
+  args.addUsage("");
   args.addUsage("-w  --window   sfft window size");
   args.addUsage("               (default 1024)");
   args.addUsage("");
@@ -52,6 +56,7 @@ int main(int argc, char** argv)
   args.setOption("input", 'i');
   args.setOption("output", 'o');
   args.setOption("pitch", 'p');
+  args.setOption("formant", 'f');
   args.setOption("window", 'w');
   args.setOption("overlap", 'v');
 
@@ -69,6 +74,7 @@ int main(int argc, char** argv)
   std::string outfile = "";
 
   std::vector<float> factors = { 1 };
+  float quefrency = 0;
 
   int framesize = 1024;
   int hoprate = 32;
@@ -101,6 +107,11 @@ int main(int argc, char** argv)
         factors.push_back(std::stof(value));
       }
     }
+  }
+
+  if (args.getValue("formant") || args.getValue('f'))
+  {
+    quefrency = std::stof(args.getValue("formant")) * 1e-3;
   }
 
   if (args.getValue("window") || args.getValue('w'))
@@ -149,15 +160,50 @@ int main(int argc, char** argv)
       STFT stft(framesize, framesize / hoprate);
       Vocoder vocoder(framesize, framesize / hoprate, samplerate);
       Pitcher pitcher(factors);
+      Cepstrum cepstrum(quefrency, samplerate);
 
-      stft(indata, outdata, [&](std::vector<std::complex<float>>& frame)
+      if (quefrency)
       {
-        // timer.tic();
-        vocoder.encode(frame);
-        pitcher.shiftpitch(frame);
-        vocoder.decode(frame);
-        // timer.toc();
-      });
+        std::vector<float> envelope;
+
+        stft(indata, outdata, [&](std::vector<std::complex<float>>& frame)
+        {
+          // timer.tic();
+
+          vocoder.encode(frame);
+
+          cepstrum.lifter(frame, envelope);
+
+          for (size_t i = 0; i < frame.size(); ++i)
+          {
+            frame[i].real(frame[i].real() / envelope[i]);
+          }
+
+          pitcher.shiftpitch(frame);
+
+          for (size_t i = 0; i < frame.size(); ++i)
+          {
+            frame[i].real(frame[i].real() * envelope[i]);
+          }
+
+          vocoder.decode(frame);
+
+          // timer.toc();
+        });
+      }
+      else
+      {
+        stft(indata, outdata, [&](std::vector<std::complex<float>>& frame)
+        {
+          // timer.tic();
+
+          vocoder.encode(frame);
+          pitcher.shiftpitch(frame);
+          vocoder.decode(frame);
+
+          // timer.toc();
+        });
+      }
 
       // std::cout << timer.str() << std::endl;
     }

@@ -9,6 +9,7 @@ project(smbPitchShift)
 
 add_executable(smbPitchShift
   main.cpp
+  Cepstrum.h Cepstrum.cpp
   IO.h IO.cpp
   Pitcher.h Pitcher.cpp
   Resampler.h Resampler.cpp
