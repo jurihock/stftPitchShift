@@ -75,6 +75,9 @@ Both programs C++ and Python provides a similar set of command line arguments:
 -p  --pitch    fractional pitch shifting factors separated by comma
                (default 1.0)
 
+-f  --formant  optional formant lifter quefrency in milliseconds
+               (default 0.0)
+
 -w  --window   sfft window size
                (default 1024)
 
