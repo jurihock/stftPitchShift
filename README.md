@@ -62,9 +62,31 @@ Will soon appear...
 
 ## Build
 
-Use [CMake](http://cmake.org) to build the C++ program, e.g. `mkdir build && cd build && cmake .. && cmake --build .`.
+### C++
 
-The Python program, depending only on `click`, `matplotlib` and `numpy`, can be executed directly via `python3 main.py`.
+Use [CMake](http://cmake.org) to build the C++ program like so:
+
+```
+mkdir build
+cd build
+cmake ..
+cmake --build .
+```
+
+### Python
+
+The Python program `stftpitchshift` can be installed via `pip install stftpitchshift`.
+
+Also feel free to explore the installed Python module `StftPitchShift` in your personal audio project:
+
+```
+from StftPitchShift import StftPitchShift
+
+pitchshifter = StftPitchShift(1024, 256, 44100)
+
+x = [0] * 44100
+y = pitchshifter.shiftpitch(x, 1)
+```
 
 ## Usage
 
