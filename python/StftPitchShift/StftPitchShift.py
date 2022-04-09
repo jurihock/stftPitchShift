@@ -45,6 +45,6 @@ class StftPitchShift:
 
         output = istft(frames, framesize, hopsize)
 
-        output.resize(input.shape)
+        output.resize(np.shape(input))
 
         return output
