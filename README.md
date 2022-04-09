@@ -140,7 +140,7 @@ To apply multiple pitch shifts at once, separate each factor by a comma, e.g. `-
 
 To enable the formant preservation feature specify a suitable *quefrency* value in milliseconds. Depending on the source signal, begin with a small value like `-f 1`. Generally, the *quefrency* value has to be smaller than the fundamental period, as reciprocal of the fundamental frequency, of the source signal.
 
-At the moment the formant preservation doesn't seem to work along with the multi pitch shifting and smaller pitch shifting factors. Further investigation is therefore necessary...
+At the moment the formant preservation doesn't seem to work well along with the multi pitch shifting and smaller pitch shifting factors. Further investigation is therefore necessary...
 
 ## Further reading
 
