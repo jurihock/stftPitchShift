@@ -10,10 +10,6 @@ Both sources contain a ready-to-use command line tool as well as a library for c
 
 ## Modules
 
-### Pitcher
-
-The *Pitcher* module performs single or multi pitch shifting of the encoded DFT frame depending on the specified fractional factors.
-
 ### Vocoder
 
 The *Vocoder* module transforms the DFT spectral data according to the original algorithm, which is actually the *instantaneous frequency estimation* technique. See also [further reading](#further-reading) for more details.
@@ -22,9 +18,17 @@ The particular `encode` function replaces the input DFT values by the `magnitude
 
 The `decode` function does an inverse transformation back to the original DFT complex numbers, by replacing eventually modified frequency value by the reconstructed phase value.
 
+### Pitcher
+
+The *Pitcher* module performs single or multi pitch shifting of the encoded DFT frame depending on the specified fractional factors.
+
 ### Resampler
 
 The *Resampler* module provides `linear` and `bilinear` interpolation routines, to actually perform pitch shifting, based on the *Vocoder* DFT transform.
+
+### Cepstrum
+
+The *Cepstrum* module estimates a spectral envelope of the DFT magnitude vector, representing the vocal tract resonances. This computation takes place in the cepstral domain by applying a low-pass filter. The cutoff value of the low-pass filter or *lifter* is the *quefrency* value specified in seconds or milliseconds.
 
 ### STFT
 
