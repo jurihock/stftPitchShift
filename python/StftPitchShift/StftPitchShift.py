@@ -1,7 +1,7 @@
-from .Cepstrum import lifter
-from .Pitcher import shiftpitch
-from .STFT import stft, istft, spectrogram
-from .Vocoder import encode, decode
+from StftPitchShift.Cepstrum import lifter
+from StftPitchShift.Pitcher import shiftpitch
+from StftPitchShift.STFT import stft, istft, spectrogram
+from StftPitchShift.Vocoder import encode, decode
 
 import numpy as np
 
