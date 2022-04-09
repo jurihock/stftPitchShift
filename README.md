@@ -4,7 +4,7 @@ This is a reimplementation of the Stephan M. Bernsee [smbPitchShift.cpp](https:/
 
 This repository features two analogical algorithm implementations, [main.cpp](main.cpp) (C++) and [main.py](main.py) (Python). Both of them contain a set of modules of the same name (but different file extension, of course).
 
-In addition to the base algorithm implementation, it also features a spectral *multi pitch shifting* extension, which will be introduced in the later section.
+In addition to the base algorithm implementation, it also features spectral [multi pitch shifting](#pitch-shifting) and cepstral [formant preservation](#formant-preservation) extensions.
 
 ## Modules
 
