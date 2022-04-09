@@ -29,12 +29,49 @@ void StftPitchShift::shiftpitch(
 {
   const std::vector<float> factors = { factor };
 
-  shiftpitch(input, output, factors, quefrency);
+  shiftpitch(
+    input.size(),
+    input.data(),
+    output.data(),
+    factors,
+    quefrency);
+}
+
+void StftPitchShift::shiftpitch(
+  const size_t size,
+  const float* input,
+  float* const output,
+  const float factor,
+  const float quefrency)
+{
+  const std::vector<float> factors = { factor };
+
+  shiftpitch(
+    size,
+    input,
+    output,
+    factors,
+    quefrency);
 }
 
 void StftPitchShift::shiftpitch(
   const std::vector<float>& input,
   std::vector<float>& output,
+  const std::vector<float>& factors,
+  const float quefrency)
+{
+  shiftpitch(
+    input.size(),
+    input.data(),
+    output.data(),
+    factors,
+    quefrency);
+}
+
+void StftPitchShift::shiftpitch(
+  const size_t size,
+  const float* input,
+  float* const output,
   const std::vector<float>& factors,
   const float quefrency)
 {
@@ -51,7 +88,7 @@ void StftPitchShift::shiftpitch(
   {
     std::vector<float> envelope;
 
-    stft(input, output, [&](std::vector<std::complex<float>>& frame)
+    stft(size, input, output, [&](std::vector<std::complex<float>>& frame)
     {
       #ifdef DebugStftPitchShift
       timer.tic();
@@ -82,7 +119,7 @@ void StftPitchShift::shiftpitch(
   }
   else
   {
-    stft(input, output, [&](std::vector<std::complex<float>>& frame)
+    stft(size, input, output, [&](std::vector<std::complex<float>>& frame)
     {
       #ifdef DebugStftPitchShift
       timer.tic();

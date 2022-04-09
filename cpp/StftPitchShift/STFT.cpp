@@ -25,6 +25,11 @@ STFT::STFT(const size_t framesize, const size_t hopsize) :
 
 void STFT::operator()(const std::vector<float>& input, std::vector<float>& output, const std::function<void(std::vector<std::complex<float>>& dft)> callback) const
 {
+  (*this)(input.size(), input.data(), output.data(), callback);
+}
+
+void STFT::operator()(const size_t size, const float* input, float* const output, const std::function<void(std::vector<std::complex<float>>& dft)> callback) const
+{
   std::vector<float> frame(framesize);
   std::vector<std::complex<float>> dft(framesize / 2 + 1);
 
@@ -36,9 +41,9 @@ void STFT::operator()(const std::vector<float>& input, std::vector<float>& outpu
     1.0f * unitygain  // synthesis window
   };
 
-  for (size_t hop = 0; (hop + framesize) < input.size(); hop += hopsize)
+  for (size_t hop = 0; (hop + framesize) < size; hop += hopsize)
   {
-    reject(input, frame, hop);
+    reject(size, input, frame, hop);
     weight(frame, window, scalers[0]);
     fft(frame, dft, scalers[1]);
 
@@ -46,22 +51,22 @@ void STFT::operator()(const std::vector<float>& input, std::vector<float>& outpu
 
     ifft(dft, frame, scalers[2]);
     weight(frame, window, scalers[3]);
-    inject(output, frame, hop);
+    inject(size, output, frame, hop);
   }
 }
 
-void STFT::reject(const std::vector<float>& input, std::vector<float>& frame, const size_t hop)
+void STFT::reject(const size_t size, const float* input, std::vector<float>& frame, const size_t hop)
 {
   frame.assign(
-    input.data() + hop,
-    input.data() + (hop + frame.size()));
+    input + hop,
+    input + (hop + frame.size()));
 }
 
-void STFT::inject(std::vector<float>& output, const std::vector<float>& frame, const size_t hop)
+void STFT::inject(const size_t size, float* const output, const std::vector<float>& frame, const size_t hop)
 {
   for (size_t i = 0; i < frame.size(); ++i)
   {
-    if ((hop + i) >= output.size())
+    if ((hop + i) >= size)
     {
       break;
     }
