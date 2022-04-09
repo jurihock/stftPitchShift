@@ -5,9 +5,9 @@ include("dr_libs/CMakeLists.txt")
 include("pocketfft/CMakeLists.txt")
 include("smb/CMakeLists.txt")
 
-project(smbPitchShift)
+project(stftPitchShift)
 
-add_executable(smbPitchShift
+add_executable(stftPitchShift
   main.cpp
   Cepstrum.h Cepstrum.cpp
   IO.h IO.cpp
@@ -18,19 +18,19 @@ add_executable(smbPitchShift
   Vocoder.h Vocoder.cpp
 )
 
-target_link_libraries(smbPitchShift
+target_link_libraries(stftPitchShift
   anyoption dr_libs pocketfft smb
 )
 
-target_include_directories(smbPitchShift
+target_include_directories(stftPitchShift
   INTERFACE "${CMAKE_CURRENT_LIST_DIR}"
 )
 
-target_compile_features(smbPitchShift
+target_compile_features(stftPitchShift
   PRIVATE cxx_std_11
 )
 
 set_property(
   DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-  PROPERTY VS_STARTUP_PROJECT smbPitchShift
+  PROPERTY VS_STARTUP_PROJECT stftPitchShift
 )

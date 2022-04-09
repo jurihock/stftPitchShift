@@ -48,7 +48,7 @@ int main(int argc, char** argv)
   args.addUsage("-v  --overlap  stft window overlap");
   args.addUsage("               (default 32)");
   args.addUsage("");
-  args.addUsage("    --smb      enable original algorithm");
+  args.addUsage("    --smb      enable original smb algorithm");
 
   args.setFlag("help");
   args.setFlag('h');

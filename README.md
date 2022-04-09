@@ -1,4 +1,4 @@
-# smbPitchShift
+# stftPitchShift
 
 This is a reimplementation of the Stephan M. Bernsee [smbPitchShift.cpp](https://blogs.zynaptiq.com/bernsee/download), a pitch shifting algorithm using the Short-Time Fourier Transform ([STFT](https://www.audiolabs-erlangen.de/resources/MIR/FMP/C2/C2_STFT-Basic.html)).
 
@@ -91,7 +91,7 @@ Both programs C++ and Python provides a similar set of command line arguments:
 -d  --debug    plot spectrograms before and after processing
                (only available in the Python version)
 
-    --smb      enable original algorithm
+    --smb      enable original smb algorithm
                (only available in the C++ version)
 ```
 
