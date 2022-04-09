@@ -2,7 +2,7 @@
 
 This is a reimplementation of the Stephan M. Bernsee [smbPitchShift.cpp](https://blogs.zynaptiq.com/bernsee/download), a pitch shifting algorithm using the Short-Time Fourier Transform ([STFT](https://www.audiolabs-erlangen.de/resources/MIR/FMP/C2/C2_STFT-Basic.html)).
 
-This repository features two analogical algorithm implementations, [main.cpp](cpp/StftPitchShift/main.cpp) (C++) and [main.py](python/StftPitchShift/main.py) (Python). Both contain several [function blocks](#modules) of the same name (but different file extension, of course).
+This repository features two analogical algorithm implementations, [C++](cpp/StftPitchShift) and [Python](python/StftPitchShift). Both contain several [function blocks](#modules) of the same name (but different file extension, of course).
 
 In addition to the base algorithm implementation, it also features spectral [multi pitch shifting](#pitch-shifting) and cepstral [formant preservation](#formant-preservation) extensions.
 
@@ -64,13 +64,26 @@ Will soon appear...
 
 ### C++
 
-Use [CMake](http://cmake.org) to build the C++ program like so:
+Use [CMake](http://cmake.org) to build the C++ program and library like so:
 
 ```cmd
 mkdir build
 cd build
 cmake ..
 cmake --build .
+```
+
+To include this library in your C++ audio project, check the [LibStftPitchShift.cmake](cpp/StftPitchShift/LibStftPitchShift.cmake) file and the following minimal example:
+
+```cpp
+#include <StftPitchShift/StftPitchShift.h>
+
+StftPitchShift pitchshifter(1024, 256, 44100);
+
+std::vector<float> x(44100);
+std::vector<float> y(x.size());
+
+pitchshifter.shiftpitch(x, y, 1);
 ```
 
 ### Python
