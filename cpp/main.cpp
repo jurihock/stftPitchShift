@@ -1,14 +1,13 @@
 #include <iostream>
+#include <sstream>
+#include <string>
+#include <vector>
 
 #include <anyoption/anyoption.h>
 #include <smb/smbPitchShift.h>
 
-#include <Cepstrum.h>
 #include <IO.h>
-#include <Pitcher.h>
-#include <STFT.h>
-#include <Timer.h>
-#include <Vocoder.h>
+#include <StftPitchShift.h>
 
 std::vector<std::string> split(const std::string& value, const char delimiter)
 {
@@ -155,57 +154,16 @@ int main(int argc, char** argv)
     }
     else
     {
-      Timer<std::chrono::microseconds> timer;
+      StftPitchShift stft(
+        framesize,
+        framesize / hoprate,
+        samplerate);
 
-      STFT stft(framesize, framesize / hoprate);
-      Vocoder vocoder(framesize, framesize / hoprate, samplerate);
-      Pitcher pitcher(factors);
-      Cepstrum cepstrum(quefrency, samplerate);
-
-      if (quefrency)
-      {
-        std::vector<float> envelope;
-
-        stft(indata, outdata, [&](std::vector<std::complex<float>>& frame)
-        {
-          // timer.tic();
-
-          vocoder.encode(frame);
-
-          cepstrum.lifter(frame, envelope);
-
-          for (size_t i = 0; i < frame.size(); ++i)
-          {
-            frame[i].real(frame[i].real() / envelope[i]);
-          }
-
-          pitcher.shiftpitch(frame);
-
-          for (size_t i = 0; i < frame.size(); ++i)
-          {
-            frame[i].real(frame[i].real() * envelope[i]);
-          }
-
-          vocoder.decode(frame);
-
-          // timer.toc();
-        });
-      }
-      else
-      {
-        stft(indata, outdata, [&](std::vector<std::complex<float>>& frame)
-        {
-          // timer.tic();
-
-          vocoder.encode(frame);
-          pitcher.shiftpitch(frame);
-          vocoder.decode(frame);
-
-          // timer.toc();
-        });
-      }
-
-      // std::cout << timer.str() << std::endl;
+      stft.shiftpitch(
+        indata,
+        outdata,
+        factors,
+        quefrency);
     }
 
     IO::write(outfile, outdata, samplerate);
