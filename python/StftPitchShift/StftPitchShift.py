@@ -7,14 +7,28 @@ import numpy as np
 
 
 class StftPitchShift:
+    '''
+    Short-time Fourier transform (STFT) based pitch shifting.
+    '''
 
     def __init__(self, framesize, hopsize, samplerate):
+        '''
+        :param framesize: The STFT frame size in samples.
+        :param hopsize: The STFT hop size in samples.
+        :param samplerate: The sample rate of the signal in hertz.
+        '''
 
         self.framesize = framesize
         self.hopsize = hopsize
         self.samplerate = samplerate
 
     def shiftpitch(self, input, factors = 1, quefrency = 0):
+        '''
+        :param input: The input signal.
+        :param factors: The fractional pitch shifting factors.
+        :param quefrency: The optional formant lifter quefrency in seconds.
+        :return: The output signal of the equal size.
+        '''
 
         framesize = self.framesize
         hopsize = self.hopsize
