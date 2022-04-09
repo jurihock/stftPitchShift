@@ -2,16 +2,22 @@ cmake_minimum_required(VERSION 3.19)
 
 project(LibStftPitchShift)
 
-include("pocketfft/CMakeLists.txt")
+include("${CMAKE_CURRENT_LIST_DIR}/pocketfft/CMakeLists.txt")
 
 add_library(LibStftPitchShift
-  Cepstrum.h Cepstrum.cpp
-  Pitcher.h Pitcher.cpp
-  Resampler.h Resampler.cpp
-  STFT.h STFT.cpp
-  StftPitchShift.h StftPitchShift.cpp
-  Timer.h
-  Vocoder.h Vocoder.cpp
+  "${CMAKE_CURRENT_LIST_DIR}/Cepstrum.h"
+  "${CMAKE_CURRENT_LIST_DIR}/Cepstrum.cpp"
+  "${CMAKE_CURRENT_LIST_DIR}/Pitcher.h"
+  "${CMAKE_CURRENT_LIST_DIR}/Pitcher.cpp"
+  "${CMAKE_CURRENT_LIST_DIR}/Resampler.h"
+  "${CMAKE_CURRENT_LIST_DIR}/Resampler.cpp"
+  "${CMAKE_CURRENT_LIST_DIR}/STFT.h"
+  "${CMAKE_CURRENT_LIST_DIR}/STFT.cpp"
+  "${CMAKE_CURRENT_LIST_DIR}/StftPitchShift.h"
+  "${CMAKE_CURRENT_LIST_DIR}/StftPitchShift.cpp"
+  "${CMAKE_CURRENT_LIST_DIR}/Timer.h"
+  "${CMAKE_CURRENT_LIST_DIR}/Vocoder.h"
+  "${CMAKE_CURRENT_LIST_DIR}/Vocoder.cpp"
 )
 
 set_target_properties(LibStftPitchShift

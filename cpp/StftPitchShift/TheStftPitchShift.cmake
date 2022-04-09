@@ -2,13 +2,14 @@ cmake_minimum_required(VERSION 3.19)
 
 project(TheStftPitchShift)
 
-include("anyoption/CMakeLists.txt")
-include("dr_libs/CMakeLists.txt")
-include("smb/CMakeLists.txt")
+include("${CMAKE_CURRENT_LIST_DIR}/anyoption/CMakeLists.txt")
+include("${CMAKE_CURRENT_LIST_DIR}/dr_libs/CMakeLists.txt")
+include("${CMAKE_CURRENT_LIST_DIR}/smb/CMakeLists.txt")
 
 add_executable(TheStftPitchShift
-  main.cpp
-  IO.h IO.cpp
+  "${CMAKE_CURRENT_LIST_DIR}/main.cpp"
+  "${CMAKE_CURRENT_LIST_DIR}/IO.h"
+  "${CMAKE_CURRENT_LIST_DIR}/IO.cpp"
 )
 
 set_target_properties(TheStftPitchShift
