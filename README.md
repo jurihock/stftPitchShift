@@ -6,7 +6,7 @@ This repository features two analogical algorithm implementations, [C++](cpp/Stf
 
 In addition to the base algorithm implementation, it also features spectral [multi pitch shifting](#pitch-shifting) and cepstral [formant preservation](#formant-preservation) extensions.
 
-Both sources contain a ready-to-use command line tool as well as a library for custom needs. See more details in the [build](#build) section.
+Both sources contain a ready-to-use [command line tool](#usage) as well as a library for custom needs. See more details in the [build](#build) section.
 
 ## Modules
 
