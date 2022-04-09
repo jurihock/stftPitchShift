@@ -1,12 +1,9 @@
-from Cepstrum import lifter
 from IO import read, write
-from Pitcher import shiftpitch
 from STFT import stft, istft, spectrogram
-from Vocoder import encode, decode
+from StftPitchShift import StftPitchShift
 
 import click
 import matplotlib.pyplot as plot
-import numpy as np
 
 
 @click.command(context_settings=dict(help_option_names=['-h', '--help']))
@@ -19,54 +16,35 @@ import numpy as np
 @click.option('-d', '--debug', is_flag=True, default=False, help='plot spectrograms before and after processing')
 def main(input, output, pitch, formant, window, overlap, debug):
 
-    x, sr = read(input)
+    x, samplerate = read(input)
 
     factors = [float(factor) for factor in pitch.split(',')]
-    quefrency = int(float(formant) * 1e-3 * sr)
+    quefrency = float(formant) * 1e-3
 
     framesize = window
     hopsize = window // overlap
 
-    frames = stft(x, framesize, hopsize)
+    pitchshifter = StftPitchShift(framesize, hopsize, samplerate)
 
-    if quefrency:
+    y = pitchshifter.shiftpitch(x, factors, quefrency)
 
-        frames0 = frames.copy() if debug else None
-        frames = encode(frames, framesize, hopsize, sr)
-
-        envelopes = lifter(frames, quefrency)
-
-        frames.real /= envelopes
-        frames = shiftpitch(frames, factors)
-        frames.real *= envelopes
-
-        frames = decode(frames, framesize, hopsize, sr)
-        frames1 = frames.copy() if debug else None
-
-    else:
-
-        frames0 = frames.copy() if debug else None
-        frames = encode(frames, framesize, hopsize, sr)
-        frames = shiftpitch(frames, factors)
-        frames = decode(frames, framesize, hopsize, sr)
-        frames1 = frames.copy() if debug else None
-
-    y = istft(frames, framesize, hopsize)
-
-    write(output, y, sr)
+    write(output, y, samplerate)
 
     if debug:
 
+        framesX = stft(x, framesize, hopsize)
+        framesY = stft(y, framesize, hopsize)
+
         figure = plot.figure()
 
-        spectrogram0 = figure.add_subplot(2, 1, 1, title='Input Spectrogram')
-        spectrogram(frames0, framesize, hopsize, sr)
+        spectrogramX = figure.add_subplot(2, 1, 1, title='Input Spectrogram')
+        spectrogram(framesX, framesize, hopsize, samplerate)
 
-        spectrogram1 = figure.add_subplot(2, 1, 2, title='Output Spectrogram')
-        spectrogram(frames1, framesize, hopsize, sr)
+        spectrogramY = figure.add_subplot(2, 1, 2, title='Output Spectrogram')
+        spectrogram(framesY, framesize, hopsize, samplerate)
 
-        spectrogram0.get_shared_x_axes().join(spectrogram0, spectrogram1)
-        spectrogram0.get_shared_y_axes().join(spectrogram0, spectrogram1)
+        spectrogramX.get_shared_x_axes().join(spectrogramX, spectrogramY)
+        spectrogramX.get_shared_y_axes().join(spectrogramX, spectrogramY)
 
         plot.tight_layout()
         plot.show()

@@ -6,12 +6,12 @@ def wrap(x):
     return (x + np.pi) % (2 * np.pi) - np.pi
 
 
-def encode(frames, framesize, hopsize, sr):
+def encode(frames, framesize, hopsize, samplerate):
 
     M, N = frames.shape
 
     phaseinc = 2 * np.pi * hopsize / framesize
-    freqinc = sr / framesize
+    freqinc = samplerate / framesize
 
     buffer = np.zeros(N)
     data = np.zeros((M, N), complex)
@@ -34,12 +34,12 @@ def encode(frames, framesize, hopsize, sr):
     return data
 
 
-def decode(frames, framesize, hopsize, sr):
+def decode(frames, framesize, hopsize, samplerate):
 
     M, N = frames.shape
 
     phaseinc = 2 * np.pi * hopsize / framesize
-    freqinc = sr / framesize
+    freqinc = samplerate / framesize
 
     buffer = np.zeros(N)
     data = np.zeros((M, N), complex)

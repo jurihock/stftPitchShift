@@ -40,7 +40,7 @@ def istft(frames, framesize, hopsize):
     return y
 
 
-def spectrogram(frames, framesize, hopsize, sr, xlim=None, ylim=None, clim=-120, cmap='inferno'):
+def spectrogram(frames, framesize, hopsize, samplerate, xlim=None, ylim=None, clim=-120, cmap='inferno'):
 
     def lim():
 
@@ -65,8 +65,8 @@ def spectrogram(frames, framesize, hopsize, sr, xlim=None, ylim=None, clim=-120,
     with np.errstate(divide='ignore', invalid='ignore'):
         data = 20 * np.log10(np.abs(frames))
 
-    timestamps = np.arange(frames.shape[0]) * hopsize / sr
-    frequencies = np.arange(frames.shape[1]) * sr / framesize
+    timestamps = np.arange(frames.shape[0]) * hopsize / samplerate
+    frequencies = np.arange(frames.shape[1]) * samplerate / framesize
 
     roi = (np.min(timestamps), np.max(timestamps), np.min(frequencies), np.max(frequencies))
 
@@ -86,7 +86,7 @@ def spectrogram(frames, framesize, hopsize, sr, xlim=None, ylim=None, clim=-120,
     return plot
 
 
-def phasogram(frames, framesize, hopsize, sr, xlim=None, ylim=None, clim=None, cmap='twilight'):
+def phasogram(frames, framesize, hopsize, samplerate, xlim=None, ylim=None, clim=None, cmap='twilight'):
 
     def lim():
 
@@ -112,8 +112,8 @@ def phasogram(frames, framesize, hopsize, sr, xlim=None, ylim=None, clim=None, c
 
     data = np.angle(frames)
 
-    timestamps = np.arange(frames.shape[0]) * hopsize / sr
-    frequencies = np.arange(frames.shape[1]) * sr / framesize
+    timestamps = np.arange(frames.shape[0]) * hopsize / samplerate
+    frequencies = np.arange(frames.shape[1]) * samplerate / framesize
 
     roi = (np.min(timestamps), np.max(timestamps), np.min(frequencies), np.max(frequencies))
 
