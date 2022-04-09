@@ -66,7 +66,7 @@ Will soon appear...
 
 Use [CMake](http://cmake.org) to build the C++ program like so:
 
-```
+```cmd
 mkdir build
 cd build
 cmake ..
@@ -79,7 +79,7 @@ The Python program `stftpitchshift` can be installed via `pip install stftpitchs
 
 Also feel free to explore the installed Python module `StftPitchShift` in your personal audio project:
 
-```
+```python
 from StftPitchShift import StftPitchShift
 
 pitchshifter = StftPitchShift(1024, 256, 44100)
