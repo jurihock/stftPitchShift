@@ -95,8 +95,15 @@ To apply multiple pitch shifts at once, separate each factor by a comma, e.g. `-
 
 ## Further reading
 
+### Instantaneous frequency estimation
+
 * [Fundamentals of Music Processing](http://www.music-processing.de) by Meinard Müller (section 8.2.1 in the second edition or [online](https://www.audiolabs-erlangen.de/resources/MIR/FMP/C8/C8S2_InstantFreqEstimation.html))
 * [Digital Audio Effects](http://www.dafx.de) by Udo Zölzer (sections 7.3.1 and 7.3.5 in the second edition)
+
+### Cepstrum analysis and formant changing
+
+* [Digital Audio Effects](http://www.dafx.de) by Udo Zölzer (sections 8.2.3 and 8.3.2 in the second edition)
+* [Discrete-Time Signal Processing](https://www.pearson.com/us/higher-education/program/Oppenheim-Discrete-Time-Signal-Processing-3rd-Edition/PGM212808.html) by Oppenheim & Schafer (chapter 13 in the third edition)
 
 ## Credits
 
