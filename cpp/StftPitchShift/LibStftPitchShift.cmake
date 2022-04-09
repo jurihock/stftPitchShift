@@ -2,11 +2,14 @@ cmake_minimum_required(VERSION 3.19)
 
 project(LibStftPitchShift)
 
+include("${CMAKE_CURRENT_LIST_DIR}/dr_libs/CMakeLists.txt")
 include("${CMAKE_CURRENT_LIST_DIR}/pocketfft/CMakeLists.txt")
 
 add_library(LibStftPitchShift
   "${CMAKE_CURRENT_LIST_DIR}/Cepstrum.h"
   "${CMAKE_CURRENT_LIST_DIR}/Cepstrum.cpp"
+  "${CMAKE_CURRENT_LIST_DIR}/IO.h"
+  "${CMAKE_CURRENT_LIST_DIR}/IO.cpp"
   "${CMAKE_CURRENT_LIST_DIR}/Pitcher.h"
   "${CMAKE_CURRENT_LIST_DIR}/Pitcher.cpp"
   "${CMAKE_CURRENT_LIST_DIR}/Resampler.h"
@@ -30,7 +33,7 @@ target_include_directories(LibStftPitchShift
 )
 
 target_link_libraries(LibStftPitchShift
-  pocketfft
+  dr_libs pocketfft
 )
 
 target_compile_features(LibStftPitchShift
