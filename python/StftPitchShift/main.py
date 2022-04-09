@@ -1,5 +1,5 @@
-from IO import read, write
-from STFT import stft, istft, spectrogram
+from StftPitchShift.IO import read, write
+from StftPitchShift.STFT import stft, istft, spectrogram
 from StftPitchShift import StftPitchShift
 
 import click
