@@ -3,6 +3,9 @@
 build*/
 cmake-build*/
 
+*.egg-info/
+dist/
+
 *.py[cod]
 __pycache__/
 
