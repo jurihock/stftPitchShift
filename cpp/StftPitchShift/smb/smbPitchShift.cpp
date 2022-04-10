@@ -50,7 +50,7 @@ double smbAtan2(double x, double y);
 // -----------------------------------------------------------------------------------------------------------------
 
 
-void smbPitchShift(float pitchShift, long numSampsToProcess, long fftFrameSize, long osamp, float sampleRate, float *indata, float *outdata)
+void smbPitchShift(float pitchShift, long numSampsToProcess, long fftFrameSize, long osamp, float sampleRate, const float* indata, float* const outdata)
 /*
 	Routine smbPitchShift(). See top of file for explanation
 	Purpose: doing pitch shifting while maintaining duration using the Short
