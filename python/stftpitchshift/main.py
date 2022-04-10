@@ -5,6 +5,7 @@ from stftpitchshift.stft import stft, istft, spectrogram
 
 import click
 import matplotlib.pyplot as plot
+import numpy as np
 
 
 @click.command('stftpitchshift', help='STFT based multi pitch shifting with optional formant preservation', no_args_is_help=True, context_settings=dict(help_option_names=['-h', '--help']))
@@ -28,27 +29,37 @@ def main(input, output, pitch, quefrency, window, overlap, debug):
 
     pitchshifter = StftPitchShift(framesize, hopsize, samplerate)
 
-    y = pitchshifter.shiftpitch(x, factors, quefrency)
+    channels = x.shape[-1] if x.ndim > 1 else 1
+
+    x = x[:, None] if channels == 1 else x
+
+    y = np.stack([
+        pitchshifter.shiftpitch(x[:, channel], factors, quefrency)
+        for channel in range(channels)
+    ], axis=-1)
 
     write(output, y, samplerate)
 
     if debug:
 
-        framesX = stft(x, framesize, hopsize)
-        framesY = stft(y, framesize, hopsize)
+        for channel in range(channels):
 
-        figure = plot.figure()
+            framesX = stft(x[:, channel], framesize, hopsize)
+            framesY = stft(y[:, channel], framesize, hopsize)
 
-        spectrogramX = figure.add_subplot(2, 1, 1, title='Input Spectrogram')
-        spectrogram(framesX, framesize, hopsize, samplerate)
+            figure = plot.figure(f'Channel {channel+1}/{channels}')
 
-        spectrogramY = figure.add_subplot(2, 1, 2, title='Output Spectrogram')
-        spectrogram(framesY, framesize, hopsize, samplerate)
+            spectrogramX = figure.add_subplot(2, 1, 1, title='Input Spectrogram')
+            spectrogram(framesX, framesize, hopsize, samplerate)
 
-        spectrogramX.get_shared_x_axes().join(spectrogramX, spectrogramY)
-        spectrogramX.get_shared_y_axes().join(spectrogramX, spectrogramY)
+            spectrogramY = figure.add_subplot(2, 1, 2, title='Output Spectrogram')
+            spectrogram(framesY, framesize, hopsize, samplerate)
 
-        plot.tight_layout()
+            spectrogramX.get_shared_x_axes().join(spectrogramX, spectrogramY)
+            spectrogramX.get_shared_y_axes().join(spectrogramX, spectrogramY)
+
+            plot.tight_layout()
+
         plot.show()
 
 
