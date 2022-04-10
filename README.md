@@ -113,6 +113,7 @@ Both programs C++ and Python provides a similar set of command line arguments:
 
 ```
 -h  --help     print this help
+    --version  print version number
 
 -i  --input    input .wav file name
 -o  --output   output .wav file name
