@@ -1,7 +1,7 @@
-from StftPitchShift.IO import read, write
-from StftPitchShift.STFT import stft, istft, spectrogram
-from StftPitchShift import StftPitchShift
-from StftPitchShift import __version__ as version
+from stftpitchshift import StftPitchShift
+from stftpitchshift import __version__ as version
+from stftpitchshift.io import read, write
+from stftpitchshift.stft import stft, istft, spectrogram
 
 import click
 import matplotlib.pyplot as plot

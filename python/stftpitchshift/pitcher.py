@@ -1,4 +1,4 @@
-from StftPitchShift.Resampler import linear as resample
+from stftpitchshift.resampler import linear as resample
 
 import numpy as np
 

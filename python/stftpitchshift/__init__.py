@@ -1,3 +1,3 @@
 __version__ = "1.1"
 
-from .StftPitchShift import StftPitchShift
+from stftpitchshift.stftpitchshift import StftPitchShift

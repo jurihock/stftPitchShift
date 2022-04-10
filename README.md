@@ -96,10 +96,10 @@ pitchshifter.shiftpitch(x, y, 1);
 
 The Python program `stftpitchshift` can be installed via `pip install stftpitchshift`.
 
-Also feel free to explore the installed Python module `StftPitchShift` in your personal audio project:
+Also feel free to explore the Python class `StftPitchShift` in your personal audio project:
 
 ```python
-from StftPitchShift import StftPitchShift
+from stftpitchshift import StftPitchShift
 
 pitchshifter = StftPitchShift(1024, 256, 44100)
 

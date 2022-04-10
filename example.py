@@ -1,4 +1,4 @@
-from StftPitchShift import StftPitchShift
+from stftpitchshift import StftPitchShift
 
 pitchshifter = StftPitchShift(1024, 256, 44100)
 
