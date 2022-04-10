@@ -109,7 +109,7 @@ y = pitchshifter.shiftpitch(x, 1)
 
 ## Usage
 
-Both programs C++ and Python provides a similar set of command line arguments:
+Both programs C++ and Python provides a similar set of command line options:
 
 ```
 -h  --help       print this help
