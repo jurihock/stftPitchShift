@@ -1,7 +1,20 @@
 #include <IO.h>
 
+#include <limits>
+
 #define DR_WAV_IMPLEMENTATION
 #include <dr_libs/dr_wav.h>
+
+void IO::clip(std::vector<float>& data)
+{
+  const float min = -1.0f + std::numeric_limits<float>::epsilon();
+  const float max = +1.0f - std::numeric_limits<float>::epsilon();
+
+  for (size_t i = 0; i < data.size(); ++i)
+  {
+    data[i] = std::min(std::max(data[i], min), max);
+  }
+}
 
 void IO::read(const std::string& path, std::vector<float>& data, float& samplerate, size_t& channels)
 {

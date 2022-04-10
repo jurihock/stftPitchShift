@@ -1,5 +1,4 @@
 #include <iostream>
-#include <limits>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -217,14 +216,7 @@ int main(int argc, char** argv)
       }
     }
 
-    const float min = -1.0f + std::numeric_limits<float>::epsilon();
-    const float max = +1.0f - std::numeric_limits<float>::epsilon();
-
-    for (size_t i = 0; i < outdata.size(); ++i)
-    {
-      outdata[i] = std::min(std::max(outdata[i], min), max);
-    }
-
+    IO::clip(outdata);
     IO::write(outfile, outdata, samplerate, channels);
   }
   catch (const std::exception& exception)
