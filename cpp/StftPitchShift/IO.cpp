@@ -55,4 +55,10 @@ void IO::write(const std::string& path, const std::vector<float>& data, const fl
     throw std::runtime_error(
       "Unable to write \"" + path + "\"!");
   }
+  
+  if (drwav_uninit(&wav) != DRWAV_SUCCESS)
+  {
+    throw std::runtime_error(
+      "Unable to write \"" + path + "\"!");
+  }
 }
