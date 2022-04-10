@@ -25,7 +25,7 @@ add_library(LibStftPitchShift
 )
 
 set_target_properties(LibStftPitchShift
-  PROPERTIES OUTPUT_NAME "StftPitchShift"
+  PROPERTIES OUTPUT_NAME "stftpitchshift"
 )
 
 target_include_directories(LibStftPitchShift
