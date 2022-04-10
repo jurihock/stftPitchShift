@@ -1,12 +1,14 @@
 from StftPitchShift.IO import read, write
 from StftPitchShift.STFT import stft, istft, spectrogram
 from StftPitchShift import StftPitchShift
+from StftPitchShift import __version__ as version
 
 import click
 import matplotlib.pyplot as plot
 
 
 @click.command(context_settings=dict(help_option_names=['-h', '--help']))
+@click.version_option(version=version, message='%(version)s')
 @click.option('-i', '--input', required=True, help='input .wav file name')
 @click.option('-o', '--output', required=True, help='output .wav file name')
 @click.option('-p', '--pitch', default='1.0', show_default=True, help='fractional pitch shifting factors separated by comma')

@@ -19,6 +19,7 @@ add_library(LibStftPitchShift
   "${CMAKE_CURRENT_LIST_DIR}/StftPitchShift.h"
   "${CMAKE_CURRENT_LIST_DIR}/StftPitchShift.cpp"
   "${CMAKE_CURRENT_LIST_DIR}/Timer.h"
+  "${CMAKE_CURRENT_LIST_DIR}/Version.h"
   "${CMAKE_CURRENT_LIST_DIR}/Vocoder.h"
   "${CMAKE_CURRENT_LIST_DIR}/Vocoder.cpp"
 )

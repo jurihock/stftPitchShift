@@ -9,6 +9,7 @@
 
 #include <StftPitchShift/IO.h>
 #include <StftPitchShift/StftPitchShift.h>
+#include <StftPitchShift/Version.h>
 
 std::vector<std::string> split(const std::string& value, const char delimiter)
 {
@@ -32,6 +33,7 @@ int main(int argc, char** argv)
   args.addUsage("Usage:");
   args.addUsage("");
   args.addUsage("-h  --help     print this help");
+  args.addUsage("    --version  print version number");
   args.addUsage("");
   args.addUsage("-i  --input    input .wav file name");
   args.addUsage("-o  --output   output .wav file name");
@@ -50,8 +52,9 @@ int main(int argc, char** argv)
   args.addUsage("");
   args.addUsage("    --smb      enable original smb algorithm");
 
-  args.setFlag("help");
   args.setFlag('h');
+  args.setFlag("help");
+  args.setFlag("version");
   args.setFlag("smb");
   args.setOption("input", 'i');
   args.setOption("output", 'o');
@@ -65,6 +68,12 @@ int main(int argc, char** argv)
   if (!args.hasOptions() || args.getFlag("help") || args.getFlag('h'))
   {
     args.printUsage();
+    return 0;
+  }
+
+  if (args.getFlag("version"))
+  {
+    std::cout << StftPitchShiftVersion << std::endl;
     return 0;
   }
 
