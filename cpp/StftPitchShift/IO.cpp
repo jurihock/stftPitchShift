@@ -15,13 +15,13 @@ void IO::read(const std::string& path, std::vector<float>& data, float& sr)
   if (rawdata == nullptr)
   {
     throw std::runtime_error(
-      "Unable to read " + path + "!");
+      "Unable to read \"" + path + "\"!");
   }
 
   if (channels != 1)
   {
     throw std::runtime_error(
-      "Unsupported number of channels " + std::to_string(channels) + " in " + path + "!");
+      "Unsupported number of channels " + std::to_string(channels) + " in \"" + path + "\"!");
   }
 
   data.assign(rawdata, rawdata + samples);
@@ -47,12 +47,12 @@ void IO::write(const std::string& path, const std::vector<float>& data, const fl
   if (drwav_init_file_write(&wav, path.c_str(), &format, nullptr) != DRWAV_TRUE)
   {
     throw std::runtime_error(
-      "Unable to write " + path + "!");
+      "Unable to write \"" + path + "\"!");
   }
 
   if (drwav_write_pcm_frames(&wav, rawdata.size(), rawdata.data()) != rawdata.size())
   {
     throw std::runtime_error(
-      "Unable to write " + path + "!");
+      "Unable to write \"" + path + "\"!");
   }
 }
