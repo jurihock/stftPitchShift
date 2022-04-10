@@ -112,34 +112,34 @@ y = pitchshifter.shiftpitch(x, 1)
 Both programs C++ and Python provides a similar set of command line arguments:
 
 ```
--h  --help     print this help
-    --version  print version number
+-h  --help       print this help
+    --version    print version number
 
--i  --input    input .wav file name
--o  --output   output .wav file name
+-i  --input      input .wav file name
+-o  --output     output .wav file name
 
--p  --pitch    fractional pitch shifting factors separated by comma
-               (default 1.0)
+-p  --pitch      fractional pitch shifting factors separated by comma
+                 (default 1.0)
 
--f  --formant  optional formant lifter quefrency in milliseconds
-               (default 0.0)
+-q  --quefrency  optional formant lifter quefrency in milliseconds
+                 (default 0.0)
 
--w  --window   sfft window size
-               (default 1024)
+-w  --window     sfft window size
+                 (default 1024)
 
--v  --overlap  stft window overlap
-               (default 32)
+-v  --overlap    stft window overlap
+                 (default 32)
 
--d  --debug    plot spectrograms before and after processing
-               (only available in the Python version)
+-d  --debug      plot spectrograms before and after processing
+                 (only available in the Python version)
 
-    --smb      enable original smb algorithm
-               (only available in the C++ version)
+    --smb        enable original smb algorithm
+                 (only available in the C++ version)
 ```
 
 To apply multiple pitch shifts at once, separate each factor by a comma, e.g. `-p 0.5,1,2`.
 
-To enable the formant preservation feature specify a suitable *quefrency* value in milliseconds. Depending on the source signal, begin with a small value like `-f 1`. Generally, the *quefrency* value has to be smaller than the fundamental period, as reciprocal of the fundamental frequency, of the source signal.
+To enable the formant preservation feature specify a suitable *quefrency* value in milliseconds. Depending on the source signal, begin with a small value like `-q 1`. Generally, the *quefrency* value has to be smaller than the fundamental period, as reciprocal of the fundamental frequency, of the source signal.
 
 At the moment the formant preservation doesn't seem to work well along with the multi pitch shifting and smaller pitch shifting factors. Further investigation is therefore necessary...
 

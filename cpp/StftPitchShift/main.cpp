@@ -32,25 +32,25 @@ int main(int argc, char** argv)
 
   args.addUsage("Usage:");
   args.addUsage("");
-  args.addUsage("-h  --help     print this help");
-  args.addUsage("    --version  print version number");
+  args.addUsage("-h  --help       print this help");
+  args.addUsage("    --version    print version number");
   args.addUsage("");
-  args.addUsage("-i  --input    input .wav file name");
-  args.addUsage("-o  --output   output .wav file name");
+  args.addUsage("-i  --input      input .wav file name");
+  args.addUsage("-o  --output     output .wav file name");
   args.addUsage("");
-  args.addUsage("-p  --pitch    fractional pitch shifting factors separated by comma");
-  args.addUsage("               (default 1.0)");
+  args.addUsage("-p  --pitch      fractional pitch shifting factors separated by comma");
+  args.addUsage("                 (default 1.0)");
   args.addUsage("");
-  args.addUsage("-f  --formant  optional formant lifter quefrency in milliseconds");
-  args.addUsage("               (default 0.0)");
+  args.addUsage("-q  --quefrency  optional formant lifter quefrency in milliseconds");
+  args.addUsage("                 (default 0.0)");
   args.addUsage("");
-  args.addUsage("-w  --window   sfft window size");
-  args.addUsage("               (default 1024)");
+  args.addUsage("-w  --window     sfft window size");
+  args.addUsage("                 (default 1024)");
   args.addUsage("");
-  args.addUsage("-v  --overlap  stft window overlap");
-  args.addUsage("               (default 32)");
+  args.addUsage("-v  --overlap    stft window overlap");
+  args.addUsage("                 (default 32)");
   args.addUsage("");
-  args.addUsage("    --smb      enable original smb algorithm");
+  args.addUsage("    --smb        enable original smb algorithm");
 
   args.setFlag('h');
   args.setFlag("help");
@@ -59,7 +59,7 @@ int main(int argc, char** argv)
   args.setOption("input", 'i');
   args.setOption("output", 'o');
   args.setOption("pitch", 'p');
-  args.setOption("formant", 'f');
+  args.setOption("quefrency", 'q');
   args.setOption("window", 'w');
   args.setOption("overlap", 'v');
 
@@ -118,9 +118,9 @@ int main(int argc, char** argv)
     }
   }
 
-  if (args.getValue("formant") || args.getValue('f'))
+  if (args.getValue("quefrency") || args.getValue('q'))
   {
-    quefrency = std::stof(args.getValue("formant")) * 1e-3;
+    quefrency = std::stof(args.getValue("quefrency")) * 1e-3;
   }
 
   if (args.getValue("window") || args.getValue('w'))

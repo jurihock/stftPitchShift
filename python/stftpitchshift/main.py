@@ -12,16 +12,16 @@ import matplotlib.pyplot as plot
 @click.option('-i', '--input', required=True, help='input .wav file name')
 @click.option('-o', '--output', required=True, help='output .wav file name')
 @click.option('-p', '--pitch', default='1.0', show_default=True, help='fractional pitch shifting factors separated by comma')
-@click.option('-f', '--formant', default='0.0', show_default=True, help='optional formant lifter quefrency in milliseconds')
+@click.option('-q', '--quefrency', default='0.0', show_default=True, help='optional formant lifter quefrency in milliseconds')
 @click.option('-w', '--window', default=1024, show_default=True, help='sfft window size')
 @click.option('-v', '--overlap', default=32, show_default=True, help='stft window overlap')
 @click.option('-d', '--debug', is_flag=True, default=False, help='plot spectrograms before and after processing')
-def main(input, output, pitch, formant, window, overlap, debug):
+def main(input, output, pitch, quefrency, window, overlap, debug):
 
     x, samplerate = read(input)
 
     factors = [float(factor) for factor in pitch.split(',')]
-    quefrency = float(formant) * 1e-3
+    quefrency = float(quefrency) * 1e-3
 
     framesize = window
     hopsize = window // overlap
