@@ -1,8 +1,6 @@
 #include <Vocoder.h>
 
 Vocoder::Vocoder(const size_t framesize, const size_t hopsize, const float samplerate) :
-  framesize(framesize),
-  hopsize(hopsize),
   stft_freq_inc((double)samplerate / (double)framesize),
   stft_phase_inc(PI2 / ((double)framesize / (double)hopsize))
 {

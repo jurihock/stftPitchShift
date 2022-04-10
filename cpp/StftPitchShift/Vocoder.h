@@ -18,9 +18,6 @@ private:
 
   const double PI2 = 2.0 * std::acos(-1.0);
 
-  const size_t framesize;
-  const size_t hopsize;
-
   const double stft_freq_inc;
   const double stft_phase_inc;
 
