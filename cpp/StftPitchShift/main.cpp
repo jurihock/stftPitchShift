@@ -168,44 +168,53 @@ int main(int argc, char** argv)
   try
   {
     float samplerate;
+    size_t channels;
 
     std::vector<float> indata, outdata;
 
-    IO::read(infile, indata, samplerate);
+    IO::read(infile, indata, samplerate, channels);
 
     outdata.resize(indata.size());
 
-    if (smb)
+    for (size_t channel = 0; channel < channels; ++channel)
     {
-      for (auto factor : factors)
+      const size_t size = indata.size() / channels;
+      const float* input = indata.data() + channel * size;
+      float* const output = outdata.data() + channel * size;
+
+      if (smb)
       {
-        smbPitchShift(
-          factor,
-          indata.size(),
-          framesize,
-          hoprate,
-          samplerate,
-          indata.data(),
-          outdata.data());
-        
-        for (size_t i = 0; i < outdata.size(); ++i)
+        for (const float factor : factors)
         {
-          outdata[i] /= factors.size();
+          smbPitchShift(
+            factor,
+            size,
+            framesize,
+            hoprate,
+            samplerate,
+            input,
+            output);
+
+          for (size_t i = 0; i < outdata.size(); ++i)
+          {
+            outdata[i] /= factors.size();
+          }
         }
       }
-    }
-    else
-    {
-      StftPitchShift stft(
-        framesize,
-        framesize / hoprate,
-        samplerate);
+      else
+      {
+        StftPitchShift stft(
+          framesize,
+          framesize / hoprate,
+          samplerate);
 
-      stft.shiftpitch(
-        indata,
-        outdata,
-        factors,
-        quefrency);
+        stft.shiftpitch(
+          size,
+          input,
+          output,
+          factors,
+          quefrency);
+      }
     }
 
     const float min = -1.0f + std::numeric_limits<float>::epsilon();
@@ -216,7 +225,7 @@ int main(int argc, char** argv)
       outdata[i] = std::min(std::max(outdata[i], min), max);
     }
 
-    IO::write(outfile, outdata, samplerate);
+    IO::write(outfile, outdata, samplerate, channels);
   }
   catch (const std::exception& exception)
   {
