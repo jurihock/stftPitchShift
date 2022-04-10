@@ -2,4 +2,4 @@
 
 #include <string>
 
-const std::string StftPitchShiftVersion = "1.2";
+const std::string StftPitchShiftVersion = "1.3";
