@@ -122,11 +122,6 @@ void STFT::inject(const size_t size, float* const output, const std::vector<floa
 {
   for (size_t i = 0; i < frame.size(); ++i)
   {
-    if ((hop + i) >= size)
-    {
-      break;
-    }
-
     output[hop + i] += frame[i];
   }
 }
