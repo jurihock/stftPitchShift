@@ -50,14 +50,14 @@ void Resampler::linear(const std::vector<std::complex<float>>& x, std::vector<st
 
     if (n0 == n1)
     {
-      y[m] = x[n0];
+      y[m] = x[static_cast<size_t>(n0)];
       continue;
     }
 
     const std::complex<float> y0 = x[static_cast<size_t>(n0)];
     const std::complex<float> y1 = x[static_cast<size_t>(n1)];
 
-    const float i = (n - n0) / (n1 - n0);
+    const float i = static_cast<float>((n - n0) / (n1 - n0));
 
     y[m] = y0 * (1 - i) + y1 * i;
   }

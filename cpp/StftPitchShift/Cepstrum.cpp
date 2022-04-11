@@ -24,7 +24,7 @@ void Cepstrum::lifter(const std::vector<std::complex<float>>& dft, std::vector<f
 
   for (size_t i = 0; i < spectrum.size(); ++i)
   {
-    envelope[i] = std::pow(10, spectrum[i].real());
+    envelope[i] = std::pow(10.0f, spectrum[i].real());
   }
 }
 

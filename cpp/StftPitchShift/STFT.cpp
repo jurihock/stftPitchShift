@@ -43,7 +43,7 @@ void STFT::operator()(const size_t size, const float* input, float* const output
 
   for (size_t hop = 0; (hop + framesize) < size; hop += hopsize)
   {
-    reject(size, input, frame, hop);
+    reject(/*size,*/ input, frame, hop);
     weight(frame, window, scalers[0]);
     fft(frame, dft, scalers[1]);
 
@@ -55,11 +55,11 @@ void STFT::operator()(const size_t size, const float* input, float* const output
   }
 }
 
-void STFT::reject(const size_t size, const float* input, std::vector<float>& frame, const size_t hop)
+void STFT::reject(/*const size_t size,*/ const float* input, std::vector<float>& frame, const size_t hop)
 {
   frame.assign(
     input + hop,
-    input + (hop + frame.size()));
+    input + hop + frame.size());
 }
 
 void STFT::inject(const size_t size, float* const output, const std::vector<float>& frame, const size_t hop)

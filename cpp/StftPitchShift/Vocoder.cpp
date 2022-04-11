@@ -10,15 +10,13 @@ Vocoder::Vocoder(const size_t framesize, const size_t hopsize, const float sampl
 
 void Vocoder::encode(std::vector<std::complex<float>>& dft)
 {
-  double magnitude,
-         frequency,
+  double frequency,
          phase,
          delta,
          j;
 
   for (size_t i = 0; i < dft.size(); ++i)
   {
-    magnitude = std::abs(dft[i]);
     phase = std::arg(dft[i]);
 
     delta = phase - encode_phase_buffer[i];
@@ -28,22 +26,21 @@ void Vocoder::encode(std::vector<std::complex<float>>& dft)
 
     frequency = (i + j) * stft_freq_inc;
 
-    dft[i].real(magnitude);
-    dft[i].imag(frequency);
+    dft[i] = std::complex<float>(
+      std::abs(dft[i]),
+      static_cast<float>(frequency));
   }
 }
 
 void Vocoder::decode(std::vector<std::complex<float>>& dft)
 {
-  double magnitude,
-         frequency,
+  double frequency,
          phase,
          delta,
          j;
 
   for (size_t i = 0; i < dft.size(); ++i)
   {
-    magnitude = dft[i].real();
     frequency = dft[i].imag();
 
     j = (frequency - i * stft_freq_inc) / stft_freq_inc;
@@ -53,6 +50,8 @@ void Vocoder::decode(std::vector<std::complex<float>>& dft)
     decode_phase_buffer[i] += delta;
     phase = decode_phase_buffer[i];
 
-    dft[i] = std::polar(magnitude, phase);
+    dft[i] = std::polar<float>(
+      dft[i].real(),
+      static_cast<float>(phase));
   }
 }

@@ -97,8 +97,8 @@ int main(int argc, char** argv)
   std::vector<float> factors = { 1 };
   float quefrency = 0;
 
-  int framesize = 1024;
-  int hoprate = 32;
+  size_t framesize = 1024;
+  size_t hoprate = 32;
 
   try
   {
@@ -144,7 +144,7 @@ int main(int argc, char** argv)
 
     if (args.getValue("quefrency") || args.getValue('q'))
     {
-      quefrency = std::stof(args.getValue("quefrency")) * 1e-3;
+      quefrency = std::stof(args.getValue("quefrency")) * 1e-3f;
     }
 
     if (args.getValue("window") || args.getValue('w'))

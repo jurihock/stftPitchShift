@@ -1,5 +1,6 @@
 #include <IO.h>
 
+#include <algorithm>
 #include <limits>
 
 #define DR_WAV_IMPLEMENTATION
