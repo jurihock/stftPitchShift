@@ -5,6 +5,11 @@
 #include <STFT.h>
 #include <Vocoder.h>
 
+#include <iomanip>
+#include <iostream>
+#include <fstream>
+#include <sstream>
+
 StftPitchShift::StftPitchShift(
   const size_t framesize,
   const size_t hopsize,
@@ -13,6 +18,10 @@ StftPitchShift::StftPitchShift(
   hopsize(hopsize),
   samplerate(samplerate)
 {
+  debug.chronometry = false;
+  debug.dump = false;
+  debug.filename = "";
+  debug.fileindex = 0;
 }
 
 void StftPitchShift::shiftpitch(
@@ -69,10 +78,12 @@ void StftPitchShift::shiftpitch(
   const std::vector<float>& factors,
   const float quefrency)
 {
-  STFT stft(framesize, hopsize);
+  STFT stft(framesize, hopsize, debug.chronometry);
   Vocoder vocoder(framesize, hopsize, samplerate);
   Pitcher pitcher(factors);
   Cepstrum cepstrum(quefrency, samplerate);
+
+  debug.fileindex = 0;
 
   if (quefrency)
   {
@@ -108,4 +119,34 @@ void StftPitchShift::shiftpitch(
       vocoder.decode(frame);
     });
   }
+}
+
+void StftPitchShift::dump(const std::string& filename, const size_t fileindex, const std::vector<float>& data)
+{
+  std::stringstream filepath;
+
+  filepath << filename;
+  filepath << ".";
+  filepath << std::setw(10) << std::setfill('0') << fileindex;
+  filepath << ".raw";
+
+  std::ofstream file(filepath.str(), std::ios::out | std::ios::binary);
+
+  file.write(reinterpret_cast<const char*>(data.data()), data.size() * sizeof(float));
+  file.close();
+}
+
+void StftPitchShift::dump(const std::string& filename, const size_t fileindex, const std::vector<std::complex<float>>& data)
+{
+  std::vector<float> buffer(data.size());
+
+  std::transform(data.begin(), data.end(), buffer.begin(),
+    [](const std::complex<float>& value) { return std::real(value); });
+
+  dump(filename + ".real", fileindex, buffer);
+
+  std::transform(data.begin(), data.end(), buffer.begin(),
+    [](const std::complex<float>& value) { return std::imag(value); });
+
+  dump(filename + ".imag", fileindex, buffer);
 }
