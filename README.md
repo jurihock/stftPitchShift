@@ -135,6 +135,9 @@ Both programs C++ and Python provides a similar set of command line options:
 
     --smb        enable original smb algorithm
                  (only available in the C++ version)
+
+    --chrono     enable runtime measurements
+                 (only available in the C++ version)
 ```
 
 To apply multiple pitch shifts at once, separate each factor by a comma, e.g. `-p 0.5,1,2`.
