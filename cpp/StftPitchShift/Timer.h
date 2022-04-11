@@ -19,7 +19,7 @@ public:
     data.reserve(capacity);
   }
 
-  void reset()
+  void cls()
   {
     data.clear();
   }
