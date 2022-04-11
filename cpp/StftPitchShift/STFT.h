@@ -11,7 +11,7 @@ class STFT
 
 public:
 
-  STFT(const size_t framesize, const size_t hopsize);
+  STFT(const size_t framesize, const size_t hopsize, const bool chronometry = false);
 
   void operator()(const std::vector<float>& input, std::vector<float>& output, const std::function<void(std::vector<std::complex<float>>& dft)> callback) const;
   void operator()(const size_t size, const float* input, float* const output, const std::function<void(std::vector<std::complex<float>>& dft)> callback) const;
@@ -22,6 +22,8 @@ private:
 
   const size_t framesize;
   const size_t hopsize;
+
+  const bool chronometry;
 
   struct
   {

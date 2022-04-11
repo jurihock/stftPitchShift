@@ -1,16 +1,13 @@
 #include <STFT.h>
 
-#undef TIMERS
-
-#ifdef TIMERS
 #include <Timer.h>
-#endif
 
 #include <pocketfft/pocketfft_hdronly.h>
 
-STFT::STFT(const size_t framesize, const size_t hopsize) :
+STFT::STFT(const size_t framesize, const size_t hopsize, const bool chronometry) :
   framesize(framesize),
-  hopsize(hopsize)
+  hopsize(hopsize),
+  chronometry(chronometry)
 {
   std::vector<float> window(framesize);
 
@@ -36,69 +33,57 @@ void STFT::operator()(const std::vector<float>& input, std::vector<float>& outpu
 
 void STFT::operator()(const size_t size, const float* input, float* const output, const std::function<void(std::vector<std::complex<float>>& dft)> callback) const
 {
-  #ifdef TIMERS
-  struct
-  {
-    Timer<std::chrono::microseconds> analysis;
-    Timer<std::chrono::microseconds> synthesis;
-    Timer<std::chrono::microseconds> callback;
-    Timer<std::chrono::milliseconds> loop;
-  }
-  timers;
-  #endif
-
   std::vector<float> frame(framesize);
   std::vector<std::complex<float>> dft(framesize / 2 + 1);
 
-  #ifdef TIMERS
-  timers.loop.tic();
-  #endif
-
-  for (size_t hop = 0; (hop + framesize) < size; hop += hopsize)
+  if (chronometry)
   {
-    #ifdef TIMERS
-    timers.analysis.tic();
-    #endif
+    struct
+    {
+      Timer<std::chrono::microseconds> analysis;
+      Timer<std::chrono::microseconds> synthesis;
+      Timer<std::chrono::microseconds> callback;
+      Timer<std::chrono::milliseconds> loop;
+    }
+    timers;
 
-    reject(hop, input, frame, windows.analysis);
-    fft(frame, dft);
+    timers.loop.tic();
+    for (size_t hop = 0; (hop + framesize) < size; hop += hopsize)
+    {
+      timers.analysis.tic();
+      reject(hop, input, frame, windows.analysis);
+      fft(frame, dft);
+      timers.analysis.toc();
 
-    #ifdef TIMERS
-    timers.analysis.toc();
-    #endif
+      timers.callback.tic();
+      callback(dft);
+      timers.callback.toc();
 
-    #ifdef TIMERS
-    timers.callback.tic();
-    #endif
+      timers.synthesis.tic();
+      ifft(dft, frame);
+      inject(hop, output, frame, windows.synthesis);
+      timers.synthesis.toc();
+    }
+    timers.loop.toc();
 
-    callback(dft);
-
-    #ifdef TIMERS
-    timers.callback.toc();
-    #endif
-
-    #ifdef TIMERS
-    timers.synthesis.tic();
-    #endif
-
-    ifft(dft, frame);
-    inject(hop, output, frame, windows.synthesis);
-
-    #ifdef TIMERS
-    timers.synthesis.toc();
-    #endif
+    std::cout << "analysis  " << timers.analysis.str()  << std::endl;
+    std::cout << "synthesis " << timers.synthesis.str() << std::endl;
+    std::cout << "callback  " << timers.callback.str()  << std::endl;
+    std::cout << "loop      " << timers.loop.str()      << std::endl;
   }
+  else
+  {
+    for (size_t hop = 0; (hop + framesize) < size; hop += hopsize)
+    {
+      reject(hop, input, frame, windows.analysis);
+      fft(frame, dft);
 
-  #ifdef TIMERS
-  timers.loop.toc();
-  #endif
+      callback(dft);
 
-  #ifdef TIMERS
-  std::cout << "analysis  " << timers.analysis.str()  << std::endl;
-  std::cout << "synthesis " << timers.synthesis.str() << std::endl;
-  std::cout << "callback  " << timers.callback.str()  << std::endl;
-  std::cout << "loop      " << timers.loop.str()      << std::endl;
-  #endif
+      ifft(dft, frame);
+      inject(hop, output, frame, windows.synthesis);
+    }
+  }
 }
 
 void STFT::reject(const size_t hop, const float* input, std::vector<float>& frame, const std::vector<float>& window)
