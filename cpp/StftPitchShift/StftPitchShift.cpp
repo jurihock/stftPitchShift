@@ -1,11 +1,5 @@
 #include <StftPitchShift.h>
 
-#undef DebugStftPitchShift
-
-#ifdef DebugStftPitchShift
-#include <Timer.h>
-#endif
-
 #include <Cepstrum.h>
 #include <Pitcher.h>
 #include <STFT.h>
@@ -75,10 +69,6 @@ void StftPitchShift::shiftpitch(
   const std::vector<float>& factors,
   const float quefrency)
 {
-  #ifdef DebugStftPitchShift
-  Timer<std::chrono::microseconds> timer;
-  #endif
-
   STFT stft(framesize, hopsize);
   Vocoder vocoder(framesize, hopsize, samplerate);
   Pitcher pitcher(factors);
@@ -90,10 +80,6 @@ void StftPitchShift::shiftpitch(
 
     stft(size, input, output, [&](std::vector<std::complex<float>>& frame)
     {
-      #ifdef DebugStftPitchShift
-      timer.tic();
-      #endif
-
       vocoder.encode(frame);
 
       cepstrum.lifter(frame, envelope);
@@ -111,31 +97,15 @@ void StftPitchShift::shiftpitch(
       }
 
       vocoder.decode(frame);
-
-      #ifdef DebugStftPitchShift
-      timer.toc();
-      #endif
     });
   }
   else
   {
     stft(size, input, output, [&](std::vector<std::complex<float>>& frame)
     {
-      #ifdef DebugStftPitchShift
-      timer.tic();
-      #endif
-
       vocoder.encode(frame);
       pitcher.shiftpitch(frame);
       vocoder.decode(frame);
-
-      #ifdef DebugStftPitchShift
-      timer.toc();
-      #endif
     });
   }
-
-  #ifdef DebugStftPitchShift
-  std::cout << timer.str() << std::endl;
-  #endif
 }
