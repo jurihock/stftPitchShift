@@ -18,9 +18,9 @@ void Cepstrum::lifter(const std::vector<std::complex<float>>& dft, std::vector<f
     spectrum[i] = std::log10(dft[i].real());
   }
 
-  ifft(spectrum, cepstrum, 1.0f);
+  ifft(spectrum, cepstrum);
   lowpass(cepstrum, quefrency);
-  fft(cepstrum, spectrum, 1.0f / cepstrum.size());
+  fft(cepstrum, spectrum);
 
   for (size_t i = 0; i < spectrum.size(); ++i)
   {
@@ -41,7 +41,7 @@ void Cepstrum::lowpass(std::vector<float>& cepstrum, const size_t quefrency)
   }
 }
 
-void Cepstrum::fft(const std::vector<float>& frame, std::vector<std::complex<float>>& dft, const float scale)
+void Cepstrum::fft(const std::vector<float>& frame, std::vector<std::complex<float>>& dft)
 {
   pocketfft::r2c(
     { frame.size() },
@@ -51,10 +51,10 @@ void Cepstrum::fft(const std::vector<float>& frame, std::vector<std::complex<flo
     true,
     frame.data(),
     dft.data(),
-    scale);
+    1.0f / frame.size());
 }
 
-void Cepstrum::ifft(const std::vector<std::complex<float>>& dft, std::vector<float>& frame, const float scale)
+void Cepstrum::ifft(const std::vector<std::complex<float>>& dft, std::vector<float>& frame)
 {
   pocketfft::c2r(
     { frame.size() },
@@ -64,5 +64,5 @@ void Cepstrum::ifft(const std::vector<std::complex<float>>& dft, std::vector<flo
     false,
     dft.data(),
     frame.data(),
-    scale);
+    1.0f);
 }

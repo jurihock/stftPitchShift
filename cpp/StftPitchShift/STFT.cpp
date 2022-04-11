@@ -12,21 +12,21 @@ STFT::STFT(const size_t framesize, const size_t hopsize) :
   framesize(framesize),
   hopsize(hopsize)
 {
-  window.resize(framesize);
+  std::vector<float> window(framesize);
 
-  for (size_t i = 0; i < window.size(); ++i)
-  {
-    window[i] = 0.5f - 0.5f * std::cos(PI2 * i / window.size());
-  }
+  std::iota(window.begin(), window.end(), 0.0f);
 
-  unitygain = 0;
+  std::transform(window.begin(), window.end(), window.begin(),
+    [&](float value) { return 0.5f - 0.5f * std::cos(PI2 * value / window.size()); });
 
-  for (size_t i = 0; i < window.size(); ++i)
-  {
-    unitygain += window[i] * window[i];
-  }
+  windows.analysis = window;
+  windows.synthesis = window;
 
-  unitygain = hopsize / unitygain;
+  const float unitygain = hopsize / std::inner_product(
+    window.begin(), window.end(), window.begin(), 0.0f);
+
+  std::transform(windows.synthesis.begin(), windows.synthesis.end(), windows.synthesis.begin(),
+    [&](float value) { return value * unitygain; });
 }
 
 void STFT::operator()(const std::vector<float>& input, std::vector<float>& output, const std::function<void(std::vector<std::complex<float>>& dft)> callback) const
@@ -50,14 +50,6 @@ void STFT::operator()(const size_t size, const float* input, float* const output
   std::vector<float> frame(framesize);
   std::vector<std::complex<float>> dft(framesize / 2 + 1);
 
-  const float scalers[4] =
-  {
-    1.0f,             // analysis window
-    1.0f / framesize, // forward fft
-    1.0f,             // backward fft
-    1.0f * unitygain  // synthesis window
-  };
-
   #ifdef TIMERS
   timers.loop.tic();
   #endif
@@ -68,9 +60,8 @@ void STFT::operator()(const size_t size, const float* input, float* const output
     timers.analysis.tic();
     #endif
 
-    reject(/*size,*/ input, frame, hop);
-    weight(frame, window, scalers[0]);
-    fft(frame, dft, scalers[1]);
+    reject(hop, input, frame, windows.analysis);
+    fft(frame, dft);
 
     #ifdef TIMERS
     timers.analysis.toc();
@@ -90,9 +81,8 @@ void STFT::operator()(const size_t size, const float* input, float* const output
     timers.synthesis.tic();
     #endif
 
-    ifft(dft, frame, scalers[2]);
-    weight(frame, window, scalers[3]);
-    inject(size, output, frame, hop);
+    ifft(dft, frame);
+    inject(hop, output, frame, windows.synthesis);
 
     #ifdef TIMERS
     timers.synthesis.toc();
@@ -111,30 +101,23 @@ void STFT::operator()(const size_t size, const float* input, float* const output
   #endif
 }
 
-void STFT::reject(/*const size_t size,*/ const float* input, std::vector<float>& frame, const size_t hop)
-{
-  frame.assign(
-    input + hop,
-    input + hop + frame.size());
-}
-
-void STFT::inject(const size_t size, float* const output, const std::vector<float>& frame, const size_t hop)
+void STFT::reject(const size_t hop, const float* input, std::vector<float>& frame, const std::vector<float>& window)
 {
   for (size_t i = 0; i < frame.size(); ++i)
   {
-    output[hop + i] += frame[i];
+    frame[i] = input[hop + i] * window[i];
   }
 }
 
-void STFT::weight(std::vector<float>& frame, const std::vector<float>& window, const float scale)
+void STFT::inject(const size_t hop, float* const output, const std::vector<float>& frame, const std::vector<float>& window)
 {
   for (size_t i = 0; i < frame.size(); ++i)
   {
-    frame[i] *= window[i] * scale;
+    output[hop + i] += frame[i] * window[i];
   }
 }
 
-void STFT::fft(const std::vector<float>& frame, std::vector<std::complex<float>>& dft, const float scale)
+void STFT::fft(const std::vector<float>& frame, std::vector<std::complex<float>>& dft)
 {
   pocketfft::r2c(
     { frame.size() },
@@ -144,10 +127,10 @@ void STFT::fft(const std::vector<float>& frame, std::vector<std::complex<float>>
     true,
     frame.data(),
     dft.data(),
-    scale);
+    1.0f / frame.size());
 }
 
-void STFT::ifft(const std::vector<std::complex<float>>& dft, std::vector<float>& frame, const float scale)
+void STFT::ifft(const std::vector<std::complex<float>>& dft, std::vector<float>& frame)
 {
   pocketfft::c2r(
     { frame.size() },
@@ -157,5 +140,5 @@ void STFT::ifft(const std::vector<std::complex<float>>& dft, std::vector<float>&
     false,
     dft.data(),
     frame.data(),
-    scale);
+    1.0f);
 }
