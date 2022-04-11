@@ -13,12 +13,13 @@
 StftPitchShift::StftPitchShift(
   const size_t framesize,
   const size_t hopsize,
-  const float samplerate) :
+  const float samplerate,
+  const bool chronometry) :
   framesize(framesize),
   hopsize(hopsize),
   samplerate(samplerate)
 {
-  debug.chronometry = false;
+  debug.chronometry = chronometry;
   debug.dump = false;
   debug.filename = "";
   debug.fileindex = 0;

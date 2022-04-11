@@ -57,11 +57,14 @@ int main(int argc, char** argv)
   args.addUsage("                   (default 32)");
   args.addUsage("");
   args.addUsage("      --smb        enable original smb algorithm");
+  args.addUsage("      --chrono     enable runtime measurements");
 
   args.setFlag('h');
   args.setFlag("help");
   args.setFlag("version");
   args.setFlag("smb");
+  args.setFlag("chrono");
+
   args.setOption("input", 'i');
   args.setOption("output", 'o');
   args.setOption("pitch", 'p');
@@ -90,6 +93,7 @@ int main(int argc, char** argv)
   }
 
   bool smb = false;
+  bool chronometry = false;
 
   std::string infile = "";
   std::string outfile = "";
@@ -105,6 +109,11 @@ int main(int argc, char** argv)
     if (args.getFlag("smb"))
     {
       smb = true;
+    }
+
+    if (args.getFlag("chrono"))
+    {
+      chronometry = true;
     }
 
     if (args.getValue("input") || args.getValue('i'))
@@ -205,7 +214,8 @@ int main(int argc, char** argv)
         StftPitchShift stft(
           framesize,
           framesize / hoprate,
-          samplerate);
+          samplerate,
+          chronometry);
 
         stft.shiftpitch(
           size,

@@ -15,11 +15,13 @@ public:
    * @param framesize The STFT frame size in samples.
    * @param hopsize The STFT hop size in samples.
    * @param samplerate The sample rate of the signal in hertz.
+   * @param chronometry Optionally enable runtime measurements.
    */
   StftPitchShift(
     const size_t framesize,
     const size_t hopsize,
-    const float samplerate);
+    const float samplerate,
+    const bool chronometry = false);
 
   /**
    * @param input The input signal.
