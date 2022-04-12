@@ -1,7 +1,7 @@
 #!/bin/bash
 
 run() {
-  echo $@ && /usr/bin/time -h -p $@
+  echo $@ && time $@
 }
 
 mkdir -p build-release
