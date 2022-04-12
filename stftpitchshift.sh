@@ -14,4 +14,4 @@ popd >/dev/null 2>&1
 example=examples/voice
 
 run build-release/stftpitchshift -i $example.wav -o $example.cpp.wav $@
-run python stftpitchshift.py -i $example.wav -o $example.python.wav $@
+run python3 stftpitchshift.py -i $example.wav -o $example.python.wav $@

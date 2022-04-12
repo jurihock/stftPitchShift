@@ -1,3 +1,3 @@
 #!/bin/bash
 
-python version.py
+python3 version.py
