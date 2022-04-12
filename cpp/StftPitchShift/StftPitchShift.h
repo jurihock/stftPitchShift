@@ -1,6 +1,5 @@
 #pragma once
 
-#include <complex>
 #include <vector>
 
 /**
@@ -80,17 +79,6 @@ private:
   const size_t framesize;
   const size_t hopsize;
   const float samplerate;
-
-  struct
-  {
-    bool chronometry;
-    bool dump;
-    std::string filename;
-    size_t fileindex;
-  }
-  debug;
-
-  static void dump(const std::string& filename, const size_t fileindex, const std::vector<float>& data);
-  static void dump(const std::string& filename, const size_t fileindex, const std::vector<std::complex<float>>& data);
+  const bool chronometry;
 
 };

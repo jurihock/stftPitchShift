@@ -8,6 +8,7 @@ include("${CMAKE_CURRENT_LIST_DIR}/pocketfft/CMakeLists.txt")
 add_library(LibStftPitchShift
   "${CMAKE_CURRENT_LIST_DIR}/Cepstrum.h"
   "${CMAKE_CURRENT_LIST_DIR}/Cepstrum.cpp"
+  "${CMAKE_CURRENT_LIST_DIR}/Dump.h"
   "${CMAKE_CURRENT_LIST_DIR}/IO.h"
   "${CMAKE_CURRENT_LIST_DIR}/IO.cpp"
   "${CMAKE_CURRENT_LIST_DIR}/Pitcher.h"
