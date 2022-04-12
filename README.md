@@ -2,10 +2,10 @@
 
 ![language](https://img.shields.io/badge/language-C%2B%2B-blue)
 ![language](https://img.shields.io/badge/language-Python-blue)
-![license](https://img.shields.io/github/license/jurihock/stftPitchShift?color=blue)
-![tag](https://img.shields.io/github/v/tag/jurihock/stftPitchShift?color=brightgreen)
-![pypi](https://img.shields.io/pypi/v/stftpitchshift?color=brightgreen)
-![build](https://img.shields.io/github/workflow/status/jurihock/stftPitchShift/Build%20and%20publish%20Python%20%F0%9F%90%8D%20distributions%20%F0%9F%93%A6%20to%20PyPI%20and%20TestPyPI?color=gold)
+![license](https://img.shields.io/github/license/jurihock/stftPitchShift?color=brightgreen)
+![build](https://img.shields.io/github/workflow/status/jurihock/stftPitchShift/Build%20and%20publish%20Python%20%F0%9F%90%8D%20distributions%20%F0%9F%93%A6%20to%20PyPI%20and%20TestPyPI?color=brightgreen)
+![tag](https://img.shields.io/github/v/tag/jurihock/stftPitchShift?color=gold)
+![pypi](https://img.shields.io/pypi/v/stftpitchshift?color=gold)
 
 This is a reimplementation of the Stephan M. Bernsee [smbPitchShift.cpp](https://blogs.zynaptiq.com/bernsee/download), a pitch shifting algorithm using the Short-Time Fourier Transform ([STFT](https://www.audiolabs-erlangen.de/resources/MIR/FMP/C2/C2_STFT-Basic.html)), especially for vocal audio signals.
 
