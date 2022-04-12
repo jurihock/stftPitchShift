@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 run() {
   echo $@ && /usr/bin/time -h -p $@
