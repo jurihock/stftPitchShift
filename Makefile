@@ -12,31 +12,31 @@ help:
 	@echo which
 
 boot:
-	@python -m pip install --upgrade build
-	@python -m pip install --upgrade twine
+	@python3 -m pip install --upgrade build
+	@python3 -m pip install --upgrade twine
 
 build:
 	@rm -rf dist
-	@python -m build
+	@python3 -m build
 
 install:
-	@python -m pip install stftpitchshift
+	@python3 -m pip install stftpitchshift
 
 install-test:
-	@python -m pip install --index-url https://test.pypi.org/simple/ --no-deps stftpitchshift
+	@python3 -m pip install --index-url https://test.pypi.org/simple/ --no-deps stftpitchshift
 
 reinstall:
-	@python -m pip uninstall -y stftpitchshift
-	@python -m pip install stftpitchshift
+	@python3 -m pip uninstall -y stftpitchshift
+	@python3 -m pip install stftpitchshift
 
 uninstall:
-	@python -m pip uninstall -y stftpitchshift
+	@python3 -m pip uninstall -y stftpitchshift
 
 upload:
-	@python -m twine upload dist/*
+	@python3 -m twine upload dist/*
 
 upload-test:
-	@python -m twine upload --repository testpypi dist/*
+	@python3 -m twine upload --repository testpypi dist/*
 
 which:
-	@which python
+	@which python3
