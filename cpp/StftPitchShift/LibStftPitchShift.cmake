@@ -37,7 +37,7 @@ target_include_directories(LibStftPitchShift
 )
 
 target_link_libraries(LibStftPitchShift
-  dr_libs pocketfft
+  PUBLIC dr_libs pocketfft
 )
 
 target_compile_features(LibStftPitchShift

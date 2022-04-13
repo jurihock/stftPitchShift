@@ -20,11 +20,11 @@ target_include_directories(TheStftPitchShift
 )
 
 target_link_libraries(TheStftPitchShift
-  LibStftPitchShift
+  PRIVATE LibStftPitchShift
 )
 
 target_link_libraries(TheStftPitchShift
-  anyoption smb
+  PRIVATE anyoption smb
 )
 
 target_compile_features(TheStftPitchShift
