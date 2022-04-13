@@ -3,8 +3,8 @@
 mkdir build-release
 
 pushd build-release
-cmake -A x64 .. || exit /B 1
-cmake --build . --config Release || exit /B 1
+cmake -A x64 .. || exit /b
+cmake --build . --config Release || exit /b
 popd
 
 set example=examples\voice

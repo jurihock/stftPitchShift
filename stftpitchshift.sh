@@ -7,8 +7,8 @@ run() {
 mkdir -p build-release
 
 pushd build-release >/dev/null 2>&1
-cmake -DCMAKE_BUILD_TYPE=Release .. || exit 1
-cmake --build . || exit 1
+cmake -DCMAKE_BUILD_TYPE=Release .. || exit $?
+cmake --build . || exit $?
 popd >/dev/null 2>&1
 
 example=examples/voice
