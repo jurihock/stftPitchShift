@@ -7,3 +7,7 @@ target_sources(dr_libs
 target_include_directories(dr_libs
   INTERFACE "${CMAKE_CURRENT_LIST_DIR}/.."
 )
+
+target_compile_definitions(dr_libs
+  INTERFACE -DDR_WAV_IMPLEMENTATION
+)
