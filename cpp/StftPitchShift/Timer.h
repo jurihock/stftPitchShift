@@ -34,10 +34,10 @@ public:
     const std::chrono::high_resolution_clock::duration duration =
       std::chrono::high_resolution_clock::now() - timestamp;
 
-    data.push_back(std::chrono::duration_cast<T>(duration).count());
+    data.push_back(std::chrono::duration_cast<T>(duration * 1e+3).count() * 1e-3);
   }
 
-  std::string str(const std::streamsize precision = 3)
+  std::string str()
   {
     const std::map<intmax_t, std::string> units =
     {
@@ -56,7 +56,7 @@ public:
     const double stdev = std::sqrt(sumsum / data.size() - mean * mean);
 
     std::ostringstream result;
-    result.precision(precision);
+    result.precision(3);
     result << mean << " ± " << stdev << " " << unit;
 
     return result.str();
