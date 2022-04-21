@@ -35,8 +35,9 @@ void Resampler::linear(const std::vector<std::complex<float>>& x, std::vector<st
   {
     const double n = m / factor;
 
-    const double n0 = std::floor(n);
-    const double n1 = std::ceil(n);
+    const ptrdiff_t n_ = static_cast<ptrdiff_t>(n);
+    const ptrdiff_t n0 = n_ - (n < n_); // std::floor(n)
+    const ptrdiff_t n1 = n_ + (n > n_); // std::ceil(n)
 
     if (n0 < 0 || N <= n0)
     {
@@ -50,12 +51,12 @@ void Resampler::linear(const std::vector<std::complex<float>>& x, std::vector<st
 
     if (n0 == n1)
     {
-      y[m] = x[static_cast<size_t>(n0)];
+      y[m] = x[n0];
       continue;
     }
 
-    const std::complex<float> y0 = x[static_cast<size_t>(n0)];
-    const std::complex<float> y1 = x[static_cast<size_t>(n1)];
+    const std::complex<float> y0 = x[n0];
+    const std::complex<float> y1 = x[n1];
 
     const float i = static_cast<float>((n - n0) / (n1 - n0));
 
