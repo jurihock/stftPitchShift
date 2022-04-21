@@ -80,11 +80,12 @@ Will soon appear...
 Use [CMake](http://cmake.org) to build the C++ program and library like so:
 
 ```cmd
-mkdir build
+cmake -S . -B build [-DENABLE_IO=OFF -DBUILD_EXAMPLES=OFF]
 cd build
-cmake ..
 cmake --build .
 ```
+
+You can turn building I/O support (drlibs wav reader) and examples off to execute a minimal library only build.
 
 To include this library in your C++ audio project, check the [LibStftPitchShift.cmake](cpp/StftPitchShift/LibStftPitchShift.cmake) file and the following minimal example:
 
