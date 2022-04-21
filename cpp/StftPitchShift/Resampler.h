@@ -15,6 +15,9 @@ public:
   
   Resampler& operator=(const Resampler& other);
 
+  void cosine(const std::vector<std::complex<float>>& x,
+              std::vector<std::complex<float>>& y) const;
+
   void linear(const std::vector<std::complex<float>>& x,
               std::vector<std::complex<float>>& y) const;
 
@@ -23,6 +26,8 @@ public:
                 std::vector<std::complex<float>>& y) const;
 
 private:
+
+  const float PI = std::acos(-1.0f);
 
   double factor;
 
