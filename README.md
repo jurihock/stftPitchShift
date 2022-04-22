@@ -91,9 +91,7 @@ std::vector<float> y(x.size());
 pitchshifter.shiftpitch(x, y, 1);
 ```
 
-Specify additional CMake options `-DBUILD_EXECUTABLE=OFF` and `-DBUILD_EXAMPLES=OFF` to perform a minimal library only build without executables.
-
-If you also specify the `-DENABLE_BUILTIN=OFF` CMake option, compilation will use externally provided *pocketfft* package, which can be useful for building via package managers like [vcpkg](https://vcpkg.io).
+Optionally specify CMake option `-DVCPKG=ON` to enable the [vcpkg](https://vcpkg.io) minimal library only build without executables.
 
 ### Python
 
