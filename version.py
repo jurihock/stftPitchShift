@@ -2,6 +2,7 @@ import os
 import re
 
 files = dict(
+    cmake=os.path.join('cpp', 'StftPitchShift', 'LibStftPitchShift.cmake'),
     cpp=os.path.join('cpp', 'StftPitchShift', 'Version.h'),
     python=os.path.join('python', 'stftpitchshift', '__init__.py')
 )
@@ -34,6 +35,13 @@ new = '.'.join([str(x) for x in new])
 
 with open('VERSION', 'w') as file:
     file.write(new)
+
+with open(files['cmake'], 'r+') as file:
+    code = file.read()
+    code = re.sub(r'project\(LibStftPitchShift VERSION .*\)', f'project(LibStftPitchShift VERSION {new})', code)
+    file.seek(0)
+    file.write(code)
+    file.truncate()
 
 with open(files['cpp'], 'r+') as file:
     code = file.read()
