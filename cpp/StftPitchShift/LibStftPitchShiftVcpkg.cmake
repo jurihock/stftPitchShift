@@ -10,6 +10,12 @@ add_library(LibStftPitchShift)
 # use external pocketfft package
 find_path(POCKETFFT_INCLUDE_DIR pocketfft_hdronly.h REQUIRED)
 
+# link against pthread on Unix required by pocketfft
+if (UNIX)
+  target_link_libraries(LibStftPitchShift
+    PUBLIC pthread)
+endif()
+
 set_target_properties(LibStftPitchShift
   PROPERTIES OUTPUT_NAME "stftpitchshift"
 )
