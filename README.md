@@ -77,17 +77,14 @@ Will soon appear...
 
 ### C++
 
-Use [CMake](http://cmake.org) to build the C++ program and library like so:
+Use [CMake](http://cmake.org) to build the C++ library, main and example programs like this:
 
 ```cmd
-cmake -S . -B build [-DENABLE_BUILTIN=OFF -DBUILD_EXECUTABLE=OFF -DBUILD_EXAMPLES=OFF]
-cd build
-cmake --build .
+cmake -S . -B build
+cmake --build build
 ```
 
-You can turn building I/O support (drlibs wav reader) and examples off to execute a minimal library only build. If you specify `-DENABLE_BUILTIN=OFF`, compilation will use externally provided pocketfft and dr_libs packages (useful for building via package managers like vcpkg).
-
-To include this library in your C++ audio project, check the [LibStftPitchShift.cmake](cpp/StftPitchShift/LibStftPitchShift.cmake) file and the following minimal example:
+To include this library in your C++ audio project, study the minimal C++ example in the examples folder:
 
 ```cpp
 #include <StftPitchShift/StftPitchShift.h>
@@ -99,6 +96,10 @@ std::vector<float> y(x.size());
 
 pitchshifter.shiftpitch(x, y, 1);
 ```
+
+Specify additional CMake options `-DBUILD_EXECUTABLE=OFF` and `-DBUILD_EXAMPLES=OFF` to perform a minimal library only build without executables.
+
+If you also specify the `-DENABLE_BUILTIN=OFF` CMake option, compilation will use externally provided *pocketfft* package, which can be useful for building via package managers like [vcpkg](https://vcpkg.io).
 
 ### Python
 
