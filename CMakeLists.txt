@@ -2,9 +2,7 @@ cmake_minimum_required(VERSION 3.18)
 
 project(StftPitchShift)
 
-option(ENABLE_BUILTIN "Use included external sources (pocketfft)" ON)
-option(BUILD_EXECUTABLE "Build executable" ON)
-option(BUILD_EXAMPLES "Build examples" ON)
+option(VCPKG "Enable vcpkg library only build excluding executables" OFF)
 
 if (MSVC)
 
@@ -21,12 +19,10 @@ else()
 
 endif()
 
-include("${CMAKE_CURRENT_LIST_DIR}/cpp/StftPitchShift/LibStftPitchShift.cmake")
-
-if(BUILD_EXECUTABLE)
+if(VCPKG)
+  include("${CMAKE_CURRENT_LIST_DIR}/cpp/StftPitchShift/LibStftPitchShiftVcpkg.cmake")
+else()
+  include("${CMAKE_CURRENT_LIST_DIR}/cpp/StftPitchShift/LibStftPitchShift.cmake")
   include("${CMAKE_CURRENT_LIST_DIR}/cpp/StftPitchShift/TheStftPitchShift.cmake")
-endif()
-
-if(BUILD_EXAMPLES)
   include("${CMAKE_CURRENT_LIST_DIR}/examples/example.cmake")
 endif()

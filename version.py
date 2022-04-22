@@ -2,7 +2,7 @@ import os
 import re
 
 files = dict(
-    cmake=os.path.join('cpp', 'StftPitchShift', 'LibStftPitchShift.cmake'),
+    cmake=os.path.join('cpp', 'StftPitchShift', 'LibStftPitchShiftVcpkg.cmake'),
     cpp=os.path.join('cpp', 'StftPitchShift', 'Version.h'),
     python=os.path.join('python', 'stftpitchshift', '__init__.py')
 )
