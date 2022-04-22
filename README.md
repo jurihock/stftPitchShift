@@ -168,6 +168,8 @@ At the moment the formant preservation doesn't seem to work well along with the 
 * [pocketfft](https://gitlab.mpcdf.mpg.de/mtr/pocketfft) by Martin Reinecke
 * [smbPitchShift.cpp](http://blogs.zynaptiq.com/bernsee/download) by Stephan M. Bernsee
 
+Special thanks to [jjYBdx4IL](https://github.com/jjYBdx4IL) for *vcpkg* build preparation and packaging.
+
 ## License
 
 *stftPitchShift* is licensed under the terms of the MIT license.
