@@ -1,4 +1,4 @@
-#include <Vocoder.h>
+#include <StftPitchShift/Vocoder.h>
 
 Vocoder::Vocoder(const size_t framesize, const size_t hopsize, const float samplerate) :
   stft_freq_inc((double)samplerate / (double)framesize),

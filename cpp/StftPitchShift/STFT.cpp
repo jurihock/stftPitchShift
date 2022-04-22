@@ -1,6 +1,6 @@
-#include <STFT.h>
+#include <StftPitchShift/STFT.h>
 
-#include <Timer.h>
+#include <StftPitchShift/Timer.h>
 
 #include <pocketfft/pocketfft_hdronly.h>
 

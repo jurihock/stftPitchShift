@@ -5,7 +5,7 @@
 #include <limits>
 #include <vector>
 
-#include <Resampler.h>
+#include <StftPitchShift/Resampler.h>
 
 class Pitcher
 {

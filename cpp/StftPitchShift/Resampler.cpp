@@ -1,4 +1,4 @@
-#include <Resampler.h>
+#include <StftPitchShift/Resampler.h>
 
 Resampler::Resampler(const double factor) :
   factor(factor)

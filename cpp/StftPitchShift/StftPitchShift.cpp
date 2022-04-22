@@ -1,9 +1,9 @@
-#include <StftPitchShift.h>
+#include <StftPitchShift/StftPitchShift.h>
 
-#include <Cepstrum.h>
-#include <Pitcher.h>
-#include <STFT.h>
-#include <Vocoder.h>
+#include <StftPitchShift/Cepstrum.h>
+#include <StftPitchShift/Pitcher.h>
+#include <StftPitchShift/STFT.h>
+#include <StftPitchShift/Vocoder.h>
 
 StftPitchShift::StftPitchShift(
   const size_t framesize,

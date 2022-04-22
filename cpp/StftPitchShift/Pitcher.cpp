@@ -1,4 +1,4 @@
-#include <Pitcher.h>
+#include <StftPitchShift/Pitcher.h>
 
 Pitcher::Pitcher(const std::vector<float>& factors) :
   factors(factors)
