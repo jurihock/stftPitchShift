@@ -2,9 +2,9 @@ import os
 import re
 
 files = dict(
-    cmake=os.path.join('cpp', 'StftPitchShift', 'LibStftPitchShiftVcpkg.cmake'),
     cpp=os.path.join('cpp', 'StftPitchShift', 'Version.h'),
-    python=os.path.join('python', 'stftpitchshift', '__init__.py')
+    python=os.path.join('python', 'stftpitchshift', '__init__.py'),
+    vcpkg=os.path.join('cpp', 'StftPitchShift', 'LibStftPitchShiftVcpkg.cmake')
 )
 
 with open('VERSION', 'r') as file:
@@ -36,13 +36,6 @@ new = '.'.join([str(x) for x in new])
 with open('VERSION', 'w') as file:
     file.write(new)
 
-with open(files['cmake'], 'r+') as file:
-    code = file.read()
-    code = re.sub(r'project\(LibStftPitchShift VERSION .*\)', f'project(LibStftPitchShift VERSION {new})', code)
-    file.seek(0)
-    file.write(code)
-    file.truncate()
-
 with open(files['cpp'], 'r+') as file:
     code = file.read()
     code = re.sub(r'".*"', f'"{new}"', code)
@@ -53,6 +46,13 @@ with open(files['cpp'], 'r+') as file:
 with open(files['python'], 'r+') as file:
     code = file.read()
     code = re.sub(r'".*"', f'"{new}"', code)
+    file.seek(0)
+    file.write(code)
+    file.truncate()
+
+with open(files['vcpkg'], 'r+') as file:
+    code = file.read()
+    code = re.sub(r'project\(LibStftPitchShift VERSION .*\)', f'project(LibStftPitchShift VERSION {new})', code)
     file.seek(0)
     file.write(code)
     file.truncate()
