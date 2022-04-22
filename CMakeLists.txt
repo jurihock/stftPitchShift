@@ -2,10 +2,9 @@ cmake_minimum_required(VERSION 3.18)
 
 project(StftPitchShift)
 
-option(ENABLE_BUILTIN "Use included external sources (drlibs wav I/O, pocketfft)" ON)
-option(ENABLE_IO "enable wav I/O support (needed for executable)" ON)
-option(BUILD_EXAMPLES "build examples" ON)
-option(BUILD_EXECUTABLE "build executable" ON)
+option(ENABLE_BUILTIN "Use included external sources (pocketfft)" ON)
+option(BUILD_EXECUTABLE "Build executable" ON)
+option(BUILD_EXAMPLES "Build examples" ON)
 
 if (MSVC)
   # add_compile_options(/W3 /WX)

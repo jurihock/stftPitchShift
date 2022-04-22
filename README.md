@@ -80,7 +80,7 @@ Will soon appear...
 Use [CMake](http://cmake.org) to build the C++ program and library like so:
 
 ```cmd
-cmake -S . -B build [-DBUILD_EXAMPLES=OFF -DENABLE_IO=OFF -DENABLE_BUILTIN=OFF -DBUILD_EXECUTABLE=OFF]
+cmake -S . -B build [-DENABLE_BUILTIN=OFF -DBUILD_EXECUTABLE=OFF -DBUILD_EXAMPLES=OFF]
 cd build
 cmake --build .
 ```

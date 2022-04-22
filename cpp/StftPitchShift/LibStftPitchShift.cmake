@@ -5,16 +5,10 @@ project(LibStftPitchShift VERSION 1.3)
 add_library(LibStftPitchShift)
 
 if(ENABLE_BUILTIN)
-  #include("${CMAKE_CURRENT_LIST_DIR}/dr_libs/CMakeLists.txt")
-  #include("${CMAKE_CURRENT_LIST_DIR}/pocketfft/CMakeLists.txt")
-  find_path(POCKETFFT_INCLUDE_DIRS pocketfft_hdronly.h PATHS "${CMAKE_CURRENT_LIST_DIR}/pocketfft" REQUIRED)
-  find_path(DRLIBS_INCLUDE_DIRS "dr_wav.h" PATHS "${CMAKE_CURRENT_LIST_DIR}/dr_libs" REQUIRED)
-  if (UNIX)
-    target_link_libraries(pocketfft INTERFACE pthread)
-  endif()
+  # formerly include("${CMAKE_CURRENT_LIST_DIR}/pocketfft/CMakeLists.txt")
+  find_path(POCKETFFT_INCLUDE_DIR pocketfft_hdronly.h PATHS "${CMAKE_CURRENT_LIST_DIR}/pocketfft" REQUIRED)
 else()
   find_package(pocketfft CONFIG REQUIRED)
-  find_path(DRLIBS_INCLUDE_DIRS "dr_wav.h" REQUIRED)
   target_link_libraries(LibStftPitchShift PRIVATE pocketfft::pocketfft)
 endif()
 
@@ -34,48 +28,40 @@ set(HEADER_FILES
   "${CMAKE_CURRENT_LIST_DIR}/Vocoder.h"
 )
 
-if(ENABLE_IO)
-  list(APPEND HEADER_FILES "${CMAKE_CURRENT_LIST_DIR}/IO.h")
-endif()
+set(SOURCE_FILES
+  "${CMAKE_CURRENT_LIST_DIR}/Cepstrum.cpp"
+  "${CMAKE_CURRENT_LIST_DIR}/Pitcher.cpp"
+  "${CMAKE_CURRENT_LIST_DIR}/Resampler.cpp"
+  "${CMAKE_CURRENT_LIST_DIR}/STFT.cpp"
+  "${CMAKE_CURRENT_LIST_DIR}/StftPitchShift.cpp"
+  "${CMAKE_CURRENT_LIST_DIR}/Vocoder.cpp"
+)
 
 target_sources(LibStftPitchShift
-  PRIVATE ${HEADER_FILES}
-         "${CMAKE_CURRENT_LIST_DIR}/Cepstrum.cpp"
-         "${CMAKE_CURRENT_LIST_DIR}/Pitcher.cpp"
-         "${CMAKE_CURRENT_LIST_DIR}/Resampler.cpp"
-         "${CMAKE_CURRENT_LIST_DIR}/STFT.cpp"
-         "${CMAKE_CURRENT_LIST_DIR}/StftPitchShift.cpp"
-         "${CMAKE_CURRENT_LIST_DIR}/Vocoder.cpp"
-)
-
-if(ENABLE_IO)
-  target_sources(LibStftPitchShift
-    PRIVATE "${CMAKE_CURRENT_LIST_DIR}/IO.cpp")
-endif()
-
-#-------------------------------------------------------------
-# install
-# https://cmake.org/cmake/help/git-stage/guide/importing-exporting/index.html
-include(CMakePackageConfigHelpers)
-include(GNUInstallDirs)
-
-
-
-target_include_directories(LibStftPitchShift
-  PUBLIC  "$<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/..>"
-  PRIVATE "$<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}>"
-  INTERFACE "$<INSTALL_INTERFACE:include/LibStftPitchShift>"
-)
-
-target_compile_definitions(LibStftPitchShift
-  PRIVATE -DDR_WAV_IMPLEMENTATION
+  PRIVATE ${HEADER_FILES} ${SOURCE_FILES}
 )
 
 target_compile_features(LibStftPitchShift
   PRIVATE cxx_std_11
 )
 
+if (UNIX)
+  target_link_libraries(LibStftPitchShift
+    PRIVATE pthread)
+endif()
 
+#-------------------------------------------------------------
+# install
+# https://cmake.org/cmake/help/git-stage/guide/importing-exporting/index.html
+
+include(CMakePackageConfigHelpers)
+include(GNUInstallDirs)
+
+target_include_directories(LibStftPitchShift
+  PUBLIC  "$<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/..>"
+  PRIVATE "$<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}>"
+  INTERFACE "$<INSTALL_INTERFACE:include/LibStftPitchShift>"
+)
 
 install(TARGETS ${PROJECT_NAME}
         EXPORT ${PROJECT_NAME}Targets
@@ -101,15 +87,14 @@ set_property(TARGET ${PROJECT_NAME} PROPERTY VERSION ${PROJECT_VERSION})
 set_property(TARGET ${PROJECT_NAME} PROPERTY SOVERSION 1)
 set_property(TARGET ${PROJECT_NAME} PROPERTY INTERFACE_${PROJECT_NAME}_MAJOR_VERSION 1)
 set_property(TARGET ${PROJECT_NAME} APPEND PROPERTY COMPATIBLE_INTERFACE_STRING ${PROJECT_NAME}_MAJOR_VERSION)
-      
+
 write_basic_package_version_file(
-    "${PROJECT_NAME}ConfigVersion.cmake"
-    VERSION "${PROJECT_VERSION}"
-    COMPATIBILITY AnyNewerVersion)
+  "${PROJECT_NAME}ConfigVersion.cmake"
+  VERSION "${PROJECT_VERSION}"
+  COMPATIBILITY AnyNewerVersion)
 
 install(
     FILES
         ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
         ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
-    
