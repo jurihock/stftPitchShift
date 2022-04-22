@@ -65,7 +65,9 @@ In this way, the multi pitch shifting can be performed *simultaneously* in the s
 
 ## Formant preservation
 
-Will soon appear...
+The pitch shifting also causes distortion of the original [vocal formants](https://en.wikipedia.org/wiki/Formant), leading to a so called *Mickey Mouse* effect if scaled up. One possibility to reduce this artifact, is to exclude the formant feature from the pitch shifting procedure.
+
+The vocal formants are represented by the *spectral envelope*, which is given by the smoothed DFT mangitude vector. In this implementation, the smoothing of the DFT mangitude vector takes place in the cepstral domain by low-pass *liftering*. The extracted envelope is then removed from the original DFT magnitude. The remaining *residual* or *excitation* signal goes through the pitch shifting algorithm. After that, the previously extracted envelope is combined with the processed residual.
 
 ## Build
 
