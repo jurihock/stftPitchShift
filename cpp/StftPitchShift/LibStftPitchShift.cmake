@@ -8,8 +8,7 @@ if(ENABLE_BUILTIN)
   # formerly include("${CMAKE_CURRENT_LIST_DIR}/pocketfft/CMakeLists.txt")
   find_path(POCKETFFT_INCLUDE_DIR pocketfft_hdronly.h PATHS "${CMAKE_CURRENT_LIST_DIR}/pocketfft" REQUIRED)
 else()
-  find_package(pocketfft CONFIG REQUIRED)
-  target_link_libraries(LibStftPitchShift PRIVATE pocketfft::pocketfft)
+  find_path(POCKETFFT_INCLUDE_DIR pocketfft_hdronly.h REQUIRED)
 endif()
 
 set_target_properties(LibStftPitchShift
