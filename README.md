@@ -41,12 +41,6 @@ The *Cepstrum* module estimates a spectral envelope of the DFT magnitude vector,
 
 As the name of this module already implies, it performs the comprehensive *STFT* analysis and synthesis steps.
 
-### IO
-
-The *IO* module provides a simple possibility to read and write `.wav` audio files.
-
-Currently only `.wav` files are supported. Please use e.g. [Audacity](http://www.audacityteam.org) or [SoX](http://sox.sourceforge.net) to prepare your audio files for pitch shifting.
-
 ## Pitch shifting
 
 ### Single pitch
@@ -148,6 +142,8 @@ Both programs C++ and Python provides a similar set of command line options:
     --chrono     enable runtime measurements
                  (only available in the C++ version)
 ```
+
+Currently only `.wav` files are supported. Please use e.g. [Audacity](http://www.audacityteam.org) or [SoX](http://sox.sourceforge.net) to prepare your audio files for pitch shifting.
 
 To apply multiple pitch shifts at once, separate each factor by a comma, e.g. `-p 0.5,1,2`.
 
