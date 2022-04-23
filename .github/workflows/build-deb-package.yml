@@ -11,20 +11,20 @@ jobs:
     steps:
 
     - name: Checkout
-    - uses: actions/checkout@master
+      uses: actions/checkout@master
 
     - name: Prep
-    - run: cmake -S . -B build -DSHARED=ON -DDEB=ON
+      run: cmake -S . -B build -DSHARED=ON -DDEB=ON
 
     - name: Build
-    - run: cmake --build build
+      run: cmake --build build
 
     - name: Pack
-    - run: cpack --config build/CPackConfig.cmake
+      run: cpack --config build/CPackConfig.cmake
 
     - name: Upload
-    - uses: actions/upload-artifact@master
+      uses: actions/upload-artifact@master
       with:
         name: stftpitchshift
-        path: ./stftpitchshift*.deb
+        path: stftpitchshift*.deb
         if-no-files-found: error
