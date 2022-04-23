@@ -3,10 +3,10 @@
 ![language](https://img.shields.io/badge/language-C%2B%2B-blue)
 ![language](https://img.shields.io/badge/language-Python-blue)
 ![license](https://img.shields.io/github/license/jurihock/stftPitchShift?color=blue)
-[![build deb](https://github.com/jurihock/stftPitchShift/actions/workflows/build-deb-package.yml/badge.svg)](https://github.com/jurihock/stftPitchShift/actions/workflows/build-deb-package.yml)
-[![build pip](https://github.com/jurihock/stftPitchShift/actions/workflows/publish-to-pypi.yml/badge.svg)](https://github.com/jurihock/stftPitchShift/actions/workflows/publish-to-pypi.yml)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/jurihock/stftPitchShift/Build%20.deb%20distribution%20package?label=build%20deb)
+![build pypi](https://img.shields.io/github/workflow/status/jurihock/stftPitchShift/Build%20and%20publish%20Python%20%F0%9F%90%8D%20distributions%20%F0%9F%93%A6%20to%20PyPI%20and%20TestPyPI?label=build%20pypi)
 ![tag](https://img.shields.io/github/v/tag/jurihock/stftPitchShift?color=gold)
-![pip](https://img.shields.io/pypi/v/stftpitchshift?color=gold)
+![pypi](https://img.shields.io/pypi/v/stftpitchshift?color=gold)
 
 This is a reimplementation of the Stephan M. Bernsee [smbPitchShift.cpp](https://blogs.zynaptiq.com/bernsee/download), a pitch shifting algorithm using the Short-Time Fourier Transform ([STFT](https://www.audiolabs-erlangen.de/resources/MIR/FMP/C2/C2_STFT-Basic.html)), especially for vocal audio signals.
 
@@ -94,7 +94,11 @@ std::vector<float> y(x.size());
 pitchshifter.shiftpitch(x, y, 1);
 ```
 
-Optionally specify CMake option `-DVCPKG=ON` to enable the [vcpkg](https://vcpkg.io) minimal library only build without executables.
+Optionally specify following CMake options:
+
+* `-DSHARED=ON` to enable a shared library build,
+* `-DVCPKG=ON` to enable the [vcpkg](https://vcpkg.io) minimal library only build without executables,
+* `-DDEB=ON` to enable the [deb](https://en.wikipedia.org/wiki/Deb_(file_format)) package build for library and executable.
 
 ### Python
 
