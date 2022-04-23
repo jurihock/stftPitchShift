@@ -1,0 +1,30 @@
+name: Build .deb distribution package
+
+on: push
+
+jobs:
+
+  build:
+
+    runs-on: debian-latest
+
+    steps:
+
+    - name: Checkout
+    - uses: actions/checkout@master
+
+    - name: Prep
+    - run: cmake -S . -B build -DSHARED=ON -DDEB=ON
+
+    - name: Build
+    - run: cmake --build build
+
+    - name: Pack
+    - run: cpack --config build/CPackConfig.cmake
+
+    - name: Upload
+      uses: actions/upload-artifact@v3
+      with:
+        name: stftpitchshift
+        path: *.deb
+        if-no-files-found: error
