@@ -6,7 +6,8 @@ jobs:
 
   build:
 
-    runs-on: debian-latest
+    name: Build .deb distribution package
+    runs-on: ubuntu-18.04
 
     steps:
 
