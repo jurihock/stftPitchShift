@@ -2,7 +2,11 @@ cmake_minimum_required(VERSION 3.18)
 
 project(LibStftPitchShift VERSION 1.3)
 
-add_library(LibStftPitchShift)
+if(SHARED)
+  add_library(LibStftPitchShift SHARED)
+else()
+  add_library(LibStftPitchShift)
+endif()
 
 # use internal pocketfft package
 # find_path(POCKETFFT_INCLUDE_DIR pocketfft_hdronly.h PATHS "${CMAKE_CURRENT_LIST_DIR}/pocketfft")

@@ -2,7 +2,9 @@ cmake_minimum_required(VERSION 3.18)
 
 project(StftPitchShift)
 
-option(VCPKG "Enable vcpkg library only build excluding executables" OFF)
+option(SHARED "Enable shared library build" OFF)
+option(VCPKG  "Enable vcpkg library only build excluding executable" OFF)
+option(DEB    "Enable deb package build for library and executable" OFF)
 
 if (MSVC)
 
@@ -19,8 +21,14 @@ else()
 
 endif()
 
+if(VCPKG AND DEB)
+  message(FATAL_ERROR "Please enable only one option VCPKG or DEB, but not both at once!")
+endif()
+
 if(VCPKG)
   include("${CMAKE_CURRENT_LIST_DIR}/cpp/StftPitchShift/LibStftPitchShiftVcpkg.cmake")
+elseif(DEB)
+  include("${CMAKE_CURRENT_LIST_DIR}/cpp/StftPitchShift/StftPitchShiftDeb.cmake")
 else()
   include("${CMAKE_CURRENT_LIST_DIR}/cpp/StftPitchShift/LibStftPitchShift.cmake")
   include("${CMAKE_CURRENT_LIST_DIR}/cpp/StftPitchShift/TheStftPitchShift.cmake")
