@@ -23,8 +23,8 @@ jobs:
     - run: cpack --config build/CPackConfig.cmake
 
     - name: Upload
-      uses: actions/upload-artifact@master
+    - uses: actions/upload-artifact@master
       with:
         name: stftpitchshift
-        path: ./*.deb
+        path: *.deb
         if-no-files-found: error
