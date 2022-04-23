@@ -26,5 +26,5 @@ jobs:
     - uses: actions/upload-artifact@master
       with:
         name: stftpitchshift
-        path: *.deb
+        path: stftpitchshift*.deb
         if-no-files-found: error
