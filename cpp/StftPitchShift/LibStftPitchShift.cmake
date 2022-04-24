@@ -55,7 +55,7 @@ target_include_directories(LibStftPitchShift
 )
 
 target_link_libraries(LibStftPitchShift
-  PRIVATE pocketfft
+  PUBLIC pocketfft
 )
 
 target_compile_features(LibStftPitchShift
