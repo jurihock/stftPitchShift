@@ -14,6 +14,10 @@ dist/
 __pycache__/
 *.py[cod]
 
+debian/changelog
+debian/control
+debian/copyright
+
 .DS_Store
 Thumbs.db
 

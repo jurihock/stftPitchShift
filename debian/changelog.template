@@ -1,0 +1,5 @@
+@CPACK_PACKAGE_NAME@ (@CPACK_PACKAGE_VERSION@) unstable; urgency=low
+
+  * Have a nice day!
+
+ -- @CPACK_DEBIAN_PACKAGE_MAINTAINER@  @DATE@

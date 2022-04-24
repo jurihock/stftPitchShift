@@ -1,0 +1,17 @@
+#!/usr/bin/make -f
+
+build: build-indep build-arch
+
+build-indep:
+build-arch:
+	cmake -S . -B build -DSHARED=ON -DDEB=ON
+	cmake --build build
+
+binary: binary-indep binary-arch
+
+binary-indep:
+binary-arch:
+	cpack --config build/CPackConfig.cmake
+
+clean:
+	rm -rf build
