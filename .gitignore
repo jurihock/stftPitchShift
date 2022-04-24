@@ -4,11 +4,15 @@
 build*/
 cmake-build*/
 
-*.egg-info/
-dist/
+_CPack_*/
+*.deb
+*.tar.gz
 
-*.py[cod]
+dist/
+*.egg-info/
+
 __pycache__/
+*.py[cod]
 
 .DS_Store
 Thumbs.db
