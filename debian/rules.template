@@ -1,0 +1,16 @@
+#!/usr/bin/make -f
+
+%:
+	dh $@
+
+override_dh_auto_configure:
+	cmake -S . -B build -DSHARED=ON -DDEB=ON
+
+override_dh_auto_build:
+	cmake --build build
+
+override_dh_auto_install:
+	cmake --install build --prefix debian/@CPACK_PACKAGE_NAME@/usr
+
+override_dh_auto_clean:
+	rm -rf build
