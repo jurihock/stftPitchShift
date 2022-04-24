@@ -17,6 +17,7 @@ __pycache__/
 debian/changelog
 debian/control
 debian/copyright
+debian/rules
 
 .DS_Store
 Thumbs.db
