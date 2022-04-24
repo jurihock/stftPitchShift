@@ -73,8 +73,7 @@ install(
   DESTINATION "${CMAKE_INSTALL_DATADIR}/doc/${CPACK_PACKAGE_NAME}"
 )
 
-# TODO https://lintian.debian.org/tags/no-shlibs
-# set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
-# set(CPACK_DEBIAN_PACKAGE_GENERATE_SHLIBS ON)
+# FIX https://lintian.debian.org/tags/no-shlibs
+set(CPACK_DEBIAN_PACKAGE_GENERATE_SHLIBS ${SHARED})
 
 include(CPack)
