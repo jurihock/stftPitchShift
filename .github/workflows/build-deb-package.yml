@@ -15,7 +15,7 @@ jobs:
       uses: actions/checkout@master
 
     - name: Prep
-      run: sudo apt-get -y install devscripts
+      run: sudo apt install --yes devscripts
 
     - name: Build
       run: ./debian.sh
