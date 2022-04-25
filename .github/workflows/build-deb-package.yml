@@ -15,7 +15,7 @@ jobs:
       uses: actions/checkout@master
 
     - name: Prep
-      run: sudo apt install --yes devscripts
+      run: sudo apt install --yes build-essential cmake devscripts
 
     - name: Build
       run: ./debian.sh
