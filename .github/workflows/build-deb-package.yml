@@ -7,7 +7,7 @@ jobs:
   build:
 
     name: Build .deb distribution package
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
 
     steps:
 
