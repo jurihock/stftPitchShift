@@ -74,9 +74,24 @@ install(
 
 # FIX https://lintian.debian.org/tags/no-copyright-file
 install(
-  FILES "${CMAKE_CURRENT_SOURCE_DIR}/debian/copyright"
+  FILES "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE"
   DESTINATION "${CMAKE_INSTALL_DATADIR}/doc/${CPACK_PACKAGE_NAME}"
+  RENAME "copyright"
 )
+
+file(GLOB_RECURSE
+  LICENSES "${CMAKE_CURRENT_LIST_DIR}/*/LICENSE"
+)
+
+foreach(LICENSE ${LICENSES})
+  get_filename_component(DIRECTORY ${LICENSE} DIRECTORY)
+  get_filename_component(NAME ${DIRECTORY} NAME)
+  install(
+    FILES "${CMAKE_CURRENT_LIST_DIR}/${NAME}/LICENSE"
+    DESTINATION "${CMAKE_INSTALL_DATADIR}/doc/${CPACK_PACKAGE_NAME}"
+    RENAME "copyright.${NAME}"
+  )
+endforeach()
 
 # FIX https://lintian.debian.org/tags/no-shlibs
 set(CPACK_DEBIAN_PACKAGE_GENERATE_SHLIBS ${SHARED})
