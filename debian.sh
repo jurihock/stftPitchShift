@@ -11,5 +11,6 @@ cpack --config ${BUILD}/CPackSourceConfig.cmake
 tar -xzvf stftpitchshift_${VERSION}.tar.gz -C ${BUILD}
 
 pushd ${BUILD}/stftpitchshift_${VERSION}
-debuild -B -us -ui -uc
+debuild -S --no-sign
+debuild -B --no-sign
 popd
