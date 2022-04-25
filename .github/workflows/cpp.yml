@@ -1,4 +1,4 @@
-name: Build .deb distribution package
+name: cpp
 
 on: push
 
