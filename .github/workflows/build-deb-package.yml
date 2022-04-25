@@ -15,4 +15,4 @@ jobs:
       uses: actions/checkout@master
 
     - name: Build
-      run: debian.sh
+      run: ./debian.sh
