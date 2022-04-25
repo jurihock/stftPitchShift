@@ -18,15 +18,20 @@ set(CPACK_DEBIAN_FILE_NAME DEB-DEFAULT)
 set(CPACK_SOURCE_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}_${CPACK_PACKAGE_VERSION}")
 
 set(CPACK_SOURCE_IGNORE_FILES
-  "/\\\\.git/"
-  "/\\\\.github/"
-  "/build*"
-  "/_CPack_*"
-  "/__pycache__"
-  "/\.DS_Store"
-  "/Thumbs.db"
-  "/*\\\\.deb"
-  "/*\\\\.tar.gz"
+  "\.git/"
+  "\.github/"
+  "build.*/"
+  "cmake-build.*/"
+  "_CPack_.*/"
+  ".*\.deb"
+  ".*\.tar\.gz"
+  "dist/"
+  ".*\.egg-info/"
+  "__pycache__/"
+  ".*\.py[cod]"
+  "\.DS_Store"
+  "Thumbs\.db"
+  "voice\..*\.wav"
 )
 
 string(TIMESTAMP DATE "%a, %d %b %Y %H:%M:%S +0000" UTC)
