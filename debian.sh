@@ -5,12 +5,12 @@ VERSION=$(cat VERSION | xargs)
 
 rm -rf ${BUILD}
 
-cmake -S . -B ${BUILD} -DSHARED=ON -DDEB=ON
-cpack --config ${BUILD}/CPackSourceConfig.cmake
+cmake -S . -B ${BUILD} -DSHARED=ON -DDEB=ON || exit $?
+cpack --config ${BUILD}/CPackSourceConfig.cmake || exit $?
 
-tar -xzvf stftpitchshift_${VERSION}.tar.gz -C ${BUILD}
+tar -xzvf stftpitchshift_${VERSION}.tar.gz -C ${BUILD} || exit $?
 
-pushd ${BUILD}/stftpitchshift_${VERSION}
-debuild -S --no-sign
-debuild -B --no-sign
-popd
+pushd ${BUILD}/stftpitchshift_${VERSION} >/dev/null 2>&1
+debuild -S --no-sign || exit $?
+debuild -B --no-sign || exit $?
+popd >/dev/null 2>&1
