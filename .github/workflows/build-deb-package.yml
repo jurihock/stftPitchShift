@@ -14,18 +14,5 @@ jobs:
     - name: Checkout
       uses: actions/checkout@master
 
-    - name: Prep
-      run: cmake -S . -B build -DSHARED=ON -DDEB=ON
-
     - name: Build
-      run: cmake --build build
-
-    - name: Pack
-      run: cpack --config build/CPackConfig.cmake
-
-    - name: Upload
-      uses: actions/upload-artifact@master
-      with:
-        name: stftpitchshift
-        path: stftpitchshift*.deb
-        if-no-files-found: error
+      run: debian.sh
