@@ -1,8 +1,7 @@
 #include <StftPitchShift/Cepstrum.h>
 
-#include <pocketfft/pocketfft_hdronly.h>
-
-Cepstrum::Cepstrum(const float quefrency, const float samplerate) :
+Cepstrum::Cepstrum(const std::shared_ptr<FFT> fft, const float quefrency, const float samplerate) :
+  fft(fft),
   quefrency(static_cast<size_t>(quefrency * samplerate))
 {
 }
@@ -18,9 +17,9 @@ void Cepstrum::lifter(const std::vector<std::complex<float>>& dft, std::vector<f
     spectrum[i] = std::log10(dft[i].real());
   }
 
-  ifft(spectrum, cepstrum);
+  fft->ifft(spectrum, cepstrum);
   lowpass(cepstrum, quefrency);
-  fft(cepstrum, spectrum);
+  fft->fft(cepstrum, spectrum);
 
   for (size_t i = 0; i < spectrum.size(); ++i)
   {
@@ -39,30 +38,4 @@ void Cepstrum::lowpass(std::vector<float>& cepstrum, const size_t quefrency)
   {
     cepstrum[i] = 0;
   }
-}
-
-void Cepstrum::fft(const std::vector<float>& frame, std::vector<std::complex<float>>& dft)
-{
-  pocketfft::r2c(
-    { frame.size() },
-    { sizeof(float) },
-    { sizeof(std::complex<float>) },
-    0,
-    true,
-    frame.data(),
-    dft.data(),
-    1.0f / frame.size());
-}
-
-void Cepstrum::ifft(const std::vector<std::complex<float>>& dft, std::vector<float>& frame)
-{
-  pocketfft::c2r(
-    { frame.size() },
-    { sizeof(std::complex<float>) },
-    { sizeof(float) },
-    0,
-    false,
-    dft.data(),
-    frame.data(),
-    1.0f);
 }

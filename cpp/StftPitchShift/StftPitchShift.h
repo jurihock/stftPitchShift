@@ -1,6 +1,6 @@
 #pragma once
 
-#include <vector>
+#include <StftPitchShift/FFT.h>
 
 /**
  * Short-time Fourier transform (STFT) based pitch shifting.
@@ -17,6 +17,20 @@ public:
    * @param chronometry Optionally enable runtime measurements.
    */
   StftPitchShift(
+    const size_t framesize,
+    const size_t hopsize,
+    const float samplerate,
+    const bool chronometry = false);
+
+  /**
+   * @param fft The custom FFT calculation instance.
+   * @param framesize The STFT frame size in samples.
+   * @param hopsize The STFT hop size in samples.
+   * @param samplerate The sample rate of the signal in hertz.
+   * @param chronometry Optionally enable runtime measurements.
+   */
+  StftPitchShift(
+    const std::shared_ptr<FFT> fft,
     const size_t framesize,
     const size_t hopsize,
     const float samplerate,
@@ -76,6 +90,7 @@ public:
 
 private:
 
+  const std::shared_ptr<FFT> fft;
   const size_t framesize;
   const size_t hopsize;
   const float samplerate;

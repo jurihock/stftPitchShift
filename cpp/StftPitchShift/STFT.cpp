@@ -2,9 +2,8 @@
 
 #include <StftPitchShift/Timer.h>
 
-#include <pocketfft/pocketfft_hdronly.h>
-
-STFT::STFT(const size_t framesize, const size_t hopsize, const bool chronometry) :
+STFT::STFT(const std::shared_ptr<FFT> fft, const size_t framesize, const size_t hopsize, const bool chronometry) :
+  fft(fft),
   framesize(framesize),
   hopsize(hopsize),
   chronometry(chronometry)
@@ -52,7 +51,7 @@ void STFT::operator()(const size_t size, const float* input, float* const output
     {
       timers.analysis.tic();
       reject(hop, input, frame, windows.analysis);
-      fft(frame, dft);
+      fft->fft(frame, dft);
       timers.analysis.toc();
 
       timers.callback.tic();
@@ -60,7 +59,7 @@ void STFT::operator()(const size_t size, const float* input, float* const output
       timers.callback.toc();
 
       timers.synthesis.tic();
-      ifft(dft, frame);
+      fft->ifft(dft, frame);
       inject(hop, output, frame, windows.synthesis);
       timers.synthesis.toc();
     }
@@ -76,11 +75,11 @@ void STFT::operator()(const size_t size, const float* input, float* const output
     for (size_t hop = 0; (hop + framesize) < size; hop += hopsize)
     {
       reject(hop, input, frame, windows.analysis);
-      fft(frame, dft);
+      fft->fft(frame, dft);
 
       callback(dft);
 
-      ifft(dft, frame);
+      fft->ifft(dft, frame);
       inject(hop, output, frame, windows.synthesis);
     }
   }
@@ -100,30 +99,4 @@ void STFT::inject(const size_t hop, float* const output, const std::vector<float
   {
     output[hop + i] += frame[i] * window[i];
   }
-}
-
-void STFT::fft(const std::vector<float>& frame, std::vector<std::complex<float>>& dft)
-{
-  pocketfft::r2c(
-    { frame.size() },
-    { sizeof(float) },
-    { sizeof(std::complex<float>) },
-    0,
-    true,
-    frame.data(),
-    dft.data(),
-    1.0f / frame.size());
-}
-
-void STFT::ifft(const std::vector<std::complex<float>>& dft, std::vector<float>& frame)
-{
-  pocketfft::c2r(
-    { frame.size() },
-    { sizeof(std::complex<float>) },
-    { sizeof(float) },
-    0,
-    false,
-    dft.data(),
-    frame.data(),
-    1.0f);
 }

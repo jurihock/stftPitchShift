@@ -10,6 +10,21 @@ StftPitchShift::StftPitchShift(
   const size_t hopsize,
   const float samplerate,
   const bool chronometry) :
+  fft(std::make_shared<Pocketfft>()),
+  framesize(framesize),
+  hopsize(hopsize),
+  samplerate(samplerate),
+  chronometry(chronometry)
+{
+}
+
+StftPitchShift::StftPitchShift(
+  const std::shared_ptr<FFT> fft,
+  const size_t framesize,
+  const size_t hopsize,
+  const float samplerate,
+  const bool chronometry) :
+  fft(fft),
   framesize(framesize),
   hopsize(hopsize),
   samplerate(samplerate),
@@ -71,10 +86,10 @@ void StftPitchShift::shiftpitch(
   const std::vector<float>& factors,
   const float quefrency)
 {
-  STFT stft(framesize, hopsize, chronometry);
+  STFT stft(fft, framesize, hopsize, chronometry);
   Vocoder vocoder(framesize, hopsize, samplerate);
   Pitcher pitcher(factors);
-  Cepstrum cepstrum(quefrency, samplerate);
+  Cepstrum cepstrum(fft, quefrency, samplerate);
 
   if (quefrency)
   {
