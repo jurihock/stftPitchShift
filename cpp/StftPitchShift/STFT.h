@@ -9,126 +9,129 @@
 #include <StftPitchShift/FFT.h>
 #include <StftPitchShift/Timer.h>
 
-template<class T>
-class STFT
+namespace stftpitchshift
 {
-
-public:
-
-  STFT(const std::shared_ptr<FFT> fft, const size_t framesize, const size_t hopsize, const bool chronometry = false) :
-    fft(fft),
-    framesize(framesize),
-    hopsize(hopsize),
-    chronometry(chronometry)
+  template<class T>
+  class STFT
   {
-    const T PI2 = T(2) * std::acos(T(-1));
 
-    std::vector<T> window(framesize);
+  public:
 
-    std::iota(window.begin(), window.end(), T(0));
-
-    std::transform(window.begin(), window.end(), window.begin(),
-      [&](T value) { return T(0.5) - T(0.5) * std::cos(PI2 * value / window.size()); });
-
-    windows.analysis = window;
-    windows.synthesis = window;
-
-    const T unitygain = hopsize / std::inner_product(
-      window.begin(), window.end(), window.begin(), 0.0f);
-
-    std::transform(windows.synthesis.begin(), windows.synthesis.end(), windows.synthesis.begin(),
-      [&](T value) { return value * unitygain; });
-  }
-
-  void operator()(const std::vector<T>& input, std::vector<T>& output, const std::function<void(std::vector<std::complex<T>>& dft)> callback) const
-  {
-    (*this)(input.size(), input.data(), output.data(), callback);
-  }
-
-  void operator()(const size_t size, const T* input, T* const output, const std::function<void(std::vector<std::complex<T>>& dft)> callback) const
-  {
-    std::vector<T> frame(framesize);
-    std::vector<std::complex<T>> dft(framesize / 2 + 1);
-
-    if (chronometry)
+    STFT(const std::shared_ptr<FFT> fft, const size_t framesize, const size_t hopsize, const bool chronometry = false) :
+      fft(fft),
+      framesize(framesize),
+      hopsize(hopsize),
+      chronometry(chronometry)
     {
-      struct
+      const T PI2 = T(2) * std::acos(T(-1));
+
+      std::vector<T> window(framesize);
+
+      std::iota(window.begin(), window.end(), T(0));
+
+      std::transform(window.begin(), window.end(), window.begin(),
+        [&](T value) { return T(0.5) - T(0.5) * std::cos(PI2 * value / window.size()); });
+
+      windows.analysis = window;
+      windows.synthesis = window;
+
+      const T unitygain = hopsize / std::inner_product(
+        window.begin(), window.end(), window.begin(), 0.0f);
+
+      std::transform(windows.synthesis.begin(), windows.synthesis.end(), windows.synthesis.begin(),
+        [&](T value) { return value * unitygain; });
+    }
+
+    void operator()(const std::vector<T>& input, std::vector<T>& output, const std::function<void(std::vector<std::complex<T>>& dft)> callback) const
+    {
+      (*this)(input.size(), input.data(), output.data(), callback);
+    }
+
+    void operator()(const size_t size, const T* input, T* const output, const std::function<void(std::vector<std::complex<T>>& dft)> callback) const
+    {
+      std::vector<T> frame(framesize);
+      std::vector<std::complex<T>> dft(framesize / 2 + 1);
+
+      if (chronometry)
       {
-        Timer<std::chrono::microseconds> analysis;
-        Timer<std::chrono::microseconds> synthesis;
-        Timer<std::chrono::microseconds> callback;
-        Timer<std::chrono::milliseconds> loop;
-      }
-      timers;
+        struct
+        {
+          Timer<std::chrono::microseconds> analysis;
+          Timer<std::chrono::microseconds> synthesis;
+          Timer<std::chrono::microseconds> callback;
+          Timer<std::chrono::milliseconds> loop;
+        }
+        timers;
 
-      timers.loop.tic();
-      for (size_t hop = 0; (hop + framesize) < size; hop += hopsize)
+        timers.loop.tic();
+        for (size_t hop = 0; (hop + framesize) < size; hop += hopsize)
+        {
+          timers.analysis.tic();
+          reject(hop, input, frame, windows.analysis);
+          fft->fft(frame, dft);
+          timers.analysis.toc();
+
+          timers.callback.tic();
+          callback(dft);
+          timers.callback.toc();
+
+          timers.synthesis.tic();
+          fft->ifft(dft, frame);
+          inject(hop, output, frame, windows.synthesis);
+          timers.synthesis.toc();
+        }
+        timers.loop.toc();
+
+        std::cout << "analysis  " << timers.analysis.str()  << std::endl;
+        std::cout << "synthesis " << timers.synthesis.str() << std::endl;
+        std::cout << "callback  " << timers.callback.str()  << std::endl;
+        std::cout << "loop      " << timers.loop.str()      << std::endl;
+      }
+      else
       {
-        timers.analysis.tic();
-        reject(hop, input, frame, windows.analysis);
-        fft->fft(frame, dft);
-        timers.analysis.toc();
+        for (size_t hop = 0; (hop + framesize) < size; hop += hopsize)
+        {
+          reject(hop, input, frame, windows.analysis);
+          fft->fft(frame, dft);
 
-        timers.callback.tic();
-        callback(dft);
-        timers.callback.toc();
+          callback(dft);
 
-        timers.synthesis.tic();
-        fft->ifft(dft, frame);
-        inject(hop, output, frame, windows.synthesis);
-        timers.synthesis.toc();
+          fft->ifft(dft, frame);
+          inject(hop, output, frame, windows.synthesis);
+        }
       }
-      timers.loop.toc();
-
-      std::cout << "analysis  " << timers.analysis.str()  << std::endl;
-      std::cout << "synthesis " << timers.synthesis.str() << std::endl;
-      std::cout << "callback  " << timers.callback.str()  << std::endl;
-      std::cout << "loop      " << timers.loop.str()      << std::endl;
     }
-    else
+
+  private:
+
+    const std::shared_ptr<FFT> fft;
+    const size_t framesize;
+    const size_t hopsize;
+
+    const bool chronometry;
+
+    struct
     {
-      for (size_t hop = 0; (hop + framesize) < size; hop += hopsize)
+      std::vector<T> analysis;
+      std::vector<T> synthesis;
+    }
+    windows;
+
+    static void reject(const size_t hop, const T* input, std::vector<T>& frame, const std::vector<T>& window)
+    {
+      for (size_t i = 0; i < frame.size(); ++i)
       {
-        reject(hop, input, frame, windows.analysis);
-        fft->fft(frame, dft);
-
-        callback(dft);
-
-        fft->ifft(dft, frame);
-        inject(hop, output, frame, windows.synthesis);
+        frame[i] = input[hop + i] * window[i];
       }
     }
-  }
 
-private:
-
-  const std::shared_ptr<FFT> fft;
-  const size_t framesize;
-  const size_t hopsize;
-
-  const bool chronometry;
-
-  struct
-  {
-    std::vector<T> analysis;
-    std::vector<T> synthesis;
-  }
-  windows;
-
-  static void reject(const size_t hop, const T* input, std::vector<T>& frame, const std::vector<T>& window)
-  {
-    for (size_t i = 0; i < frame.size(); ++i)
+    static void inject(const size_t hop, T* const output, const std::vector<T>& frame, const std::vector<T>& window)
     {
-      frame[i] = input[hop + i] * window[i];
+      for (size_t i = 0; i < frame.size(); ++i)
+      {
+        output[hop + i] += frame[i] * window[i];
+      }
     }
-  }
 
-  static void inject(const size_t hop, T* const output, const std::vector<T>& frame, const std::vector<T>& window)
-  {
-    for (size_t i = 0; i < frame.size(); ++i)
-    {
-      output[hop + i] += frame[i] * window[i];
-    }
-  }
-
-};
+  };
+}

@@ -10,6 +10,8 @@
 #include <StftPitchShift/StftPitchShift.h>
 #include <StftPitchShift/Version.h>
 
+using namespace stftpitchshift;
+
 const int OK = 0;
 const int NOK = 1;
 

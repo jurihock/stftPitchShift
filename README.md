@@ -96,6 +96,8 @@ To include this library in your C++ audio project, study the minimal C++ example
 ```cpp
 #include <StftPitchShift/StftPitchShift.h>
 
+using namespace stftpitchshift;
+
 StftPitchShift pitchshifter(1024, 256, 44100);
 
 std::vector<float> x(44100);

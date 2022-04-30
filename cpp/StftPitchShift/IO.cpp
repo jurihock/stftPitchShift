@@ -2,6 +2,8 @@
 
 #include <dr_libs/dr_wav.h>
 
+using namespace stftpitchshift;
+
 void IO::read(const std::string& path, std::vector<float>& data, double& samplerate, size_t& channels)
 {
   struct

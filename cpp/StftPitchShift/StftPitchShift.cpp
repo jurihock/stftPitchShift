@@ -6,6 +6,8 @@
 #include <StftPitchShift/STFT.h>
 #include <StftPitchShift/Vocoder.h>
 
+using namespace stftpitchshift;
+
 StftPitchShift::StftPitchShift(
   const size_t framesize,
   const size_t hopsize,

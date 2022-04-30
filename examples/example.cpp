@@ -1,5 +1,7 @@
 #include <StftPitchShift/StftPitchShift.h>
 
+using namespace stftpitchshift;
+
 int main()
 {
   StftPitchShift pitchshifter(1024, 256, 44100);
