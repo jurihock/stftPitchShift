@@ -156,7 +156,7 @@ private:
 
   inline static size_t rebit(size_t x, size_t bits)
   {
-    size_t y = 0;
+    size_t y = 0; // reversed bit order
 
     for (size_t i = 0; i < bits; ++i)
     {
