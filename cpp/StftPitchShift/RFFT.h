@@ -40,7 +40,7 @@ public:
 
     pack(buffer, output, a, b, size);
 
-    const T scale = T(0.5) / T(size);
+    const T scale = T(1) / T(size);
 
     for (size_t i = 0; i < size; ++i)
     {
