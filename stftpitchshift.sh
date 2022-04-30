@@ -15,3 +15,5 @@ example=examples/voice
 
 run build-release/stftpitchshift -i $example.wav -o $example.cpp.wav $@
 run python3 stftpitchshift.py -i $example.wav -o $example.python.wav $@
+
+python3 compare.py $example.python.wav $example.cpp.wav
