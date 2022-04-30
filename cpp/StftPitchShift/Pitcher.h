@@ -20,7 +20,7 @@ private:
 
   const std::vector<double> factors;
 
-  std::vector<Resampler> resample;
+  std::vector<Resampler<float>> resample;
   std::vector<std::vector<std::complex<float>>> buffer;
 
   bool prepare = true;

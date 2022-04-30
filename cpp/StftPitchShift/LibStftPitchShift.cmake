@@ -37,7 +37,6 @@ set(HEADERS
 set(SOURCES
   "${CMAKE_CURRENT_LIST_DIR}/Cepster.cpp"
   "${CMAKE_CURRENT_LIST_DIR}/Pitcher.cpp"
-  "${CMAKE_CURRENT_LIST_DIR}/Resampler.cpp"
   "${CMAKE_CURRENT_LIST_DIR}/STFT.cpp"
   "${CMAKE_CURRENT_LIST_DIR}/StftPitchShift.cpp"
 )

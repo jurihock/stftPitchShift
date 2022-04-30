@@ -14,7 +14,7 @@ void Pitcher::shiftpitch(std::vector<std::complex<float>>& dft)
 
     for (size_t i = 0; i < factors.size(); ++i)
     {
-      resample[i] = Resampler(factors[i]);
+      resample[i] = Resampler<float>(factors[i]);
       buffer[i].resize(dft.size());
     }
 
