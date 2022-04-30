@@ -2,6 +2,7 @@
 
 #include <StftPitchShift/Cepster.h>
 #include <StftPitchShift/Pitcher.h>
+#include <StftPitchShift/RFFT.h>
 #include <StftPitchShift/STFT.h>
 #include <StftPitchShift/Vocoder.h>
 
@@ -11,6 +12,7 @@ StftPitchShift::StftPitchShift(
   const double samplerate,
   const bool chronometry) :
   fft(std::make_shared<Pocketfft>()),
+  // fft(std::make_shared<RFFT>()),
   framesize(framesize),
   hopsize(hopsize),
   samplerate(samplerate),

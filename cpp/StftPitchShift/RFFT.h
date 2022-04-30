@@ -7,17 +7,37 @@
 #include <cassert>
 
 template<class T>
-class RFFT : public FFT
+class TRFFT
 {
 
 public:
 
-  RFFT(const size_t framesize)
+  TRFFT()
+  {
+    cache.resize(0);
+  }
+
+  TRFFT(const size_t framesize)
   {
     cache.resize(framesize);
   }
 
-  void fft(const std::vector<T>& frame, std::vector<std::complex<T>>& dft) override
+  TRFFT(const TRFFT& other)
+  {
+    cache.resize(other.cache.size.full);
+  }
+
+  TRFFT& operator=(const TRFFT& other)
+  {
+    if(this != &other)
+    {
+      this->cache.resize(other.cache.size.full);
+    }
+
+    return *this;
+  }
+
+  void fft(const std::vector<T>& frame, std::vector<std::complex<T>>& dft)
   {
     assert(dft.size() >= frame.size() / 2);
 
@@ -54,7 +74,7 @@ public:
     }
   }
 
-  void ifft(const std::vector<std::complex<T>>& dft, std::vector<T>& frame) override
+  void ifft(const std::vector<std::complex<T>>& dft, std::vector<T>& frame)
   {
     assert(frame.size() <= dft.size() * 2);
 
@@ -211,4 +231,40 @@ private:
       //   break;
     }
   }
+};
+
+class RFFT : public FFT
+{
+
+public:
+
+  void fft(const std::vector<float>& frame, std::vector<std::complex<float>>& dft) override
+  {
+    precision.f.fft(frame, dft);
+  }
+
+  void fft(const std::vector<double>& frame, std::vector<std::complex<double>>& dft) override
+  {
+    precision.d.fft(frame, dft);
+  }
+
+  void ifft(const std::vector<std::complex<float>>& dft, std::vector<float>& frame) override
+  {
+    precision.f.ifft(dft, frame);
+  }
+
+  void ifft(const std::vector<std::complex<double>>& dft, std::vector<double>& frame) override
+  {
+    precision.d.ifft(dft, frame);
+  }
+
+private:
+
+  struct
+  {
+    TRFFT<float> f;
+    TRFFT<double> d;
+  }
+  precision;
+
 };
