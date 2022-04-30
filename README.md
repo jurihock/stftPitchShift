@@ -18,29 +18,39 @@ Both sources contain a ready-to-use [command line tool](#usage) as well as a lib
 
 ## Modules
 
-### Vocoder
+<details>
+<summary><strong>Vocoder</strong></summary>
 
 The *Vocoder* module transforms the DFT spectral data according to the original algorithm, which is actually the *instantaneous frequency estimation* technique. See also [further reading](#further-reading) for more details.
 
 The particular `encode` function replaces the input DFT values by the `magnitude + j * frequency` complex numbers, representing the phase error based frequency estimation in the imaginary part.
 
 The `decode` function does an inverse transformation back to the original DFT complex numbers, by replacing eventually modified frequency value by the reconstructed phase value.
+</details>
 
-### Pitcher
+<details>
+<summary><strong>Pitcher</strong></summary>
 
 The *Pitcher* module performs single or multi pitch shifting of the encoded DFT frame depending on the specified fractional factors.
+</details>
 
-### Resampler
+<details>
+<summary><strong>Resampler</strong></summary>
 
 The *Resampler* module provides `linear` and `bilinear` interpolation routines, to actually perform pitch shifting, based on the *Vocoder* DFT transform.
+</details>
 
-### Cepster
+<details>
+<summary><strong>Cepster</strong></summary>
 
 The *Cepster* module estimates a spectral envelope of the DFT magnitude vector, representing the vocal tract resonances. This computation takes place in the cepstral domain by applying a low-pass filter. The cutoff value of the low-pass filter or *lifter* is the *quefrency* value to be specified in seconds or milliseconds.
+</details>
 
-### STFT
+<details>
+<summary><strong>STFT</strong></summary>
 
 As the name of this module already implies, it performs the comprehensive *STFT* analysis and synthesis steps.
+</details>
 
 ## Pitch shifting
 
