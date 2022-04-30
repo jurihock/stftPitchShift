@@ -6,17 +6,6 @@
 
 #include <dr_libs/dr_wav.h>
 
-void IO::clip(std::vector<float>& data)
-{
-  const float min = -1.0f + std::numeric_limits<float>::epsilon();
-  const float max = +1.0f - std::numeric_limits<float>::epsilon();
-
-  for (size_t i = 0; i < data.size(); ++i)
-  {
-    data[i] = std::min(std::max(data[i], min), max);
-  }
-}
-
 void IO::read(const std::string& path, std::vector<float>& data, double& samplerate, size_t& channels)
 {
   struct
@@ -57,6 +46,15 @@ void IO::read(const std::string& path, std::vector<float>& data, double& sampler
 
   samplerate = static_cast<double>(wav.samplerate);
   channels = static_cast<size_t>(wav.channels);
+}
+
+void IO::read(const std::string& path, std::vector<double>& data, double& samplerate, size_t& channels)
+{
+  std::vector<float> buffer;
+
+  read(path, buffer, samplerate, channels);
+
+  data.assign(buffer.begin(), buffer.end());
 }
 
 void IO::write(const std::string& path, const std::vector<float>& data, const double samplerate, const size_t channels)
@@ -109,24 +107,11 @@ void IO::write(const std::string& path, const std::vector<float>& data, const do
   }
 }
 
-void IO::split(const size_t size, const float* input, float* const output)
+void IO::write(const std::string& path, const std::vector<double>& data, const double samplerate, const size_t channels)
 {
-  const size_t halfsize = size / 2;
+  std::vector<float> buffer;
 
-  for (size_t i = 0; i < halfsize; ++i)
-  {
-    output[i] = input[i * 2];
-    output[i + halfsize] = input[i * 2 + 1];
-  }
-}
+  buffer.assign(data.begin(), data.end());
 
-void IO::merge(const size_t size, const float* input, float* const output)
-{
-  const size_t halfsize = size / 2;
-
-  for (size_t i = 0; i < halfsize; ++i)
-  {
-    output[i * 2] = input[i];
-    output[i * 2 + 1] = input[i + halfsize];
-  }
+  write(path, buffer, samplerate, channels);
 }
