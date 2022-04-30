@@ -34,9 +34,9 @@ The *Pitcher* module performs single or multi pitch shifting of the encoded DFT 
 
 The *Resampler* module provides `linear` and `bilinear` interpolation routines, to actually perform pitch shifting, based on the *Vocoder* DFT transform.
 
-### Cepstrum
+### Cepster
 
-The *Cepstrum* module estimates a spectral envelope of the DFT magnitude vector, representing the vocal tract resonances. This computation takes place in the cepstral domain by applying a low-pass filter. The cutoff value of the low-pass filter or *lifter* is the *quefrency* value to be specified in seconds or milliseconds.
+The *Cepster* module estimates a spectral envelope of the DFT magnitude vector, representing the vocal tract resonances. This computation takes place in the cepstral domain by applying a low-pass filter. The cutoff value of the low-pass filter or *lifter* is the *quefrency* value to be specified in seconds or milliseconds.
 
 ### STFT
 

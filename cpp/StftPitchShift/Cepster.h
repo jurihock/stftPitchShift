@@ -6,12 +6,12 @@
 
 #include <StftPitchShift/FFT.h>
 
-class Cepstrum
+class Cepster
 {
 
 public:
 
-  Cepstrum(const std::shared_ptr<FFT> fft, const float quefrency, const float samplerate);
+  Cepster(const std::shared_ptr<FFT> fft, const float quefrency, const float samplerate);
 
   void lifter(const std::vector<std::complex<float>>& dft, std::vector<float>& envelope);
 

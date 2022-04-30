@@ -1,4 +1,4 @@
-from stftpitchshift.cepstrum import lifter
+from stftpitchshift.cepster import lifter
 from stftpitchshift.pitcher import shiftpitch
 from stftpitchshift.stft import stft, istft, spectrogram
 from stftpitchshift.vocoder import encode, decode

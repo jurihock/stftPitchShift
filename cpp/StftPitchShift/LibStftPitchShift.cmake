@@ -21,7 +21,7 @@ set_target_properties(LibStftPitchShift
 )
 
 set(HEADERS
-  "${CMAKE_CURRENT_LIST_DIR}/Cepstrum.h"
+  "${CMAKE_CURRENT_LIST_DIR}/Cepster.h"
   "${CMAKE_CURRENT_LIST_DIR}/Dump.h"
   "${CMAKE_CURRENT_LIST_DIR}/FFT.h"
   "${CMAKE_CURRENT_LIST_DIR}/Pitcher.h"
@@ -35,7 +35,7 @@ set(HEADERS
 )
 
 set(SOURCES
-  "${CMAKE_CURRENT_LIST_DIR}/Cepstrum.cpp"
+  "${CMAKE_CURRENT_LIST_DIR}/Cepster.cpp"
   "${CMAKE_CURRENT_LIST_DIR}/Pitcher.cpp"
   "${CMAKE_CURRENT_LIST_DIR}/Resampler.cpp"
   "${CMAKE_CURRENT_LIST_DIR}/STFT.cpp"

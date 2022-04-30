@@ -1,6 +1,6 @@
 #include <StftPitchShift/StftPitchShift.h>
 
-#include <StftPitchShift/Cepstrum.h>
+#include <StftPitchShift/Cepster.h>
 #include <StftPitchShift/Pitcher.h>
 #include <StftPitchShift/STFT.h>
 #include <StftPitchShift/Vocoder.h>
@@ -89,7 +89,7 @@ void StftPitchShift::shiftpitch(
   STFT stft(fft, framesize, hopsize, chronometry);
   Vocoder vocoder(framesize, hopsize, samplerate);
   Pitcher pitcher(factors);
-  Cepstrum cepstrum(fft, quefrency, samplerate);
+  Cepster cepster(fft, quefrency, samplerate);
 
   if (quefrency)
   {
@@ -99,7 +99,7 @@ void StftPitchShift::shiftpitch(
     {
       vocoder.encode(frame);
 
-      cepstrum.lifter(frame, envelope);
+      cepster.lifter(frame, envelope);
 
       for (size_t i = 0; i < frame.size(); ++i)
       {

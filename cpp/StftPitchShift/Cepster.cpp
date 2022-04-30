@@ -1,12 +1,12 @@
-#include <StftPitchShift/Cepstrum.h>
+#include <StftPitchShift/Cepster.h>
 
-Cepstrum::Cepstrum(const std::shared_ptr<FFT> fft, const float quefrency, const float samplerate) :
+Cepster::Cepster(const std::shared_ptr<FFT> fft, const float quefrency, const float samplerate) :
   fft(fft),
   quefrency(static_cast<size_t>(quefrency * samplerate))
 {
 }
 
-void Cepstrum::lifter(const std::vector<std::complex<float>>& dft, std::vector<float>& envelope)
+void Cepster::lifter(const std::vector<std::complex<float>>& dft, std::vector<float>& envelope)
 {
   spectrum.resize(dft.size());
   cepstrum.resize((dft.size() - 1) * 2);
@@ -27,7 +27,7 @@ void Cepstrum::lifter(const std::vector<std::complex<float>>& dft, std::vector<f
   }
 }
 
-void Cepstrum::lowpass(std::vector<float>& cepstrum, const size_t quefrency)
+void Cepster::lowpass(std::vector<float>& cepstrum, const size_t quefrency)
 {
   for (size_t i = 1; i < std::min(quefrency, cepstrum.size()); ++i)
   {
