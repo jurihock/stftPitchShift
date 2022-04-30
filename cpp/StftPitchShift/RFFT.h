@@ -23,8 +23,8 @@ public:
     auto input = reinterpret_cast<const std::complex<T>*>(frame.data());
     auto output = dft.data();
     auto buffer = cache.buffer.data();
-    auto a = cache.a.data();
-    auto b = cache.b.data();
+    auto a = cache.coeffs.a.data();
+    auto b = cache.coeffs.b.data();
 
     // transform(-1, reinterpret_cast<const std::complex<T>*>(input.data()), buffer.data(), N);
 
@@ -38,13 +38,13 @@ public:
       buffer,
       T(1));
 
-    unpack(buffer, output, a, b, size);
+    pack(buffer, output, a, b, size);
 
-    const T W = T(0.5) / T(size);
+    const T scale = T(0.5) / T(size);
 
     for (size_t i = 0; i < size; ++i)
     {
-      output[i] *= W;
+      output[i] *= scale;
     }
   }
 
@@ -59,8 +59,8 @@ public:
     auto input = dft.data();
     auto output = reinterpret_cast<std::complex<T>* const>(frame.data());
     auto buffer = cache.buffer.data();
-    auto a = cache.a.data();
-    auto b = cache.b.data();
+    auto a = cache.coeffs.conj.a.data();
+    auto b = cache.coeffs.conj.b.data();
 
     pack(input, buffer, a, b, size);
 
@@ -90,7 +90,17 @@ private:
 
     std::vector<std::complex<T>> buffer;
 
-    std::vector<std::complex<T>> w, a, b;
+    struct
+    {
+      std::vector<std::complex<T>> w, a, b;
+
+      struct
+      {
+        std::vector<std::complex<T>> a, b;
+      }
+      conj;
+    }
+    coeffs;
 
     void resize(size_t newsize)
     {
@@ -104,18 +114,23 @@ private:
 
       buffer.resize(size.half);
 
-      w.resize(size.half);
-      a.resize(size.half);
-      b.resize(size.half);
+      coeffs.w.resize(size.half);
+      coeffs.a.resize(size.half);
+      coeffs.b.resize(size.half);
+      coeffs.conj.a.resize(size.half);
+      coeffs.conj.b.resize(size.half);
 
       const T pi = T(-2) * std::acos(T(-1)) / T(size.full);
 
       for (size_t i = 0; i < size.half; ++i)
       {
-        w[i] = std::polar(T(1), pi * i);
+        coeffs.w[i] = std::polar(T(1), pi * i);
 
-        a[i] = imul({ T(0.5), T(0.5) }, -w[i]);
-        b[i] = imul({ T(0.5), T(0.5) }, +w[i]);
+        coeffs.a[i] = imul({ T(0.5), T(0.5) }, -coeffs.w[i]);
+        coeffs.b[i] = imul({ T(0.5), T(0.5) }, +coeffs.w[i]);
+
+        coeffs.conj.a[i] = std::conj(coeffs.a[i]);
+        coeffs.conj.b[i] = std::conj(coeffs.b[i]);
       }
     }
   }
@@ -130,23 +145,13 @@ private:
     };
   }
 
-  static void unpack(const std::complex<T>* input, std::complex<T>* const output, const std::complex<T>* a, const std::complex<T>* b, const size_t size)
+  static void pack(const std::complex<T>* input, std::complex<T>* const output, const std::complex<T>* a, const std::complex<T>* b, const size_t size)
   {
     output[0] = input[0] * a[0] + std::conj(input[0]) * b[0];
 
     for (size_t i = 1, j = size - 1; i < size; ++i, --j)
     {
       output[i] = input[i] * a[i] + std::conj(input[j]) * b[i];
-    }
-  }
-
-  static void pack(const std::complex<T>* input, std::complex<T>* const output, const std::complex<T>* a, const std::complex<T>* b, const size_t size)
-  {
-    output[0] = input[0] * std::conj(a[0]) + std::conj(input[0]) * std::conj(b[0]);
-
-    for (size_t i = 1, j = size - 1; i < size; ++i, --j)
-    {
-      output[i] = input[i] * std::conj(a[i]) + std::conj(input[j]) * std::conj(b[i]);
     }
   }
 
