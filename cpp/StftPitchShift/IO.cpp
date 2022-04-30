@@ -1,9 +1,5 @@
 #include <StftPitchShift/IO.h>
 
-#include <algorithm>
-#include <limits>
-#include <stdexcept>
-
 #include <dr_libs/dr_wav.h>
 
 void IO::read(const std::string& path, std::vector<float>& data, double& samplerate, size_t& channels)
