@@ -12,6 +12,11 @@ class RFFT : public FFT
 
 public:
 
+  RFFT(const size_t framesize)
+  {
+    cache.resize(framesize);
+  }
+
   void fft(const std::vector<T>& frame, std::vector<std::complex<T>>& dft) override
   {
     assert(dft.size() >= frame.size() / 2);
