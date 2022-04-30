@@ -8,7 +8,7 @@
 StftPitchShift::StftPitchShift(
   const size_t framesize,
   const size_t hopsize,
-  const float samplerate,
+  const double samplerate,
   const bool chronometry) :
   fft(std::make_shared<Pocketfft>()),
   framesize(framesize),
@@ -22,7 +22,7 @@ StftPitchShift::StftPitchShift(
   const std::shared_ptr<FFT> fft,
   const size_t framesize,
   const size_t hopsize,
-  const float samplerate,
+  const double samplerate,
   const bool chronometry) :
   fft(fft),
   framesize(framesize),
@@ -35,10 +35,10 @@ StftPitchShift::StftPitchShift(
 void StftPitchShift::shiftpitch(
   const std::vector<float>& input,
   std::vector<float>& output,
-  const float factor,
-  const float quefrency)
+  const double factor,
+  const double quefrency)
 {
-  const std::vector<float> factors = { factor };
+  const std::vector<double> factors = { factor };
 
   shiftpitch(
     input.size(),
@@ -52,10 +52,10 @@ void StftPitchShift::shiftpitch(
   const size_t size,
   const float* input,
   float* const output,
-  const float factor,
-  const float quefrency)
+  const double factor,
+  const double quefrency)
 {
-  const std::vector<float> factors = { factor };
+  const std::vector<double> factors = { factor };
 
   shiftpitch(
     size,
@@ -68,8 +68,8 @@ void StftPitchShift::shiftpitch(
 void StftPitchShift::shiftpitch(
   const std::vector<float>& input,
   std::vector<float>& output,
-  const std::vector<float>& factors,
-  const float quefrency)
+  const std::vector<double>& factors,
+  const double quefrency)
 {
   shiftpitch(
     input.size(),
@@ -83,8 +83,8 @@ void StftPitchShift::shiftpitch(
   const size_t size,
   const float* input,
   float* const output,
-  const std::vector<float>& factors,
-  const float quefrency)
+  const std::vector<double>& factors,
+  const double quefrency)
 {
   STFT stft(fft, framesize, hopsize, chronometry);
   Vocoder vocoder(framesize, hopsize, samplerate);

@@ -9,7 +9,7 @@ class Vocoder
 
 public:
 
-  Vocoder(const size_t framesize, const size_t hopsize, const float samplerate);
+  Vocoder(const size_t framesize, const size_t hopsize, const double samplerate);
 
   void encode(std::vector<std::complex<float>>& dft);
   void decode(std::vector<std::complex<float>>& dft);

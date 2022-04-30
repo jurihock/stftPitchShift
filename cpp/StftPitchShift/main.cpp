@@ -98,8 +98,8 @@ int main(int argc, char** argv)
   std::string infile = "";
   std::string outfile = "";
 
-  std::vector<float> factors = { 1 };
-  float quefrency = 0;
+  std::vector<double> factors = { 1 };
+  double quefrency = 0;
 
   size_t framesize = 1024;
   size_t hoprate = 32;
@@ -175,7 +175,7 @@ int main(int argc, char** argv)
 
   try
   {
-    float samplerate;
+    double samplerate;
     size_t channels;
 
     std::vector<float> indata, outdata;
@@ -192,7 +192,7 @@ int main(int argc, char** argv)
 
       if (smb)
       {
-        for (const float factor : factors)
+        for (const double factor : factors)
         {
           smbPitchShift(
             factor,

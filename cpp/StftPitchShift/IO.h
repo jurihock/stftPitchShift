@@ -10,8 +10,8 @@ public:
 
   static void clip(std::vector<float>& data);
 
-  static void read(const std::string& path, std::vector<float>& data, float& samplerate, size_t& channels);
-  static void write(const std::string& path, const std::vector<float>& data, const float samplerate, const size_t channels);
+  static void read(const std::string& path, std::vector<float>& data, double& samplerate, size_t& channels);
+  static void write(const std::string& path, const std::vector<float>& data, const double samplerate, const size_t channels);
 
 private:
 

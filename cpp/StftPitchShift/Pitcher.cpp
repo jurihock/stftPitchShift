@@ -1,6 +1,6 @@
 #include <StftPitchShift/Pitcher.h>
 
-Pitcher::Pitcher(const std::vector<float>& factors) :
+Pitcher::Pitcher(const std::vector<double>& factors) :
   factors(factors)
 {
 }

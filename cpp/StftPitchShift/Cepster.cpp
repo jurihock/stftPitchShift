@@ -1,6 +1,6 @@
 #include <StftPitchShift/Cepster.h>
 
-Cepster::Cepster(const std::shared_ptr<FFT> fft, const float quefrency, const float samplerate) :
+Cepster::Cepster(const std::shared_ptr<FFT> fft, const double quefrency, const double samplerate) :
   fft(fft),
   quefrency(static_cast<size_t>(quefrency * samplerate))
 {

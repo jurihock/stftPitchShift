@@ -11,7 +11,7 @@ class Cepster
 
 public:
 
-  Cepster(const std::shared_ptr<FFT> fft, const float quefrency, const float samplerate);
+  Cepster(const std::shared_ptr<FFT> fft, const double quefrency, const double samplerate);
 
   void lifter(const std::vector<std::complex<float>>& dft, std::vector<float>& envelope);
 

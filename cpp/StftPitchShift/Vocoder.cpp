@@ -1,7 +1,7 @@
 #include <StftPitchShift/Vocoder.h>
 
-Vocoder::Vocoder(const size_t framesize, const size_t hopsize, const float samplerate) :
-  stft_freq_inc((double)samplerate / (double)framesize),
+Vocoder::Vocoder(const size_t framesize, const size_t hopsize, const double samplerate) :
+  stft_freq_inc(samplerate / (double)framesize),
   stft_phase_inc(PI2 / ((double)framesize / (double)hopsize))
 {
   encode_phase_buffer.resize(framesize / 2 + 1);

@@ -12,13 +12,13 @@ class Pitcher
 
 public:
 
-  Pitcher(const std::vector<float>& factors);
+  Pitcher(const std::vector<double>& factors);
 
   void shiftpitch(std::vector<std::complex<float>>& dft);
 
 private:
 
-  const std::vector<float> factors;
+  const std::vector<double> factors;
 
   std::vector<Resampler> resample;
   std::vector<std::vector<std::complex<float>>> buffer;

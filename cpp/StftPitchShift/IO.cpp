@@ -17,7 +17,7 @@ void IO::clip(std::vector<float>& data)
   }
 }
 
-void IO::read(const std::string& path, std::vector<float>& data, float& samplerate, size_t& channels)
+void IO::read(const std::string& path, std::vector<float>& data, double& samplerate, size_t& channels)
 {
   struct
   {
@@ -55,11 +55,11 @@ void IO::read(const std::string& path, std::vector<float>& data, float& samplera
 
   drwav_free(rawdata, nullptr);
 
-  samplerate = static_cast<float>(wav.samplerate);
+  samplerate = static_cast<double>(wav.samplerate);
   channels = static_cast<size_t>(wav.channels);
 }
 
-void IO::write(const std::string& path, const std::vector<float>& data, const float samplerate, const size_t channels)
+void IO::write(const std::string& path, const std::vector<float>& data, const double samplerate, const size_t channels)
 {
   std::vector<drwav_int32> rawdata(data.size());
 

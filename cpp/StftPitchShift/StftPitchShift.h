@@ -19,7 +19,7 @@ public:
   StftPitchShift(
     const size_t framesize,
     const size_t hopsize,
-    const float samplerate,
+    const double samplerate,
     const bool chronometry = false);
 
   /**
@@ -33,7 +33,7 @@ public:
     const std::shared_ptr<FFT> fft,
     const size_t framesize,
     const size_t hopsize,
-    const float samplerate,
+    const double samplerate,
     const bool chronometry = false);
 
   /**
@@ -45,8 +45,8 @@ public:
   void shiftpitch(
     const std::vector<float>& input,
     std::vector<float>& output,
-    const float factor = 1,
-    const float quefrency = 0);
+    const double factor = 1,
+    const double quefrency = 0);
 
   /**
    * @param size The total number of signal values, not bytes.
@@ -59,8 +59,8 @@ public:
     const size_t size,
     const float* input,
     float* const output,
-    const float factor = 1,
-    const float quefrency = 0);
+    const double factor = 1,
+    const double quefrency = 0);
 
   /**
    * @param input The input signal.
@@ -71,8 +71,8 @@ public:
   void shiftpitch(
     const std::vector<float>& input,
     std::vector<float>& output,
-    const std::vector<float>& factors,
-    const float quefrency = 0);
+    const std::vector<double>& factors,
+    const double quefrency = 0);
 
   /**
    * @param size The total number of signal values, not bytes.
@@ -85,15 +85,15 @@ public:
     const size_t size,
     const float* input,
     float* const output,
-    const std::vector<float>& factors,
-    const float quefrency = 0);
+    const std::vector<double>& factors,
+    const double quefrency = 0);
 
 private:
 
   const std::shared_ptr<FFT> fft;
   const size_t framesize;
   const size_t hopsize;
-  const float samplerate;
+  const double samplerate;
   const bool chronometry;
 
 };
