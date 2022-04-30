@@ -49,6 +49,22 @@ void StftPitchShift::shiftpitch(
 }
 
 void StftPitchShift::shiftpitch(
+  const std::vector<double>& input,
+  std::vector<double>& output,
+  const double factor,
+  const double quefrency)
+{
+  const std::vector<double> factors = { factor };
+
+  shiftpitch(
+    input.size(),
+    input.data(),
+    output.data(),
+    factors,
+    quefrency);
+}
+
+void StftPitchShift::shiftpitch(
   const size_t size,
   const float* input,
   float* const output,
@@ -66,8 +82,39 @@ void StftPitchShift::shiftpitch(
 }
 
 void StftPitchShift::shiftpitch(
+  const size_t size,
+  const double* input,
+  double* const output,
+  const double factor,
+  const double quefrency)
+{
+  const std::vector<double> factors = { factor };
+
+  shiftpitch(
+    size,
+    input,
+    output,
+    factors,
+    quefrency);
+}
+
+void StftPitchShift::shiftpitch(
   const std::vector<float>& input,
   std::vector<float>& output,
+  const std::vector<double>& factors,
+  const double quefrency)
+{
+  shiftpitch(
+    input.size(),
+    input.data(),
+    output.data(),
+    factors,
+    quefrency);
+}
+
+void StftPitchShift::shiftpitch(
+  const std::vector<double>& input,
+  std::vector<double>& output,
   const std::vector<double>& factors,
   const double quefrency)
 {
@@ -119,6 +166,54 @@ void StftPitchShift::shiftpitch(
   else
   {
     stft(size, input, output, [&](std::vector<std::complex<float>>& frame)
+    {
+      vocoder.encode(frame);
+      pitcher.shiftpitch(frame);
+      vocoder.decode(frame);
+    });
+  }
+}
+
+void StftPitchShift::shiftpitch(
+  const size_t size,
+  const double* input,
+  double* const output,
+  const std::vector<double>& factors,
+  const double quefrency)
+{
+  STFT<double> stft(fft, framesize, hopsize, chronometry);
+  Vocoder<double> vocoder(framesize, hopsize, samplerate);
+  Pitcher<double> pitcher(factors);
+  Cepster<double> cepster(fft, quefrency, samplerate);
+
+  if (quefrency)
+  {
+    std::vector<double> envelope;
+
+    stft(size, input, output, [&](std::vector<std::complex<double>>& frame)
+    {
+      vocoder.encode(frame);
+
+      cepster.lifter(frame, envelope);
+
+      for (size_t i = 0; i < frame.size(); ++i)
+      {
+        frame[i].real(frame[i].real() / envelope[i]);
+      }
+
+      pitcher.shiftpitch(frame);
+
+      for (size_t i = 0; i < frame.size(); ++i)
+      {
+        frame[i].real(frame[i].real() * envelope[i]);
+      }
+
+      vocoder.decode(frame);
+    });
+  }
+  else
+  {
+    stft(size, input, output, [&](std::vector<std::complex<double>>& frame)
     {
       vocoder.encode(frame);
       pitcher.shiftpitch(frame);

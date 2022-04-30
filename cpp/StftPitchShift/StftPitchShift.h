@@ -49,6 +49,18 @@ public:
     const double quefrency = 0);
 
   /**
+   * @param input The input signal.
+   * @param output The output signal of the equal size.
+   * @param factor The fractional pitch shifting factor.
+   * @param quefrency The optional formant lifter quefrency in seconds.
+   */
+  void shiftpitch(
+    const std::vector<double>& input,
+    std::vector<double>& output,
+    const double factor = 1,
+    const double quefrency = 0);
+
+  /**
    * @param size The total number of signal values, not bytes.
    * @param input The input signal.
    * @param output The output signal of the equal size.
@@ -59,6 +71,20 @@ public:
     const size_t size,
     const float* input,
     float* const output,
+    const double factor = 1,
+    const double quefrency = 0);
+
+  /**
+   * @param size The total number of signal values, not bytes.
+   * @param input The input signal.
+   * @param output The output signal of the equal size.
+   * @param factor The fractional pitch shifting factor.
+   * @param quefrency The optional formant lifter quefrency in seconds.
+   */
+  void shiftpitch(
+    const size_t size,
+    const double* input,
+    double* const output,
     const double factor = 1,
     const double quefrency = 0);
 
@@ -75,6 +101,18 @@ public:
     const double quefrency = 0);
 
   /**
+   * @param input The input signal.
+   * @param output The output signal of the equal size.
+   * @param factors The fractional pitch shifting factors.
+   * @param quefrency The optional formant lifter quefrency in seconds.
+   */
+  void shiftpitch(
+    const std::vector<double>& input,
+    std::vector<double>& output,
+    const std::vector<double>& factors,
+    const double quefrency = 0);
+
+  /**
    * @param size The total number of signal values, not bytes.
    * @param input The input signal.
    * @param output The output signal of the equal size.
@@ -85,6 +123,20 @@ public:
     const size_t size,
     const float* input,
     float* const output,
+    const std::vector<double>& factors,
+    const double quefrency = 0);
+
+  /**
+   * @param size The total number of signal values, not bytes.
+   * @param input The input signal.
+   * @param output The output signal of the equal size.
+   * @param factors The fractional pitch shifting factors.
+   * @param quefrency The optional formant lifter quefrency in seconds.
+   */
+  void shiftpitch(
+    const size_t size,
+    const double* input,
+    double* const output,
     const std::vector<double>& factors,
     const double quefrency = 0);
 
