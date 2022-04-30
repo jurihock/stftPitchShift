@@ -178,7 +178,7 @@ int main(int argc, char** argv)
     double samplerate;
     size_t channels;
 
-    std::vector<float> indata, outdata;
+    std::vector<double> indata, outdata;
 
     IO::read(infile, indata, samplerate, channels);
 
@@ -187,8 +187,8 @@ int main(int argc, char** argv)
     for (size_t channel = 0; channel < channels; ++channel)
     {
       const size_t size = indata.size() / channels;
-      const float* input = indata.data() + channel * size;
-      float* const output = outdata.data() + channel * size;
+      const double* input = indata.data() + channel * size;
+      double* const output = outdata.data() + channel * size;
 
       if (smb)
       {
