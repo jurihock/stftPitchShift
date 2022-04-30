@@ -6,7 +6,7 @@
 
 #include <cassert>
 
-template<typename T>
+template<class T>
 class RFFT : public FFT
 {
 

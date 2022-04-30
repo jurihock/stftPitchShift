@@ -40,7 +40,6 @@ set(SOURCES
   "${CMAKE_CURRENT_LIST_DIR}/Resampler.cpp"
   "${CMAKE_CURRENT_LIST_DIR}/STFT.cpp"
   "${CMAKE_CURRENT_LIST_DIR}/StftPitchShift.cpp"
-  "${CMAKE_CURRENT_LIST_DIR}/Vocoder.cpp"
 )
 
 target_sources(LibStftPitchShift
