@@ -89,7 +89,7 @@ void StftPitchShift::shiftpitch(
   STFT stft(fft, framesize, hopsize, chronometry);
   Vocoder<float> vocoder(framesize, hopsize, samplerate);
   Pitcher<float> pitcher(factors);
-  Cepster cepster(fft, quefrency, samplerate);
+  Cepster<float> cepster(fft, quefrency, samplerate);
 
   if (quefrency)
   {
