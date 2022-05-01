@@ -36,7 +36,7 @@ namespace stftpitchshift
       windows.synthesis = window;
 
       const T unitygain = hopsize / std::inner_product(
-        window.begin(), window.end(), window.begin(), 0.0f);
+        window.begin(), window.end(), window.begin(), T(0));
 
       std::transform(windows.synthesis.begin(), windows.synthesis.end(), windows.synthesis.begin(),
         [&](T value) { return value * unitygain; });
