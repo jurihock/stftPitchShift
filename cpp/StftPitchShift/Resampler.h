@@ -55,12 +55,12 @@ namespace stftpitchshift
         const ptrdiff_t n0 = n_ - (n < n_); // std::floor(n)
         const ptrdiff_t n1 = n_ + (n > n_); // std::ceil(n)
 
-        if (n0 < 0 || N <= n0)
+        if (n0 < 0 || ptrdiff_t(N) <= n0)
         {
           continue;
         }
 
-        if (n1 < 0 || N <= n1)
+        if (n1 < 0 || ptrdiff_t(N) <= n1)
         {
           continue;
         }
@@ -101,12 +101,12 @@ namespace stftpitchshift
         const ptrdiff_t n0 = n_ - (n < n_); // std::floor(n)
         const ptrdiff_t n1 = n_ + (n > n_); // std::ceil(n)
 
-        if (n0 < 0 || N <= n0)
+        if (n0 < 0 || ptrdiff_t(N) <= n0)
         {
           continue;
         }
 
-        if (n1 < 0 || N <= n1)
+        if (n1 < 0 || ptrdiff_t(N) <= n1)
         {
           continue;
         }
