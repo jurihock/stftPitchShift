@@ -211,7 +211,7 @@ namespace stftpitchshift
 
       for (size_t bit = 1; bit <= bits; ++bit)
       {
-        const size_t n1 = 1 << bit;
+        const size_t n1 = size_t(1) << bit;
         const size_t n2 = n1 >> 1;
 
         const size_t inc = size / n1;
