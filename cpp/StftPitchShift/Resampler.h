@@ -44,10 +44,10 @@ namespace stftpitchshift
 
       const double PI = std::acos(-1.0);
 
-      const size_t N = x.size();
-      const size_t M = static_cast<size_t>(std::round(N * factor));
+      const ptrdiff_t N = static_cast<ptrdiff_t>(x.size());
+      const ptrdiff_t M = static_cast<ptrdiff_t>(std::round(N * factor));
 
-      for (size_t m = 0; m < std::min(M, N); ++m)
+      for (ptrdiff_t m = 0; m < std::min(M, N); ++m)
       {
         const double n = m / factor;
 
@@ -55,12 +55,12 @@ namespace stftpitchshift
         const ptrdiff_t n0 = n_ - (n < n_); // std::floor(n)
         const ptrdiff_t n1 = n_ + (n > n_); // std::ceil(n)
 
-        if (n0 < 0 || ptrdiff_t(N) <= n0)
+        if (n0 < 0 || N <= n0)
         {
           continue;
         }
 
-        if (n1 < 0 || ptrdiff_t(N) <= n1)
+        if (n1 < 0 || N <= n1)
         {
           continue;
         }
@@ -90,10 +90,10 @@ namespace stftpitchshift
         return;
       }
 
-      const size_t N = x.size();
-      const size_t M = static_cast<size_t>(std::round(N * factor));
+      const ptrdiff_t N = static_cast<ptrdiff_t>(x.size());
+      const ptrdiff_t M = static_cast<ptrdiff_t>(std::round(N * factor));
 
-      for (size_t m = 0; m < std::min(M, N); ++m)
+      for (ptrdiff_t m = 0; m < std::min(M, N); ++m)
       {
         const double n = m / factor;
 
@@ -101,12 +101,12 @@ namespace stftpitchshift
         const ptrdiff_t n0 = n_ - (n < n_); // std::floor(n)
         const ptrdiff_t n1 = n_ + (n > n_); // std::ceil(n)
 
-        if (n0 < 0 || ptrdiff_t(N) <= n0)
+        if (n0 < 0 || N <= n0)
         {
           continue;
         }
 
-        if (n1 < 0 || ptrdiff_t(N) <= n1)
+        if (n1 < 0 || N <= n1)
         {
           continue;
         }
