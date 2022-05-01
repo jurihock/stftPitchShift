@@ -26,7 +26,21 @@ def compare(x, y, plot, rtol, atol):
 
     if plot:
 
-        pyplot.plot(x - y)
+        figure, (a, b, c) = pyplot.subplots(nrows=3)
+
+        a.get_shared_x_axes().join(a, b, c)
+        a.get_shared_y_axes().join(a, b)
+
+        a.plot(x)
+        b.plot(y)
+        c.plot(x - y)
+
+        a.set_title('x')
+        b.set_title('y')
+        c.set_title('x - y')
+
+        figure.tight_layout()
+
         pyplot.show()
 
     else:
