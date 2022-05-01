@@ -154,14 +154,18 @@ void StftPitchShift::shiftpitch(
 
       for (size_t i = 0; i < frame.size(); ++i)
       {
-        frame[i].real(frame[i].real() / envelope[i]);
+        const auto value = std::isnormal(envelope[i]) ? envelope[i] : 1;
+
+        frame[i].real(frame[i].real() / value);
       }
 
       pitcher.shiftpitch(frame);
 
       for (size_t i = 0; i < frame.size(); ++i)
       {
-        frame[i].real(frame[i].real() * envelope[i]);
+        const auto value = std::isnormal(envelope[i]) ? envelope[i] : 0;
+
+        frame[i].real(frame[i].real() * value);
       }
 
       vocoder.decode(frame);
@@ -202,14 +206,18 @@ void StftPitchShift::shiftpitch(
 
       for (size_t i = 0; i < frame.size(); ++i)
       {
-        frame[i].real(frame[i].real() / envelope[i]);
+        const auto value = std::isnormal(envelope[i]) ? envelope[i] : 1;
+
+        frame[i].real(frame[i].real() / value);
       }
 
       pitcher.shiftpitch(frame);
 
       for (size_t i = 0; i < frame.size(); ++i)
       {
-        frame[i].real(frame[i].real() * envelope[i]);
+        const auto value = std::isnormal(envelope[i]) ? envelope[i] : 0;
+
+        frame[i].real(frame[i].real() * value);
       }
 
       vocoder.decode(frame);
