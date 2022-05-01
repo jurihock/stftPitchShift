@@ -154,18 +154,18 @@ void StftPitchShift::shiftpitch(
 
       for (size_t i = 0; i < frame.size(); ++i)
       {
-        const auto value = std::isnormal(envelope[i]) ? envelope[i] : 1;
+        const bool ok = std::isnormal(envelope[i]);
 
-        frame[i].real(frame[i].real() / value);
+        frame[i].real(ok ? frame[i].real() / envelope[i] : 0);
       }
 
       pitcher.shiftpitch(frame);
 
       for (size_t i = 0; i < frame.size(); ++i)
       {
-        const auto value = std::isnormal(envelope[i]) ? envelope[i] : 0;
+        const bool ok = std::isnormal(envelope[i]);
 
-        frame[i].real(frame[i].real() * value);
+        frame[i].real(ok ? frame[i].real() * envelope[i] : 0);
       }
 
       vocoder.decode(frame);
@@ -206,18 +206,18 @@ void StftPitchShift::shiftpitch(
 
       for (size_t i = 0; i < frame.size(); ++i)
       {
-        const auto value = std::isnormal(envelope[i]) ? envelope[i] : 1;
+        const bool ok = std::isnormal(envelope[i]);
 
-        frame[i].real(frame[i].real() / value);
+        frame[i].real(ok ? frame[i].real() / envelope[i] : 0);
       }
 
       pitcher.shiftpitch(frame);
 
       for (size_t i = 0; i < frame.size(); ++i)
       {
-        const auto value = std::isnormal(envelope[i]) ? envelope[i] : 0;
+        const bool ok = std::isnormal(envelope[i]);
 
-        frame[i].real(frame[i].real() * value);
+        frame[i].real(ok ? frame[i].real() * envelope[i] : 0);
       }
 
       vocoder.decode(frame);
