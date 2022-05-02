@@ -4,8 +4,6 @@ project(LibStftPitchShift)
 
 include(GNUInstallDirs)
 
-include("${CMAKE_CURRENT_LIST_DIR}/pocketfft/CMakeLists.txt")
-
 if(SHARED)
   add_library(LibStftPitchShift SHARED)
 else()
@@ -51,10 +49,6 @@ target_include_directories(LibStftPitchShift
   PRIVATE "${CMAKE_CURRENT_LIST_DIR}"
 )
 
-target_link_libraries(LibStftPitchShift
-  PUBLIC pocketfft
-)
-
 target_compile_features(LibStftPitchShift
   PRIVATE cxx_std_11
 )
@@ -63,9 +57,3 @@ install(TARGETS LibStftPitchShift
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
   PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/StftPitchShift
 )
-
-# link against pthread on Unix required by pocketfft
-if (UNIX)
-  target_link_libraries(LibStftPitchShift
-    PUBLIC pthread)
-endif()

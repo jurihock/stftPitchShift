@@ -184,7 +184,6 @@ At the moment the formant preservation doesn't seem to work well along with the 
 
 * [anyoption](https://github.com/hackorama/AnyOption) by Kishan Thomas
 * [dr_libs](https://github.com/mackron/dr_libs) by David Reid
-* [pocketfft](https://gitlab.mpcdf.mpg.de/mtr/pocketfft) by Martin Reinecke
 * [smbPitchShift.cpp](http://blogs.zynaptiq.com/bernsee/download) by Stephan M. Bernsee
 
 Special thanks to [jjYBdx4IL](https://github.com/jjYBdx4IL) for *vcpkg* build preparation and packaging.

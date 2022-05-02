@@ -13,8 +13,7 @@ StftPitchShift::StftPitchShift(
   const size_t hopsize,
   const double samplerate,
   const bool chronometry) :
-  fft(std::make_shared<Pocketfft>()),
-  // fft(std::make_shared<RFFT>()),
+  fft(std::make_shared<RFFT>()),
   framesize(framesize),
   hopsize(hopsize),
   samplerate(samplerate),
