@@ -30,7 +30,10 @@ def linear(x, factor):
     a = n - n0
     b = n1 - n0
 
-    b[b == 0] = 2
+    mask = (n0 == n1)
+
+    a[mask] = 1
+    b[mask] = 2
 
     i = a / b
 
