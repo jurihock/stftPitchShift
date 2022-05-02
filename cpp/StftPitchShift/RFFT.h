@@ -3,6 +3,8 @@
 #include <StftPitchShift/FFT.h>
 
 #include <cassert>
+#include <stdexcept>
+#include <string>
 
 namespace stftpitchshift
 {
@@ -120,6 +122,15 @@ namespace stftpitchshift
           return;
         }
 
+        const bool is_power_of_two = newsize && !(newsize & (newsize - 1));
+
+        if (!is_power_of_two)
+        {
+          throw std::runtime_error(
+            "The specified frame size " + std::to_string(newsize) + " is not a power of 2! " +
+            "Please specify values like 1024, 2048, 4096 etc.");
+        }
+
         size.full = newsize;
         size.half = newsize / 2;
 
@@ -218,10 +229,6 @@ namespace stftpitchshift
             output[j + n2] = left - right;
           }
         }
-
-        // TODO
-        // if (n1 == size)
-        //   break;
       }
     }
   };
