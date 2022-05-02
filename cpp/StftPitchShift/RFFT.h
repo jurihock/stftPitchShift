@@ -2,8 +2,6 @@
 
 #include <StftPitchShift/FFT.h>
 
-#include <pocketfft/pocketfft_hdronly.h>
-
 #include <cassert>
 
 namespace stftpitchshift
@@ -56,16 +54,6 @@ namespace stftpitchshift
       auto a = cache.coeffs.a.data();
       auto b = cache.coeffs.b.data();
 
-      // pocketfft::c2c(
-      //   { size },
-      //   { sizeof(std::complex<T>) },
-      //   { sizeof(std::complex<T>) },
-      //   { 0 },
-      //   true,
-      //   input,
-      //   buffer,
-      //   T(1));
-
       transform(input, buffer, p, w, size);
       pack(buffer, output, a, b, size);
 
@@ -96,16 +84,6 @@ namespace stftpitchshift
 
       pack(input, buffer, a, b, size);
       transform(buffer, output, p, w, size);
-
-      // pocketfft::c2c(
-      //   { size },
-      //   { sizeof(std::complex<T>) },
-      //   { sizeof(std::complex<T>) },
-      //   { 0 },
-      //   false,
-      //   buffer,
-      //   output,
-      //   T(1));
     }
 
   private:
