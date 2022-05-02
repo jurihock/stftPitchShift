@@ -51,6 +51,7 @@ namespace stftpitchshift
       auto output = dft.data();
       auto buffer = cache.buffer.data();
 
+      auto p = cache.coeffs.p.data();
       auto w = cache.coeffs.w.data();
       auto a = cache.coeffs.a.data();
       auto b = cache.coeffs.b.data();
@@ -65,7 +66,7 @@ namespace stftpitchshift
       //   buffer,
       //   T(1));
 
-      transform(input, buffer, w, size);
+      transform(input, buffer, p, w, size);
       pack(buffer, output, a, b, size);
 
       const T scale = T(1) / T(size);
@@ -88,12 +89,13 @@ namespace stftpitchshift
       auto output = reinterpret_cast<std::complex<T>* const>(frame.data());
       auto buffer = cache.buffer.data();
 
+      auto p = cache.coeffs.p.data();
       auto w = cache.coeffs.conj.w.data();
       auto a = cache.coeffs.conj.a.data();
       auto b = cache.coeffs.conj.b.data();
 
       pack(input, buffer, a, b, size);
-      transform(buffer, output, w, size);
+      transform(buffer, output, p, w, size);
 
       // pocketfft::c2c(
       //   { size },
@@ -121,6 +123,8 @@ namespace stftpitchshift
 
       struct
       {
+        std::vector<size_t> p;
+
         std::vector<std::complex<T>> w, a, b;
 
         struct
@@ -163,6 +167,15 @@ namespace stftpitchshift
           coeffs.conj.a[i] = std::conj(coeffs.a[i]);
           coeffs.conj.b[i] = std::conj(coeffs.b[i]);
         }
+
+        coeffs.p.resize(size.half);
+
+        const size_t bits = static_cast<size_t>(std::log2(size.half));
+
+        for (size_t i = 0; i < size.half; ++i)
+        {
+          coeffs.p[i] = rebit(i, bits);
+        }
       }
     }
     cache;
@@ -200,13 +213,13 @@ namespace stftpitchshift
       }
     }
 
-    void transform(const std::complex<T>* input, std::complex<T>* const output, const std::complex<T>* w, const size_t size)
+    void transform(const std::complex<T>* input, std::complex<T>* const output, const size_t* p, const std::complex<T>* w, const size_t size)
     {
       const size_t bits = static_cast<size_t>(std::log2(size));
 
       for (size_t i = 0; i < size; ++i)
       {
-        output[rebit(i, bits)] = input[i];
+        output[p[i]] = input[i];
       }
 
       for (size_t bit = 1; bit <= bits; ++bit)
