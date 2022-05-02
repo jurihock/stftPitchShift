@@ -35,6 +35,8 @@ def istft(frames, framesize, hopsize):
 
     for i, frame in enumerate(frames):
 
+        frame[0] = frame[-1] = 0  # zero out dc and nyquist
+
         data[i] += w * np.fft.irfft(frame, norm='forward')
 
     return y
