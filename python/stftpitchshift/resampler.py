@@ -11,29 +11,30 @@ def linear(x, factor):
 
     y = np.zeros(x.shape, dtype=x.dtype)
 
-    for m in range(min(M, N)):
-    
-        n = m / factor
+    m = np.arange(min(M, N))
+    n = m / factor
 
-        n0 = int(np.floor(n))
-        n1 = int(np.ceil(n))
-        
-        if n0 < 0 or N <= n0:
-            continue
+    n0 = np.floor(n).astype(int)
+    n1 = np.ceil(n).astype(int)
 
-        if n1 < 0 or N <= n1:
-            continue
+    mask = (0 <= n0) & (n0 < N) & (0 <= n1) & (n1 < N)
 
-        if n0 == n1:
-            y[m] = x[n0]
-            continue
-        
-        y0 = x[n0]
-        y1 = x[n1]
+    m = m[mask]
+    n = n[mask]
+    n0 = n0[mask]
+    n1 = n1[mask]
 
-        i = (n - n0) / (n1 - n0)
-        
-        y[m] = y0 * (1 - i) + y1 * i
+    y0 = x[n0]
+    y1 = x[n1]
+
+    a = n - n0
+    b = n1 - n0
+
+    b[b == 0] = 2
+
+    i = a / b
+
+    y[m] = y0 * (1 - i) + y1 * i
 
     return y
 
