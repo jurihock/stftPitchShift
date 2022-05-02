@@ -26,18 +26,14 @@ def compare(x, y, plot, rtol, atol):
 
     if plot:
 
-        figure, (a, b, c) = pyplot.subplots(nrows=3)
+        figure, (a, b) = pyplot.subplots(nrows=2, sharex=True)
 
-        a.get_shared_x_axes().join(a, b, c)
-        a.get_shared_y_axes().join(a, b)
+        a.plot(x, label='x', color='blue', alpha=0.5)
+        a.plot(y, label='y', color='red', alpha=0.5)
+        b.plot(x - y, label='x - y', color='black', alpha=0.5)
 
-        a.plot(x)
-        b.plot(y)
-        c.plot(x - y)
-
-        a.set_title('x')
-        b.set_title('y')
-        c.set_title('x - y')
+        a.legend()
+        b.legend()
 
         figure.tight_layout()
 
