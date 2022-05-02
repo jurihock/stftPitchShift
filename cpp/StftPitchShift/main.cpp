@@ -160,7 +160,24 @@ int main(int argc, char** argv)
 
     if (args.getValue("window") || args.getValue('w'))
     {
-      framesize = std::stoi(args.getValue("window"));
+      const std::string value = args.getValue("window");
+
+      if (value == "1k")
+      {
+        framesize = 1 * 1024;
+      }
+      else if (value == "2k")
+      {
+        framesize = 2 * 1024;
+      }
+      else if (value == "4k")
+      {
+        framesize = 4 * 1024;
+      }
+      else
+      {
+        framesize = std::stoi(value);
+      }
     }
 
     if (args.getValue("overlap") || args.getValue('v'))
