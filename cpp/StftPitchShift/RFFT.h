@@ -14,31 +14,6 @@ namespace stftpitchshift
 
   public:
 
-    TRFFT()
-    {
-      cache.resize(0);
-    }
-
-    TRFFT(const size_t framesize)
-    {
-      cache.resize(framesize);
-    }
-
-    TRFFT(const TRFFT& other)
-    {
-      cache.resize(other.cache.size.full);
-    }
-
-    TRFFT& operator=(const TRFFT& other)
-    {
-      if(this != &other)
-      {
-        this->cache.resize(other.cache.size.full);
-      }
-
-      return *this;
-    }
-
     void fft(const std::vector<T>& frame, std::vector<std::complex<T>>& dft)
     {
       assert(dft.size() >= frame.size() / 2);
