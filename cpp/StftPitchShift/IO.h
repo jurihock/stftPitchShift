@@ -22,8 +22,8 @@ namespace stftpitchshift
     template<class T>
     static void clip(std::vector<T>& data)
     {
-      const T min = T(-1) + std::numeric_limits<T>::epsilon();
-      const T max = T(+1) - std::numeric_limits<T>::epsilon();
+      const T min = T(-0.999);
+      const T max = T(+0.999);
 
       for (size_t i = 0; i < data.size(); ++i)
       {
