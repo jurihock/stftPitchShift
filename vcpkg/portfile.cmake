@@ -6,20 +6,20 @@ vcpkg_from_github(
   # SHA512 0
 )
 
-set(OPTIONS -DVCPKG=ON)
+set(stftpitchshift_CMAKE_OPTIONS -DVCPKG=ON)
 
 if(VCPKG_LIBRARY_LINKAGE STREQUAL "static")
-  list(APPEND OPTIONS -DSHARED=OFF)
+  list(APPEND stftpitchshift_CMAKE_OPTIONS -DSHARED=OFF)
 endif()
 
 if(VCPKG_LIBRARY_LINKAGE STREQUAL "dynamic")
-  list(APPEND OPTIONS -DSHARED=ON)
+  list(APPEND stftpitchshift_CMAKE_OPTIONS -DSHARED=ON)
 endif()
 
 vcpkg_configure_cmake(
   SOURCE_PATH ${SOURCE_PATH}
   PREFER_NINJA
-  OPTIONS ${OPTIONS}
+  OPTIONS ${stftpitchshift_CMAKE_OPTIONS}
 )
 
 vcpkg_install_cmake()
