@@ -30,6 +30,11 @@ class StftPitchShift:
         :return: The output signal of the equal size.
         '''
 
+        def isnotnormal(x):
+            return (np.isinf(x)) | \
+                   (np.isnan(x)) | \
+                   (abs(x) < np.finfo(x.dtype).tiny)
+
         framesize = self.framesize
         hopsize = self.hopsize
         samplerate = self.samplerate
@@ -45,9 +50,15 @@ class StftPitchShift:
 
             envelopes = lifter(frames, quefrency)
 
+            mask = isnotnormal(envelopes)
+
             frames.real /= envelopes
+            frames.real[mask] = 0
+
             frames = shiftpitch(frames, factors)
+
             frames.real *= envelopes
+            frames.real[mask] = 0
 
             frames = decode(frames, framesize, hopsize, samplerate)
 
