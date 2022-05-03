@@ -23,7 +23,7 @@ namespace stftpitchshift
     void lifter(const std::vector<std::complex<T>>& dft, std::vector<T>& envelope)
     {
       spectrum.resize(dft.size());
-      cepstrum.resize((dft.size() - 1) * 2);
+      cepstrum.resize(dft.size() * 2 - 2);
       envelope.resize(dft.size());
 
       for (size_t i = 0; i < spectrum.size(); ++i)

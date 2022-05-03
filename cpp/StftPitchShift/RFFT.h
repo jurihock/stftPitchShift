@@ -169,7 +169,7 @@ namespace stftpitchshift
 
     static void pack(const std::complex<T>* input, std::complex<T>* const output, const std::complex<T>* a, const std::complex<T>* b, const size_t size)
     {
-      output[0] = 0; // # zero out dc
+      output[0] = input[0] * a[0] + std::conj(input[0]) * b[0];
 
       for (size_t i = 1, j = size - 1; i < size; ++i, --j)
       {

@@ -68,7 +68,7 @@ namespace stftpitchshift
         {
           timers.analysis.tic();
           reject(hop, input, frame, windows.analysis);
-          fft->fft(frame, dft);
+          transform(frame, dft);
           timers.analysis.toc();
 
           timers.callback.tic();
@@ -76,7 +76,7 @@ namespace stftpitchshift
           timers.callback.toc();
 
           timers.synthesis.tic();
-          fft->ifft(dft, frame);
+          transform(dft, frame);
           inject(hop, output, frame, windows.synthesis);
           timers.synthesis.toc();
         }
@@ -92,11 +92,11 @@ namespace stftpitchshift
         for (size_t hop = 0; (hop + framesize) < size; hop += hopsize)
         {
           reject(hop, input, frame, windows.analysis);
-          fft->fft(frame, dft);
+          transform(frame, dft);
 
           callback(dft);
 
-          fft->ifft(dft, frame);
+          transform(dft, frame);
           inject(hop, output, frame, windows.synthesis);
         }
       }
@@ -116,6 +116,22 @@ namespace stftpitchshift
       std::vector<T> synthesis;
     }
     windows;
+
+    inline void transform(std::vector<T>& frame, std::vector<std::complex<T>>& dft) const
+    {
+      fft->fft(frame, dft);
+
+      // keep dc and nyquist as is
+      // dft[0] = dft[dft.size() - 1] = 0;
+    }
+
+    inline void transform(std::vector<std::complex<T>>& dft, std::vector<T>& frame) const
+    {
+      // zero dc and nyquist
+      dft[0] = dft[dft.size() - 1] = 0;
+
+      fft->ifft(dft, frame);
+    }
 
     static void reject(const size_t hop, const T* input, std::vector<T>& frame, const std::vector<T>& window)
     {
