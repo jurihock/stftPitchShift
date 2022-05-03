@@ -4,11 +4,7 @@ project(LibStftPitchShift)
 
 include(GNUInstallDirs)
 
-if(SHARED)
-  add_library(LibStftPitchShift SHARED)
-else()
-  add_library(LibStftPitchShift)
-endif()
+add_library(LibStftPitchShift)
 
 set_target_properties(LibStftPitchShift
   PROPERTIES SOVERSION 1

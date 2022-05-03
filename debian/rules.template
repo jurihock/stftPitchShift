@@ -4,7 +4,7 @@
 	dh $@
 
 override_dh_auto_configure:
-	cmake -S . -B build -DSHARED=ON -DDEB=ON
+	cmake -S . -B build -DBUILD_SHARED_LIBS=ON -DDEB=ON
 	chmod +x debian/rules
 
 override_dh_auto_build:

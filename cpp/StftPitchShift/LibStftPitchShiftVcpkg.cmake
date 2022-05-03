@@ -2,11 +2,7 @@ cmake_minimum_required(VERSION 3.1...3.18)
 
 project(LibStftPitchShift VERSION 1.3)
 
-if(SHARED)
-  add_library(LibStftPitchShift SHARED)
-else()
-  add_library(LibStftPitchShift)
-endif()
+add_library(LibStftPitchShift)
 
 set_target_properties(LibStftPitchShift
   PROPERTIES OUTPUT_NAME "stftpitchshift"

@@ -5,7 +5,7 @@ VERSION=$(cat VERSION | xargs)
 
 rm -rf ${BUILD}
 
-cmake -S . -B ${BUILD} -DSHARED=ON -DDEB=ON || exit $?
+cmake -S . -B ${BUILD} -DBUILD_SHARED_LIBS=ON -DDEB=ON || exit $?
 cpack --config ${BUILD}/CPackSourceConfig.cmake || exit $?
 
 tar -xzvf stftpitchshift_${VERSION}.tar.gz -C ${BUILD} || exit $?

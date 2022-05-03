@@ -94,6 +94,6 @@ foreach(LICENSE ${LICENSES})
 endforeach()
 
 # FIX https://lintian.debian.org/tags/no-shlibs
-set(CPACK_DEBIAN_PACKAGE_GENERATE_SHLIBS ${SHARED})
+set(CPACK_DEBIAN_PACKAGE_GENERATE_SHLIBS ${BUILD_SHARED_LIBS})
 
 include(CPack)
