@@ -26,7 +26,7 @@ if(VCPKG AND DEB)
 endif()
 
 if(VCPKG)
-  include("${CMAKE_CURRENT_LIST_DIR}/cpp/StftPitchShift/LibStftPitchShiftVcpkg.cmake")
+  include("${CMAKE_CURRENT_LIST_DIR}/cpp/StftPitchShift/LibStftPitchShift.cmake")
 elseif(DEB)
   include("${CMAKE_CURRENT_LIST_DIR}/cpp/StftPitchShift/StftPitchShiftDeb.cmake")
 else()
