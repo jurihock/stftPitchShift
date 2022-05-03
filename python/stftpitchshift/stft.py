@@ -20,7 +20,7 @@ def stft(x, framesize, hopsize):
         data[i] = np.fft.rfft(w * frame, norm='forward')
 
         # keep dc and nyquist as is
-        # frame[0] = frame[-1] = 0
+        # data[i][0] = data[i][-1] = 0
 
     return data
 
