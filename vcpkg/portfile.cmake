@@ -1,34 +1,26 @@
 vcpkg_from_github(
   OUT_SOURCE_PATH SOURCE_PATH
   REPO jurihock/stftPitchShift
-  REF 41bf6ee65f85c0e496c2c9487e3f468a71d5c714
-  SHA512 0071fa74edee788ba45e68f4d0d0c44715cb85f8ec9684a3092006ed9f2de2ebb61f3a081fb6e2c5c697eb2f125911184e5b868a25816a3cca7044fe8e7e3e1e
-  HEAD_REF master
+  HEAD_REF main
+  # REF 0
+  # SHA512 0
 )
 
+set(OPTIONS -DVCPKG=ON)
+
 if(VCPKG_LIBRARY_LINKAGE STREQUAL "static")
-
-  vcpkg_configure_cmake(
-    SOURCE_PATH ${SOURCE_PATH}
-    PREFER_NINJA
-    OPTIONS
-      -DVCPKG=ON
-      -DSHARED=OFF
-  )
-
+  list(APPEND OPTIONS -DSHARED=OFF)
 endif()
 
 if(VCPKG_LIBRARY_LINKAGE STREQUAL "dynamic")
-
-  vcpkg_configure_cmake(
-    SOURCE_PATH ${SOURCE_PATH}
-    PREFER_NINJA
-    OPTIONS
-      -DVCPKG=ON
-      -DSHARED=ON
-  )
-
+  list(APPEND OPTIONS -DSHARED=ON)
 endif()
+
+vcpkg_configure_cmake(
+  SOURCE_PATH ${SOURCE_PATH}
+  PREFER_NINJA
+  OPTIONS ${OPTIONS}
+)
 
 vcpkg_install_cmake()
 
