@@ -1,4 +1,4 @@
-add_library(anyoption)
+add_library(anyoption STATIC)
 
 target_sources(anyoption
   PUBLIC  "${CMAKE_CURRENT_LIST_DIR}/anyoption.h"

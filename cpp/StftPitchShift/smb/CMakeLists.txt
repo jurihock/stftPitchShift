@@ -1,4 +1,4 @@
-add_library(smb)
+add_library(smb STATIC)
 
 target_sources(smb
   PUBLIC  "${CMAKE_CURRENT_LIST_DIR}/smbPitchShift.h"
