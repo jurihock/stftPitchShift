@@ -150,14 +150,11 @@ Both programs C++ and Python provides a similar set of command line options:
 -v  --overlap    stft window overlap
                  (default 32)
 
+-c  --chrono     enable runtime measurements
+                 (only available in the C++ version)
+
 -d  --debug      plot spectrograms before and after processing
                  (only available in the Python version)
-
-    --smb        enable original smb algorithm
-                 (only available in the C++ version)
-
-    --chrono     enable runtime measurements
-                 (only available in the C++ version)
 ```
 
 Currently only `.wav` files are supported. Please use e.g. [Audacity](http://www.audacityteam.org) or [SoX](http://sox.sourceforge.net) to prepare your audio files for pitch shifting.
@@ -184,7 +181,6 @@ At the moment the formant preservation doesn't seem to work well along with the 
 
 * [anyoption](https://github.com/hackorama/AnyOption) by Kishan Thomas
 * [dr_libs](https://github.com/mackron/dr_libs) by David Reid
-* [smbPitchShift.cpp](http://blogs.zynaptiq.com/bernsee/download) by Stephan M. Bernsee
 
 Special thanks to [jjYBdx4IL](https://github.com/jjYBdx4IL) for *vcpkg* build preparation and packaging.
 

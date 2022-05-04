@@ -4,7 +4,6 @@
 #include <vector>
 
 #include <anyoption/anyoption.h>
-#include <smb/smbPitchShift.h>
 
 #include <StftPitchShift/IO.h>
 #include <StftPitchShift/StftPitchShift.h>
@@ -58,13 +57,11 @@ int main(int argc, char** argv)
   args.addUsage("  -v  --overlap    stft window overlap");
   args.addUsage("                   (default 32)");
   args.addUsage("");
-  args.addUsage("      --smb        enable original smb algorithm");
   args.addUsage("      --chrono     enable runtime measurements");
 
   args.setFlag('h');
   args.setFlag("help");
   args.setFlag("version");
-  args.setFlag("smb");
   args.setFlag("chrono");
 
   args.setOption("input", 'i');
@@ -94,7 +91,6 @@ int main(int argc, char** argv)
     return OK;
   }
 
-  bool smb = false;
   bool chronometry = false;
 
   std::string infile = "";
@@ -108,11 +104,6 @@ int main(int argc, char** argv)
 
   try
   {
-    if (args.getFlag("smb"))
-    {
-      smb = true;
-    }
-
     if (args.getFlag("chrono"))
     {
       chronometry = true;
@@ -209,40 +200,18 @@ int main(int argc, char** argv)
       const double* input = indata.data() + channel * size;
       double* const output = outdata.data() + channel * size;
 
-      if (smb)
-      {
-        for (const double factor : factors)
-        {
-          smbPitchShift(
-            factor,
-            size,
-            framesize,
-            hoprate,
-            samplerate,
-            input,
-            output);
+      StftPitchShift stft(
+        framesize,
+        framesize / hoprate,
+        samplerate,
+        chronometry);
 
-          for (size_t i = 0; i < outdata.size(); ++i)
-          {
-            outdata[i] /= factors.size();
-          }
-        }
-      }
-      else
-      {
-        StftPitchShift stft(
-          framesize,
-          framesize / hoprate,
-          samplerate,
-          chronometry);
-
-        stft.shiftpitch(
-          size,
-          input,
-          output,
-          factors,
-          quefrency);
-      }
+      stft.shiftpitch(
+        size,
+        input,
+        output,
+        factors,
+        quefrency);
     }
 
     IO::clip(outdata);
