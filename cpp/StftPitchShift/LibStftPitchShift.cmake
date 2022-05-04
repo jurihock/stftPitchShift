@@ -6,6 +6,12 @@ include(GNUInstallDirs)
 
 add_library(LibStftPitchShift)
 
+file(READ "${CMAKE_CURRENT_SOURCE_DIR}/VERSION" VERSION)
+string(STRIP "${VERSION}" VERSION)
+set_target_properties(LibStftPitchShift
+  PROPERTIES VERSION ${VERSION}
+)
+
 set_target_properties(LibStftPitchShift
   PROPERTIES SOVERSION 1
 )
