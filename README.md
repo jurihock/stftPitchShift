@@ -108,7 +108,7 @@ pitchshifter.shiftpitch(x, y, 1);
 
 Optionally specify following CMake options:
 
-* `-DBUILD_SHARED_LIBS=ON` to enable a shared library build,
+* `-DBUILD_SHARED_LIBS=ON` to enable a [shared](https://cmake.org/cmake/help/latest/variable/BUILD_SHARED_LIBS.html) library build,
 * `-DVCPKG=ON` to enable the [vcpkg](https://vcpkg.io) minimal library only build without executables,
 * `-DDEB=ON` to enable the [deb](https://en.wikipedia.org/wiki/Deb_(file_format)) package build for library and executable.
 
