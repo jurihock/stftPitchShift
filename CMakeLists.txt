@@ -5,7 +5,7 @@ project(StftPitchShift)
 option(VCPKG "Enable vcpkg compatible library only build excluding executable" OFF)
 option(DEB   "Enable deb package build for library and executable" OFF)
 
-if (MSVC)
+if(MSVC)
 
   # optionally treat warnings as errors
   # add_compile_options(/W3 /WX)
@@ -17,6 +17,13 @@ else()
 
   # optionally treat warnings as errors
   # add_compile_options(-Wall -Werror)
+
+endif()
+
+if(MSVC AND BUILD_SHARED_LIBS)
+
+  # automatically create module definition files on Windows
+  set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
 endif()
 
