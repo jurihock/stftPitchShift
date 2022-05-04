@@ -3,7 +3,6 @@
 #include <string>
 #include <vector>
 
-#include <anyoption/anyoption.h>
 #include <cxxopts/cxxopts.hpp>
 
 #include <StftPitchShift/IO.h>
@@ -32,61 +31,34 @@ std::vector<std::string> split(const std::string& value, const char delimiter)
 
 int main(int argc, char** argv)
 {
-  AnyOption args;
+  cxxopts::Options options("stftpitchshift", "STFT based multi pitch shifting with optional formant preservation");
 
-  args.addUsage("Usage: stftpitchshift [OPTIONS]");
-  args.addUsage("");
-  args.addUsage("  STFT based multi pitch shifting with optional formant preservation");
-  args.addUsage("");
-  args.addUsage("Options:");
-  args.addUsage("");
-  args.addUsage("  -h  --help       print this help");
-  args.addUsage("      --version    print version number");
-  args.addUsage("");
-  args.addUsage("  -i  --input      input .wav file name");
-  args.addUsage("  -o  --output     output .wav file name");
-  args.addUsage("");
-  args.addUsage("  -p  --pitch      fractional pitch shifting factors separated by comma");
-  args.addUsage("                   (default 1.0)");
-  args.addUsage("");
-  args.addUsage("  -q  --quefrency  optional formant lifter quefrency in milliseconds");
-  args.addUsage("                   (default 0.0)");
-  args.addUsage("");
-  args.addUsage("  -w  --window     sfft window size");
-  args.addUsage("                   (default 1024)");
-  args.addUsage("");
-  args.addUsage("  -v  --overlap    stft window overlap");
-  args.addUsage("                   (default 32)");
-  args.addUsage("");
-  args.addUsage("      --chrono     enable runtime measurements");
+  options.add_options()
+    ("h,help", "print this help")
+    ("version", "print version number")
+    ("c,chrono", "enable runtime measurements");
 
-  args.setFlag('h');
-  args.setFlag("help");
-  args.setFlag("version");
-  args.setFlag("chrono");
+  options.add_options("file")
+    ("i,input", "input .wav file name", cxxopts::value<std::string>())
+    ("o,output", "output .wav file name", cxxopts::value<std::string>());
 
-  args.setOption("input", 'i');
-  args.setOption("output", 'o');
-  args.setOption("pitch", 'p');
-  args.setOption("quefrency", 'q');
-  args.setOption("window", 'w');
-  args.setOption("overlap", 'v');
+  options.add_options("pitch shifting")
+    ("p,pitch", "fractional pitch shifting factors separated by comma", cxxopts::value<std::string>()->default_value("1.0"))
+    ("q,quefrency", "optional formant lifter quefrency in milliseconds", cxxopts::value<std::string>()->default_value("0.0"));
 
-  args.processCommandArgs(argc, argv);
+  options.add_options("stft")
+    ("w,window", "sfft window size", cxxopts::value<std::string>()->default_value("1024"))
+    ("v,overlap", "stft window overlap", cxxopts::value<std::string>()->default_value("32"));
 
-  if (!args.hasOptions())
+  auto args = options.parse(argc, argv);
+
+  if (args.count("help"))
   {
-    args.printUsage();
-    return NOK;
-  }
-
-  if (args.getFlag("help") || args.getFlag('h'))
-  {
-    args.printUsage();
+    std::cout << options.help() << std::endl;
     return OK;
   }
 
-  if (args.getFlag("version"))
+  if (args.count("version"))
   {
     std::cout << StftPitchShiftVersion << std::endl;
     return OK;
@@ -105,34 +77,36 @@ int main(int argc, char** argv)
 
   try
   {
-    if (args.getFlag("chrono"))
+    if (args.count("chrono"))
     {
       chronometry = true;
     }
 
-    if (args.getValue("input") || args.getValue('i'))
+    if (args.count("input"))
     {
-      infile = args.getValue("input");
+      infile = args["input"].as<std::string>();
     }
     else
     {
       std::cerr << "Missing input file name!" << std::endl;
+      std::cerr << "Please specify -h for full usage..." << std::endl;
       return NOK;
     }
 
-    if (args.getValue("output") || args.getValue('o'))
+    if (args.count("output"))
     {
-      outfile = args.getValue("output");
+      outfile = args["output"].as<std::string>();
     }
     else
     {
       std::cerr << "Missing output file name!" << std::endl;
+      std::cerr << "Please specify -h for full usage..." << std::endl;
       return NOK;
     }
 
-    if (args.getValue("pitch") || args.getValue('p'))
+    if (args.count("pitch"))
     {
-      const auto values = split(args.getValue("pitch"), ',');
+      const auto values = split(args["pitch"].as<std::string>(), ',');
 
       if (!values.empty())
       {
@@ -145,14 +119,14 @@ int main(int argc, char** argv)
       }
     }
 
-    if (args.getValue("quefrency") || args.getValue('q'))
+    if (args.count("quefrency"))
     {
-      quefrency = std::stof(args.getValue("quefrency")) * 1e-3f;
+      quefrency = std::stof(args["quefrency"].as<std::string>()) * 1e-3f;
     }
 
-    if (args.getValue("window") || args.getValue('w'))
+    if (args.count("window"))
     {
-      const std::string value = args.getValue("window");
+      const std::string value = args["window"].as<std::string>();
 
       if (value == "1k")
       {
@@ -172,9 +146,9 @@ int main(int argc, char** argv)
       }
     }
 
-    if (args.getValue("overlap") || args.getValue('v'))
+    if (args.count("overlap"))
     {
-      hoprate = std::stoi(args.getValue("overlap"));
+      hoprate = std::stoi(args["overlap"].as<std::string>());
     }
   }
   catch (const std::exception& exception)

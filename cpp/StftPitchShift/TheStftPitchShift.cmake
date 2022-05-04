@@ -4,7 +4,6 @@ project(TheStftPitchShift)
 
 include(GNUInstallDirs)
 
-include("${CMAKE_CURRENT_LIST_DIR}/anyoption/CMakeLists.txt")
 include("${CMAKE_CURRENT_LIST_DIR}/cxxopts/CMakeLists.txt")
 include("${CMAKE_CURRENT_LIST_DIR}/dr_libs/CMakeLists.txt")
 
@@ -29,7 +28,7 @@ target_link_libraries(TheStftPitchShift
 )
 
 target_link_libraries(TheStftPitchShift
-  PRIVATE anyoption cxxopts dr_libs
+  PRIVATE cxxopts dr_libs
 )
 
 target_compile_features(TheStftPitchShift

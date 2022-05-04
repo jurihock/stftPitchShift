@@ -179,7 +179,6 @@ At the moment the formant preservation doesn't seem to work well along with the 
 
 ## Credits
 
-* [anyoption](https://github.com/hackorama/AnyOption) by Kishan Thomas
 * [cxxopts](https://github.com/jarro2783/cxxopts) by Jarryd Beck
 * [dr_libs](https://github.com/mackron/dr_libs) by David Reid
 
