@@ -20,7 +20,7 @@ target_sources(TheStftPitchShift
 )
 
 target_include_directories(TheStftPitchShift
-  PRIVATE "${CMAKE_CURRENT_LIST_DIR}/.."
+  PRIVATE "$<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/..>"
 )
 
 target_link_libraries(TheStftPitchShift

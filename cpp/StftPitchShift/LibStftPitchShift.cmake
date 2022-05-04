@@ -47,8 +47,9 @@ set_target_properties(LibStftPitchShift
 )
 
 target_include_directories(LibStftPitchShift
-  PUBLIC  "${CMAKE_CURRENT_LIST_DIR}/.."
-  PRIVATE "${CMAKE_CURRENT_LIST_DIR}"
+  PRIVATE   "$<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/..>"
+  PUBLIC    "$<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/..>"
+  INTERFACE "$<INSTALL_INTERFACE:include/StftPitchShift>"
 )
 
 target_compile_features(LibStftPitchShift
