@@ -4,6 +4,7 @@
 #include <vector>
 
 #include <anyoption/anyoption.h>
+#include <cxxopts/cxxopts.hpp>
 
 #include <StftPitchShift/IO.h>
 #include <StftPitchShift/StftPitchShift.h>
