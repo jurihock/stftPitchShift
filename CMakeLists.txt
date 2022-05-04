@@ -2,8 +2,9 @@ cmake_minimum_required(VERSION 3.1...3.18)
 
 project(StftPitchShift)
 
-option(VCPKG "Enable vcpkg compatible library only build excluding executable" OFF)
-option(DEB   "Enable deb package build for library and executable" OFF)
+option(VCPKG  "Enable vcpkg compatible library only build excluding executable" OFF)
+option(DEB    "Enable deb package build for library and executable" OFF)
+option(CONFIG "Enable additional CMake config file generation for the library" OFF)
 
 if(MSVC)
 
@@ -39,4 +40,8 @@ else()
   include("${CMAKE_CURRENT_LIST_DIR}/cpp/StftPitchShift/LibStftPitchShift.cmake")
   include("${CMAKE_CURRENT_LIST_DIR}/cpp/StftPitchShift/TheStftPitchShift.cmake")
   include("${CMAKE_CURRENT_LIST_DIR}/examples/example.cmake")
+endif()
+
+if(CONFIG)
+  include("${CMAKE_CURRENT_LIST_DIR}/cpp/StftPitchShift/ConfigStftPitchShift.cmake")
 endif()

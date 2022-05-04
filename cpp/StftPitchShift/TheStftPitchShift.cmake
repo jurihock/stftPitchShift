@@ -35,6 +35,7 @@ target_compile_features(TheStftPitchShift
   PRIVATE cxx_std_11
 )
 
-install(TARGETS TheStftPitchShift
+install(
+  TARGETS TheStftPitchShift
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )

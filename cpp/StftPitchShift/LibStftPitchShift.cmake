@@ -8,6 +8,7 @@ add_library(LibStftPitchShift)
 
 file(READ "${CMAKE_CURRENT_SOURCE_DIR}/VERSION" VERSION)
 string(STRIP "${VERSION}" VERSION)
+
 set_target_properties(LibStftPitchShift
   PROPERTIES VERSION ${VERSION}
 )
@@ -15,6 +16,14 @@ set_target_properties(LibStftPitchShift
 set_target_properties(LibStftPitchShift
   PROPERTIES SOVERSION 1
 )
+
+set_property(
+  TARGET LibStftPitchShift
+  PROPERTY INTERFACE_LibStftPitchShift_MAJOR_VERSION 1)
+
+set_property(
+  TARGET LibStftPitchShift APPEND
+  PROPERTY COMPATIBLE_INTERFACE_STRING LibStftPitchShift_MAJOR_VERSION)
 
 set_target_properties(LibStftPitchShift
   PROPERTIES OUTPUT_NAME "stftpitchshift"
@@ -39,7 +48,7 @@ set(SOURCES
 )
 
 target_sources(LibStftPitchShift
-  PUBLIC ${HEADERS} ${SOURCES}
+  PRIVATE ${HEADERS} ${SOURCES}
 )
 
 set_target_properties(LibStftPitchShift
@@ -47,7 +56,6 @@ set_target_properties(LibStftPitchShift
 )
 
 target_include_directories(LibStftPitchShift
-  PRIVATE   "$<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/..>"
   PUBLIC    "$<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/..>"
   INTERFACE "$<INSTALL_INTERFACE:include/StftPitchShift>"
 )
@@ -56,7 +64,8 @@ target_compile_features(LibStftPitchShift
   PRIVATE cxx_std_11
 )
 
-install(TARGETS LibStftPitchShift
+install(
+  TARGETS LibStftPitchShift
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
   PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/StftPitchShift
 )
