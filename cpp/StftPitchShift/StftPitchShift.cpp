@@ -1,10 +1,10 @@
 #include <StftPitchShift/StftPitchShift.h>
 
-#include <StftPitchShift/Cepster.h>
-#include <StftPitchShift/Pitcher.h>
+#include <StftPitchShift/FFT.h>
 #include <StftPitchShift/RFFT.h>
 #include <StftPitchShift/STFT.h>
-#include <StftPitchShift/Vocoder.h>
+
+#include <StftPitchShift/StftPitchShiftCore.h>
 
 using namespace stftpitchshift;
 
@@ -137,53 +137,12 @@ void StftPitchShift::shiftpitch(
   const double quefrency)
 {
   STFT<float> stft(fft, framesize, hopsize, chronometry);
-  Vocoder<float> vocoder(framesize, hopsize, samplerate);
-  Pitcher<float> pitcher(factors);
-  Cepster<float> cepster(fft, quefrency, samplerate);
+  StftPitchShiftCore<float> core(fft, framesize, hopsize, samplerate, factors, quefrency);
 
-  if (quefrency)
+  stft(size, input, output, [&](std::vector<std::complex<float>>& dft)
   {
-    std::vector<float> envelope(framesize / 2 + 1);
-
-    stft(size, input, output, [&](std::vector<std::complex<float>>& frame)
-    {
-      vocoder.encode(frame);
-
-      for (size_t i = 0; i < frame.size(); ++i)
-      {
-        envelope[i] = frame[i].real();
-      }
-
-      cepster.lifter(envelope);
-
-      for (size_t i = 0; i < frame.size(); ++i)
-      {
-        const bool ok = std::isnormal(envelope[i]);
-
-        frame[i].real(ok ? frame[i].real() / envelope[i] : 0);
-      }
-
-      pitcher.shiftpitch(frame);
-
-      for (size_t i = 0; i < frame.size(); ++i)
-      {
-        const bool ok = std::isnormal(envelope[i]);
-
-        frame[i].real(ok ? frame[i].real() * envelope[i] : 0);
-      }
-
-      vocoder.decode(frame);
-    });
-  }
-  else
-  {
-    stft(size, input, output, [&](std::vector<std::complex<float>>& frame)
-    {
-      vocoder.encode(frame);
-      pitcher.shiftpitch(frame);
-      vocoder.decode(frame);
-    });
-  }
+    core.shiftpitch(dft);
+  });
 }
 
 void StftPitchShift::shiftpitch(
@@ -194,51 +153,10 @@ void StftPitchShift::shiftpitch(
   const double quefrency)
 {
   STFT<double> stft(fft, framesize, hopsize, chronometry);
-  Vocoder<double> vocoder(framesize, hopsize, samplerate);
-  Pitcher<double> pitcher(factors);
-  Cepster<double> cepster(fft, quefrency, samplerate);
+  StftPitchShiftCore<double> core(fft, framesize, hopsize, samplerate, factors, quefrency);
 
-  if (quefrency)
+  stft(size, input, output, [&](std::vector<std::complex<double>>& dft)
   {
-    std::vector<double> envelope(framesize / 2 + 1);
-
-    stft(size, input, output, [&](std::vector<std::complex<double>>& frame)
-    {
-      vocoder.encode(frame);
-
-      for (size_t i = 0; i < frame.size(); ++i)
-      {
-        envelope[i] = frame[i].real();
-      }
-
-      cepster.lifter(envelope);
-
-      for (size_t i = 0; i < frame.size(); ++i)
-      {
-        const bool ok = std::isnormal(envelope[i]);
-
-        frame[i].real(ok ? frame[i].real() / envelope[i] : 0);
-      }
-
-      pitcher.shiftpitch(frame);
-
-      for (size_t i = 0; i < frame.size(); ++i)
-      {
-        const bool ok = std::isnormal(envelope[i]);
-
-        frame[i].real(ok ? frame[i].real() * envelope[i] : 0);
-      }
-
-      vocoder.decode(frame);
-    });
-  }
-  else
-  {
-    stft(size, input, output, [&](std::vector<std::complex<double>>& frame)
-    {
-      vocoder.encode(frame);
-      pitcher.shiftpitch(frame);
-      vocoder.decode(frame);
-    });
-  }
+    core.shiftpitch(dft);
+  });
 }
