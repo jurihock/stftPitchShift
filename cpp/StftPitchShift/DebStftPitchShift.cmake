@@ -84,8 +84,8 @@ file(GLOB_RECURSE
 )
 
 foreach(LICENSE ${LICENSES})
-  get_filename_component(DIRECTORY ${LICENSE} DIRECTORY)
-  get_filename_component(NAME ${DIRECTORY} NAME)
+  get_filename_component(DIRECTORY "${LICENSE}" DIRECTORY)
+  get_filename_component(NAME "${DIRECTORY}" NAME)
   install(
     FILES "${CMAKE_CURRENT_LIST_DIR}/${NAME}/LICENSE"
     DESTINATION "${CMAKE_INSTALL_DATADIR}/doc/${CPACK_PACKAGE_NAME}"

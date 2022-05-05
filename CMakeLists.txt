@@ -4,7 +4,7 @@ project(StftPitchShift)
 
 option(VCPKG  "Enable vcpkg compatible library only build excluding executable" OFF)
 option(DEB    "Enable deb package build for library and executable" OFF)
-option(CONFIG "Enable additional CMake config file generation for the library" OFF)
+option(CONFIG "Enable additional CMake config file generation for the library" ON)
 
 if(MSVC)
 

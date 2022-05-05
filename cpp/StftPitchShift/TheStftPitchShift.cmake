@@ -37,5 +37,5 @@ target_compile_features(TheStftPitchShift
 
 install(
   TARGETS TheStftPitchShift
-  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+  RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
 )
