@@ -6,13 +6,13 @@ vcpkg_from_github(
   # SHA512 0
 )
 
-vcpkg_configure_cmake(
-  SOURCE_PATH ${SOURCE_PATH}
-  PREFER_NINJA
-  OPTIONS -DVCPKG=ON
+vcpkg_cmake_configure(
+  SOURCE_PATH "${SOURCE_PATH}"
+  OPTIONS
+    -DVCPKG=ON
 )
 
-vcpkg_install_cmake()
+vcpkg_cmake_install()
 
 file(INSTALL "${SOURCE_PATH}/LICENSE" DESTINATION "${CURRENT_PACKAGES_DIR}/share/stftpitchshift" RENAME copyright)
 
