@@ -143,13 +143,18 @@ void StftPitchShift::shiftpitch(
 
   if (quefrency)
   {
-    std::vector<float> envelope;
+    std::vector<float> envelope(framesize / 2 + 1);
 
     stft(size, input, output, [&](std::vector<std::complex<float>>& frame)
     {
       vocoder.encode(frame);
 
-      cepster.lifter(frame, envelope);
+      for (size_t i = 0; i < frame.size(); ++i)
+      {
+        envelope[i] = frame[i].real();
+      }
+
+      cepster.lifter(envelope);
 
       for (size_t i = 0; i < frame.size(); ++i)
       {
@@ -195,13 +200,18 @@ void StftPitchShift::shiftpitch(
 
   if (quefrency)
   {
-    std::vector<double> envelope;
+    std::vector<double> envelope(framesize / 2 + 1);
 
     stft(size, input, output, [&](std::vector<std::complex<double>>& frame)
     {
       vocoder.encode(frame);
 
-      cepster.lifter(frame, envelope);
+      for (size_t i = 0; i < frame.size(); ++i)
+      {
+        envelope[i] = frame[i].real();
+      }
+
+      cepster.lifter(envelope);
 
       for (size_t i = 0; i < frame.size(); ++i)
       {

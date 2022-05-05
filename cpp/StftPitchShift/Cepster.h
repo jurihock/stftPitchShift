@@ -20,15 +20,14 @@ namespace stftpitchshift
     {
     }
 
-    void lifter(const std::vector<std::complex<T>>& dft, std::vector<T>& envelope)
+    void lifter(std::vector<T>& envelope)
     {
-      spectrum.resize(dft.size());
-      cepstrum.resize(dft.size() * 2 - 2);
-      envelope.resize(dft.size());
+      spectrum.resize(envelope.size());
+      cepstrum.resize(envelope.size() * 2 - 2);
 
       for (size_t i = 0; i < spectrum.size(); ++i)
       {
-        spectrum[i] = std::log10(dft[i].real());
+        spectrum[i] = std::log10(envelope[i]);
       }
 
       fft->ifft(spectrum, cepstrum);
