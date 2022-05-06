@@ -32,7 +32,7 @@ namespace stftpitchshift
     void quefrency(const double quefrency)
     {
       value = quefrency;
-      threshold = static_cast<size_t>(quefrency * samplerate);
+      cutoff = static_cast<size_t>(quefrency * samplerate);
     }
 
     void lifter(std::vector<T>& envelope)
@@ -45,7 +45,7 @@ namespace stftpitchshift
       }
 
       fft->ifft(spectrum, cepstrum);
-      lowpass(cepstrum, threshold);
+      lowpass(cepstrum, cutoff);
       fft->fft(cepstrum, spectrum);
 
       for (size_t i = 0; i < envelope.size(); ++i)
@@ -61,19 +61,19 @@ namespace stftpitchshift
     const double samplerate;
 
     double value;
-    size_t threshold;
+    size_t cutoff;
 
     std::vector<std::complex<T>> spectrum;
     std::vector<T> cepstrum;
 
-    static void lowpass(std::vector<T>& cepstrum, const size_t threshold)
+    static void lowpass(std::vector<T>& cepstrum, const size_t cutoff)
     {
-      for (size_t i = 1; i < std::min(threshold, cepstrum.size()); ++i)
+      for (size_t i = 1; i < std::min(cutoff, cepstrum.size()); ++i)
       {
         cepstrum[i] *= 2;
       }
 
-      for (size_t i = threshold + 1; i < cepstrum.size(); ++i)
+      for (size_t i = cutoff + 1; i < cepstrum.size(); ++i)
       {
         cepstrum[i] = 0;
       }
