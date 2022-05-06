@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm>
+#include <cassert>
 #include <cmath>
 #include <complex>
 #include <vector>
@@ -30,6 +31,8 @@ namespace stftpitchshift
     void cosine(const std::vector<std::complex<T>>& x,
                 std::vector<std::complex<T>>& y) const
     {
+      assert(x.size() == y.size());
+
       if (value == 1)
       {
         y = x;
@@ -78,6 +81,8 @@ namespace stftpitchshift
     void linear(const std::vector<std::complex<T>>& x,
                 std::vector<std::complex<T>>& y) const
     {
+      assert(x.size() == y.size());
+
       if (value == 1)
       {
         y = x;
@@ -124,6 +129,9 @@ namespace stftpitchshift
                   const std::vector<std::complex<T>>& x1,
                   std::vector<std::complex<T>>& y) const
     {
+      assert(x0.size() == y.size());
+      assert(x1.size() == y.size());
+
       std::vector<std::complex<T>> y0(x0.size());
       std::vector<std::complex<T>> y1(x1.size());
 

@@ -108,7 +108,6 @@ namespace stftpitchshift
     const std::shared_ptr<FFT> fft;
     const size_t framesize;
     const size_t hopsize;
-
     const bool chronometry;
 
     struct

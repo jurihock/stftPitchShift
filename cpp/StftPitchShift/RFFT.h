@@ -16,7 +16,7 @@ namespace stftpitchshift
 
     void fft(const std::vector<T>& frame, std::vector<std::complex<T>>& dft)
     {
-      assert(dft.size() >= frame.size() / 2);
+      assert(dft.size() == frame.size() / 2 + 1);
 
       cache.resize(frame.size());
 
@@ -44,7 +44,7 @@ namespace stftpitchshift
 
     void ifft(const std::vector<std::complex<T>>& dft, std::vector<T>& frame)
     {
-      assert(frame.size() <= dft.size() * 2);
+      assert(frame.size() / 2 + 1 == dft.size());
 
       cache.resize(frame.size());
 

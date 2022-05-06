@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cassert>
 #include <cmath>
 #include <complex>
 #include <vector>
@@ -36,7 +37,9 @@ namespace stftpitchshift
 
     void lifter(std::vector<T>& envelope)
     {
-      for (size_t i = 0; i < spectrum.size(); ++i)
+      assert(envelope.size() == spectrum.size());
+
+      for (size_t i = 0; i < envelope.size(); ++i)
       {
         spectrum[i] = std::log10(envelope[i]);
       }
@@ -45,7 +48,7 @@ namespace stftpitchshift
       lowpass(cepstrum, threshold);
       fft->fft(cepstrum, spectrum);
 
-      for (size_t i = 0; i < spectrum.size(); ++i)
+      for (size_t i = 0; i < envelope.size(); ++i)
       {
         envelope[i] = std::pow(T(10), spectrum[i].real());
       }

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cassert>
 #include <cmath>
 #include <complex>
 #include <vector>
@@ -22,6 +23,8 @@ namespace stftpitchshift
 
     void encode(std::vector<std::complex<T>>& dft)
     {
+      assert(dft.size() == encode_phase_buffer.size());
+
       double frequency,
              phase,
              delta,
@@ -46,6 +49,8 @@ namespace stftpitchshift
 
     void decode(std::vector<std::complex<T>>& dft)
     {
+      assert(dft.size() == decode_phase_buffer.size());
+
       double frequency,
              phase,
              delta,
