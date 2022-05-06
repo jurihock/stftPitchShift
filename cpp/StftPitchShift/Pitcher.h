@@ -36,6 +36,11 @@ namespace stftpitchshift
         prepare = false;
       }
 
+      if (factors.size() == 0)
+      {
+        return;
+      }
+
       if (factors.size() == 1)
       {
         if (factors[0] == 1)
