@@ -19,6 +19,14 @@ Both sources contain a ready-to-use [command line tool](#usage) as well as a lib
 ## Modules
 
 <details>
+<summary><strong>StftPitchShift</strong></summary>
+
+The *StftPitchShift* module provides a full-featured audio processing chain to perform the pitch shifting of a single audio track, based on the built in *STFT* implementation.
+
+Exclusively in the C++ environment the additional *StftPitchShiftCore* module can be used to embed this pitch shifting implementation in an existing real-time *STFT* pipeline.
+</details>
+
+<details>
 <summary><strong>Vocoder</strong></summary>
 
 The *Vocoder* module transforms the DFT spectral data according to the original algorithm, which is actually the *instantaneous frequency estimation* technique. See also [further reading](#further-reading) for more details.
@@ -37,7 +45,7 @@ The *Pitcher* module performs single or multi pitch shifting of the encoded DFT 
 <details>
 <summary><strong>Resampler</strong></summary>
 
-The *Resampler* module provides `linear` and `bilinear` interpolation routines, to actually perform pitch shifting, based on the *Vocoder* DFT transform.
+The *Resampler* module provides the `linear` interpolation routine, to actually perform pitch shifting, based on the *Vocoder* DFT transform.
 </details>
 
 <details>
@@ -70,7 +78,7 @@ Due to frequency vector alteration, the resampled frequency values needs also be
 
 In terms of multi pitch shifting, multiple differently resampled `magnitude` and `frequency` vectors are to be combined together. For example, the magnitude vectors can easily be averaged. But what about the frequency vectors?
 
-The basic concept of this algorithm extension is to only keep the frequency value of the strongest magnitude value. Since the *strongest* magnitude will mask the *weakest* one. Thus, all remaining *masked* frequency values would be *inaudible* and can therefore be omitted.
+The basic concept of this algorithm extension is to only keep the frequency value of the strongest magnitude value. So the *strongest* magnitude will mask the *weakest* one. Thus, all remaining *masked* components become *inaudible*.
 
 In this way, the multi pitch shifting can be performed *simultaneously* in the same DFT frame. There is no need to build a separate STFT pipeline for different pitch variations to superimpose the synthesized signals in the time domain.
 
@@ -182,8 +190,6 @@ At the moment the formant preservation doesn't seem to work well along with the 
 
 * [cxxopts](https://github.com/jarro2783/cxxopts) by Jarryd Beck
 * [dr_libs](https://github.com/mackron/dr_libs) by David Reid
-
-Special thanks to [jjYBdx4IL](https://github.com/jjYBdx4IL) for *vcpkg* build preparation and packaging.
 
 ## License
 
