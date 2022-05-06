@@ -1,4 +1,5 @@
 #include <iostream>
+#include <set>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -50,7 +51,7 @@ int main(int argc, char** argv)
     ("w,window", "sfft window size", cxxopts::value<std::string>()->default_value("1024"))
     ("v,overlap", "stft window overlap", cxxopts::value<std::string>()->default_value("32"));
 
-  auto args = options.parse(argc, argv);
+  const auto args = options.parse(argc, argv);
 
   if (args.count("help"))
   {
@@ -106,22 +107,25 @@ int main(int argc, char** argv)
 
     if (args.count("pitch"))
     {
-      const auto values = split(args["pitch"].as<std::string>(), ',');
+      const std::vector<std::string> values = split(
+        args["pitch"].as<std::string>(), ',');
 
       if (!values.empty())
       {
-        factors.clear();
+        std::set<double> distinct;
 
-        for (const auto& value : values)
+        for (const std::string& value : values)
         {
-          factors.push_back(std::stof(value));
+          distinct.insert(std::stod(value));
         }
+
+        factors.assign(distinct.begin(), distinct.end());
       }
     }
 
     if (args.count("quefrency"))
     {
-      quefrency = std::stof(args["quefrency"].as<std::string>()) * 1e-3f;
+      quefrency = std::stod(args["quefrency"].as<std::string>()) * 1e-3f;
     }
 
     if (args.count("window"))

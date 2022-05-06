@@ -21,7 +21,7 @@ def main(input, output, pitch, quefrency, window, overlap, debug):
 
     x, samplerate = read(input)
 
-    factors = [float(factor) for factor in pitch.split(',')]
+    factors = list(set(float(factor) for factor in pitch.split(',')))
     quefrency = float(quefrency) * 1e-3
 
     framesize = window
