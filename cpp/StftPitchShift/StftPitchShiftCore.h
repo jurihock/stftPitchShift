@@ -18,19 +18,12 @@ namespace stftpitchshift
     StftPitchShiftCore(
       const size_t framesize,
       const size_t hopsize,
-      const double samplerate,
-      const std::vector<double>& factors,
-      const double quefrency) :
-      fft(std::make_shared<RFFT>()),
-      framesize(framesize),
-      hopsize(hopsize),
-      samplerate(samplerate),
-      factors(factors),
-      quefrency(quefrency),
-      vocoder(framesize, hopsize, samplerate),
-      pitcher(factors),
-      cepster(fft, quefrency, samplerate),
-      envelope(framesize / 2 + 1)
+      const double samplerate) :
+      StftPitchShiftCore(
+        std::make_shared<RFFT>(),
+        framesize,
+        hopsize,
+        samplerate)
     {
     }
 
@@ -38,25 +31,41 @@ namespace stftpitchshift
       const std::shared_ptr<FFT> fft,
       const size_t framesize,
       const size_t hopsize,
-      const double samplerate,
-      const std::vector<double>& factors,
-      const double quefrency) :
+      const double samplerate) :
       fft(fft),
       framesize(framesize),
       hopsize(hopsize),
       samplerate(samplerate),
-      factors(factors),
-      quefrency(quefrency),
       vocoder(framesize, hopsize, samplerate),
-      pitcher(factors),
-      cepster(fft, quefrency, samplerate),
+      pitcher(framesize),
+      cepster(fft, framesize, samplerate),
       envelope(framesize / 2 + 1)
     {
     }
 
+    const std::vector<double>& factors() const
+    {
+      pitcher.factors();
+    }
+
+    void factors(const std::vector<double>& factors)
+    {
+      pitcher.factors(factors);
+    }
+
+    double quefrency() const
+    {
+      return cepster.quefrency();
+    }
+
+    void quefrency(const double quefrency)
+    {
+      cepster.quefrency(quefrency);
+    }
+
     void shiftpitch(std::vector<std::complex<T>>& dft)
     {
-      if (quefrency)
+      if (cepster.quefrency())
       {
         vocoder.encode(dft);
 
@@ -99,8 +108,6 @@ namespace stftpitchshift
     const size_t framesize;
     const size_t hopsize;
     const double samplerate;
-    const std::vector<double> factors;
-    const double quefrency;
 
     Vocoder<T> vocoder;
     Pitcher<T> pitcher;

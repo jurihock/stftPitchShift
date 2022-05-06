@@ -13,30 +13,24 @@ namespace stftpitchshift
 
   public:
 
-    Resampler(const double factor = 1.0) :
-      factor(factor)
+    Resampler()
     {
     }
 
-    Resampler(const Resampler& other) :
-      factor(other.factor)
+    double factor() const
     {
+      return value;
     }
 
-    Resampler& operator=(const Resampler& other)
+    void factor(const double factor)
     {
-      if(this != &other)
-      {
-        this->factor = other.factor;
-      }
-
-      return *this;
+      value = factor;
     }
 
     void cosine(const std::vector<std::complex<T>>& x,
                 std::vector<std::complex<T>>& y) const
     {
-      if (factor == 1)
+      if (value == 1)
       {
         y = x;
         return;
@@ -45,11 +39,11 @@ namespace stftpitchshift
       const double PI = std::acos(-1.0);
 
       const ptrdiff_t N = static_cast<ptrdiff_t>(x.size());
-      const ptrdiff_t M = static_cast<ptrdiff_t>(std::round(N * factor));
+      const ptrdiff_t M = static_cast<ptrdiff_t>(std::round(N * value));
 
       for (ptrdiff_t m = 0; m < std::min(M, N); ++m)
       {
-        const double n = m / factor;
+        const double n = m / value;
 
         const ptrdiff_t n_ = static_cast<ptrdiff_t>(n);
         const ptrdiff_t n0 = n_ - (n < n_); // std::floor(n)
@@ -84,18 +78,18 @@ namespace stftpitchshift
     void linear(const std::vector<std::complex<T>>& x,
                 std::vector<std::complex<T>>& y) const
     {
-      if (factor == 1)
+      if (value == 1)
       {
         y = x;
         return;
       }
 
       const ptrdiff_t N = static_cast<ptrdiff_t>(x.size());
-      const ptrdiff_t M = static_cast<ptrdiff_t>(std::round(N * factor));
+      const ptrdiff_t M = static_cast<ptrdiff_t>(std::round(N * value));
 
       for (ptrdiff_t m = 0; m < std::min(M, N); ++m)
       {
-        const double n = m / factor;
+        const double n = m / value;
 
         const ptrdiff_t n_ = static_cast<ptrdiff_t>(n);
         const ptrdiff_t n0 = n_ - (n < n_); // std::floor(n)
@@ -144,7 +138,7 @@ namespace stftpitchshift
 
   private:
 
-    double factor;
+    double value;
 
   };
 }

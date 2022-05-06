@@ -137,7 +137,10 @@ void StftPitchShift::shiftpitch(
   const double quefrency)
 {
   STFT<float> stft(fft, framesize, hopsize, chronometry);
-  StftPitchShiftCore<float> core(fft, framesize, hopsize, samplerate, factors, quefrency);
+  StftPitchShiftCore<float> core(fft, framesize, hopsize, samplerate);
+
+  core.factors(factors);
+  core.quefrency(quefrency);
 
   stft(size, input, output, [&](std::vector<std::complex<float>>& dft)
   {
@@ -153,7 +156,10 @@ void StftPitchShift::shiftpitch(
   const double quefrency)
 {
   STFT<double> stft(fft, framesize, hopsize, chronometry);
-  StftPitchShiftCore<double> core(fft, framesize, hopsize, samplerate, factors, quefrency);
+  StftPitchShiftCore<double> core(fft, framesize, hopsize, samplerate);
+
+  core.factors(factors);
+  core.quefrency(quefrency);
 
   stft(size, input, output, [&](std::vector<std::complex<double>>& dft)
   {
