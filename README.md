@@ -92,12 +92,17 @@ The vocal formants are represented by the *spectral envelope*, which is given by
 
 ### C++
 
-Use [CMake](http://cmake.org) to build the C++ library, main and example programs like this:
+Use [CMake](http://cmake.org) to manually build the C++ library, main and example programs like this:
 
 ```cmd
 cmake -S . -B build
 cmake --build build
 ```
+
+Or alternatively just get the packaged library from:
+
+* VCPKG repository [stftpitchshift](https://vcpkg.info/port/stftpitchshift) or
+* Ubuntu repository [ppa:jurihock/stftpitchshift](https://launchpad.net/~jurihock/+archive/ubuntu/stftpitchshift).
 
 To include this library in your C++ audio project, study the minimal C++ example in the examples folder:
 
@@ -114,7 +119,7 @@ std::vector<float> y(x.size());
 pitchshifter.shiftpitch(x, y, 1);
 ```
 
-Optionally specify following CMake options:
+Optionally specify following CMake options for custom builds:
 
 * `-DBUILD_SHARED_LIBS=ON` to enable a [shared](https://cmake.org/cmake/help/latest/variable/BUILD_SHARED_LIBS.html) library build,
 * `-DVCPKG=ON` to enable the [vcpkg](https://vcpkg.io) compatible library only build without executables,
