@@ -101,7 +101,7 @@ cmake --build build
 
 Or alternatively just get the packaged library from:
 
-* VCPKG repository [stftpitchshift](https://vcpkg.info/port/stftpitchshift) or
+* Vcpkg repository [stftpitchshift](https://vcpkg.info/port/stftpitchshift) or
 * Ubuntu repository [ppa:jurihock/stftpitchshift](https://launchpad.net/~jurihock/+archive/ubuntu/stftpitchshift).
 
 To include this library in your C++ audio project, study the minimal C++ example in the examples folder:
