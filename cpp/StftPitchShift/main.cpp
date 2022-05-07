@@ -53,6 +53,12 @@ int main(int argc, char** argv)
 
   const auto args = options.parse(argc, argv);
 
+  if (argc < 2)
+  {
+    std::cout << options.help() << std::endl;
+    return OK;
+  }
+
   if (args.count("help"))
   {
     std::cout << options.help() << std::endl;
