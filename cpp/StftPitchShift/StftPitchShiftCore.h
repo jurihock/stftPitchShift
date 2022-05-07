@@ -45,7 +45,7 @@ namespace stftpitchshift
 
     const std::vector<double>& factors() const
     {
-      pitcher.factors();
+      return pitcher.factors();
     }
 
     void factors(const std::vector<double>& factors)
