@@ -13,6 +13,6 @@ target_link_libraries(example stftpitchshift)
 # if installed via ppa:jurihock/stftpitchshift on Ubuntu
 # target_link_libraries(example stftpitchshift)
 
-# TODO if installed via vcpkg
-# find_package(stftpitchshift)
-# target_link_libraries(example stftpitchshift)
+# if installed via vcpkg
+# find_package(stftpitchshift CONFIG REQUIRED)
+# target_link_libraries(example stftpitchshift::stftpitchshift)
