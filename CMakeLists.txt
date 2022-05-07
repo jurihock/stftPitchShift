@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.1...3.18)
 
-project(StftPitchShift)
+project(StftPitchShiftProject)
 
 option(VCPKG  "Enable vcpkg compatible library only build excluding executable" OFF)
 option(DEB    "Enable deb package build for library and executable" OFF)

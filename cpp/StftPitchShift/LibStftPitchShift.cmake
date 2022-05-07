@@ -1,31 +1,31 @@
 cmake_minimum_required(VERSION 3.1...3.18)
 
-project(LibStftPitchShift)
+project(stftpitchshift)
 
 include(GNUInstallDirs)
 
-add_library(LibStftPitchShift)
+add_library(${PROJECT_NAME})
 
 file(READ "${CMAKE_CURRENT_SOURCE_DIR}/VERSION" VERSION)
 string(STRIP "${VERSION}" VERSION)
 
-set_target_properties(LibStftPitchShift
+set_target_properties(${PROJECT_NAME}
   PROPERTIES VERSION "${VERSION}"
 )
 
-set_target_properties(LibStftPitchShift
+set_target_properties(${PROJECT_NAME}
   PROPERTIES SOVERSION 1
 )
 
 set_property(
-  TARGET LibStftPitchShift
-  PROPERTY INTERFACE_LibStftPitchShift_MAJOR_VERSION 1)
+  TARGET ${PROJECT_NAME}
+  PROPERTY INTERFACE_${PROJECT_NAME}_MAJOR_VERSION 1)
 
 set_property(
-  TARGET LibStftPitchShift APPEND
-  PROPERTY COMPATIBLE_INTERFACE_STRING LibStftPitchShift_MAJOR_VERSION)
+  TARGET ${PROJECT_NAME} APPEND
+  PROPERTY COMPATIBLE_INTERFACE_STRING ${PROJECT_NAME}_MAJOR_VERSION)
 
-set_target_properties(LibStftPitchShift
+set_target_properties(${PROJECT_NAME}
   PROPERTIES OUTPUT_NAME "stftpitchshift"
 )
 
@@ -48,25 +48,25 @@ set(SOURCES
   "${CMAKE_CURRENT_LIST_DIR}/StftPitchShift.cpp"
 )
 
-target_sources(LibStftPitchShift
+target_sources(${PROJECT_NAME}
   PRIVATE ${HEADERS} ${SOURCES}
 )
 
-set_target_properties(LibStftPitchShift
+set_target_properties(${PROJECT_NAME}
   PROPERTIES PUBLIC_HEADER "${HEADERS}"
 )
 
-target_include_directories(LibStftPitchShift
+target_include_directories(${PROJECT_NAME}
   PUBLIC    "$<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/..>"
   INTERFACE "$<INSTALL_INTERFACE:include/StftPitchShift>"
 )
 
-target_compile_features(LibStftPitchShift
+target_compile_features(${PROJECT_NAME}
   PRIVATE cxx_std_11
 )
 
 install(
-  TARGETS LibStftPitchShift
+  TARGETS ${PROJECT_NAME}
   LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
   PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/StftPitchShift"
 )

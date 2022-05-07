@@ -1,4 +1,4 @@
-set(StftPitchShift LibStftPitchShift)
+set(StftPitchShift stftpitchshift)
 
 file(READ "${CMAKE_CURRENT_SOURCE_DIR}/VERSION" StftPitchShiftVersion)
 string(STRIP "${StftPitchShiftVersion}" StftPitchShiftVersion)
@@ -23,7 +23,7 @@ install(
 )
 
 configure_package_config_file(
-  "${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in"
+  "${CMAKE_CURRENT_LIST_DIR}/ConfigStftPitchShift.cmake.template"
   "${CMAKE_CURRENT_BINARY_DIR}/${StftPitchShift}Config.cmake"
   INSTALL_DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${StftPitchShift}"
 )
