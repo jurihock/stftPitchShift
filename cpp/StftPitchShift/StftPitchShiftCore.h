@@ -3,6 +3,7 @@
 #include <StftPitchShift/FFT.h>
 #include <StftPitchShift/RFFT.h>
 
+#include <StftPitchShift/Normalizer.h>
 #include <StftPitchShift/Vocoder.h>
 #include <StftPitchShift/Pitcher.h>
 #include <StftPitchShift/Cepster.h>
@@ -63,12 +64,34 @@ namespace stftpitchshift
       cepster.quefrency(quefrency);
     }
 
+    bool normalization() const
+    {
+      return normalizer;
+    }
+
+    void normalization(const bool normalization)
+    {
+      if (normalization)
+      {
+        normalizer = std::make_shared<Normalizer<T>>();
+      }
+      else
+      {
+        normalizer = nullptr;
+      }
+    }
+
     void shiftpitch(std::vector<std::complex<T>>& dft)
     {
+      vocoder.encode(dft);
+
+      if (normalizer)
+      {
+        normalizer->calibrate(dft);
+      }
+
       if (cepster.quefrency())
       {
-        vocoder.encode(dft);
-
         for (size_t i = 0; i < dft.size(); ++i)
         {
           envelope[i] = dft[i].real();
@@ -91,15 +114,18 @@ namespace stftpitchshift
 
           dft[i].real(ok ? dft[i].real() * envelope[i] : 0);
         }
-
-        vocoder.decode(dft);
       }
       else
       {
-        vocoder.encode(dft);
         pitcher.shiftpitch(dft);
-        vocoder.decode(dft);
       }
+
+      if (normalizer)
+      {
+        normalizer->normalize(dft);
+      }
+
+      vocoder.decode(dft);
     }
 
   private:
@@ -114,6 +140,8 @@ namespace stftpitchshift
     Cepster<T> cepster;
 
     std::vector<T> envelope;
+
+    std::shared_ptr<Normalizer<T>> normalizer;
 
   };
 }

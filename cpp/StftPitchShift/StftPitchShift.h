@@ -16,12 +16,14 @@ namespace stftpitchshift
      * @param framesize The STFT frame size in samples.
      * @param hopsize The STFT hop size in samples.
      * @param samplerate The sample rate of the signal in hertz.
+     * @param normalization Optionally enable spectral rms normalization.
      * @param chronometry Optionally enable runtime measurements.
      */
     StftPitchShift(
       const size_t framesize,
       const size_t hopsize,
       const double samplerate,
+      const bool normalization = false,
       const bool chronometry = false);
 
     /**
@@ -29,6 +31,7 @@ namespace stftpitchshift
      * @param framesize The STFT frame size in samples.
      * @param hopsize The STFT hop size in samples.
      * @param samplerate The sample rate of the signal in hertz.
+     * @param normalization Optionally enable spectral rms normalization.
      * @param chronometry Optionally enable runtime measurements.
      */
     StftPitchShift(
@@ -36,6 +39,7 @@ namespace stftpitchshift
       const size_t framesize,
       const size_t hopsize,
       const double samplerate,
+      const bool normalization = false,
       const bool chronometry = false);
 
     /**
@@ -148,6 +152,7 @@ namespace stftpitchshift
     const size_t framesize;
     const size_t hopsize;
     const double samplerate;
+    const bool normalization;
     const bool chronometry;
 
   };

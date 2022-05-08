@@ -12,11 +12,13 @@ StftPitchShift::StftPitchShift(
   const size_t framesize,
   const size_t hopsize,
   const double samplerate,
+  const bool normalization,
   const bool chronometry) :
   fft(std::make_shared<RFFT>()),
   framesize(framesize),
   hopsize(hopsize),
   samplerate(samplerate),
+  normalization(normalization),
   chronometry(chronometry)
 {
 }
@@ -26,11 +28,13 @@ StftPitchShift::StftPitchShift(
   const size_t framesize,
   const size_t hopsize,
   const double samplerate,
+  const bool normalization,
   const bool chronometry) :
   fft(fft),
   framesize(framesize),
   hopsize(hopsize),
   samplerate(samplerate),
+  normalization(normalization),
   chronometry(chronometry)
 {
 }
@@ -141,6 +145,7 @@ void StftPitchShift::shiftpitch(
 
   core.factors(factors);
   core.quefrency(quefrency);
+  core.normalization(normalization);
 
   stft(size, input, output, [&](std::vector<std::complex<float>>& dft)
   {
@@ -160,6 +165,7 @@ void StftPitchShift::shiftpitch(
 
   core.factors(factors);
   core.quefrency(quefrency);
+  core.normalization(normalization);
 
   stft(size, input, output, [&](std::vector<std::complex<double>>& dft)
   {

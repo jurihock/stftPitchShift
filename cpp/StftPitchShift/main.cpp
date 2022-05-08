@@ -45,7 +45,8 @@ int main(int argc, char** argv)
 
   options.add_options("pitch shifting")
     ("p,pitch", "fractional pitch shifting factors separated by comma", cxxopts::value<std::string>()->default_value("1.0"))
-    ("q,quefrency", "optional formant lifter quefrency in milliseconds", cxxopts::value<std::string>()->default_value("0.0"));
+    ("q,quefrency", "optional formant lifter quefrency in milliseconds", cxxopts::value<std::string>()->default_value("0.0"))
+    ("r,rms", "enable spectral rms normalization");
 
   options.add_options("stft")
     ("w,window", "sfft window size", cxxopts::value<std::string>()->default_value("1024"))
@@ -72,6 +73,7 @@ int main(int argc, char** argv)
   }
 
   bool chronometry = false;
+  bool normalization = false;
 
   std::string infile = "";
   std::string outfile = "";
@@ -87,6 +89,11 @@ int main(int argc, char** argv)
     if (args.count("chrono"))
     {
       chronometry = true;
+    }
+
+    if (args.count("rms"))
+    {
+      normalization = true;
     }
 
     if (args.count("input"))
@@ -189,6 +196,7 @@ int main(int argc, char** argv)
         framesize,
         framesize / hoprate,
         samplerate,
+        normalization,
         chronometry);
 
       stft.shiftpitch(
