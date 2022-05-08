@@ -14,15 +14,17 @@ import numpy as np
 @click.option('-o', '--output', required=True, help='output .wav file name')
 @click.option('-p', '--pitch', default='1.0', show_default=True, help='fractional pitch shifting factors separated by comma')
 @click.option('-q', '--quefrency', default='0.0', show_default=True, help='optional formant lifter quefrency in milliseconds')
+@click.option('-r', '--rms', is_flag=True, default=False, help='enable spectral rms normalization')
 @click.option('-w', '--window', default=1024, show_default=True, help='sfft window size')
 @click.option('-v', '--overlap', default=32, show_default=True, help='stft window overlap')
 @click.option('-d', '--debug', is_flag=True, default=False, help='plot spectrograms before and after processing')
-def main(input, output, pitch, quefrency, window, overlap, debug):
+def main(input, output, pitch, quefrency, rms, window, overlap, debug):
 
     x, samplerate = read(input)
 
     factors = list(set(float(factor) for factor in pitch.split(',')))
     quefrency = float(quefrency) * 1e-3
+    normalization = rms
 
     framesize = window
     hopsize = window // overlap
@@ -34,7 +36,7 @@ def main(input, output, pitch, quefrency, window, overlap, debug):
     x = x[:, None] if channels == 1 else x
 
     y = np.stack([
-        pitchshifter.shiftpitch(x[:, channel], factors, quefrency)
+        pitchshifter.shiftpitch(x[:, channel], factors, quefrency, normalization)
         for channel in range(channels)
     ], axis=-1)
 
