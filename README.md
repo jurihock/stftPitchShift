@@ -57,7 +57,7 @@ The *Cepster* module estimates a spectral envelope of the DFT magnitude vector, 
 <details>
 <summary><strong>Normalizer</strong></summary>
 
-The *Normalizer* module optionally performs [RMS normalization](https://en.wikipedia.org/wiki/Audio_normalization) right after pitch shifting relative to the original signal to get about the same loudness level. This correction takes place in the frequency domain each DFT frame separately.
+The *Normalizer* module optionally performs a [RMS normalization](https://en.wikipedia.org/wiki/Audio_normalization) right after pitch shifting relative to the original signal to get about the same loudness level. This correction takes place in the frequency domain each DFT frame separately.
 </details>
 
 <details>
