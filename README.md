@@ -157,6 +157,8 @@ Both programs C++ and Python provides a similar set of command line options:
 -q  --quefrency  optional formant lifter quefrency in milliseconds
                  (default 0.0)
 
+-r  --rms        enable spectral rms normalization
+
 -w  --window     sfft window size
                  (default 1024)
 
