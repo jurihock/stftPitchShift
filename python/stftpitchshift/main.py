@@ -20,9 +20,11 @@ import numpy as np
 @click.option('-d', '--debug', is_flag=True, default=False, help='plot spectrograms before and after processing')
 def main(input, output, pitch, quefrency, rms, window, overlap, debug):
 
+    def semitone(value): return value.startswith('+') or value.startswith('-') or not float(value)
+
     x, samplerate = read(input)
 
-    factors = list(set(float(factor) for factor in pitch.split(',')))
+    factors = list(set(pow(2, float(factor) / 12) if semitone(factor) else float(factor) for factor in pitch.split(',')))
     quefrency = float(quefrency) * 1e-3
     normalization = rms
 

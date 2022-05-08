@@ -1,3 +1,5 @@
+#include <cmath>
+#include <functional>
 #include <iostream>
 #include <set>
 #include <sstream>
@@ -125,11 +127,27 @@ int main(int argc, char** argv)
 
       if (!values.empty())
       {
+        const auto semitone = [](const std::string& value) -> bool
+        {
+          return (value.front() == '+') || (value.front() == '-') || (std::stod(value) == 0);
+        };
+
         std::set<double> distinct;
 
         for (const std::string& value : values)
         {
-          distinct.insert(std::stod(value));
+          double factor;
+
+          if (semitone(value))
+          {
+            factor = std::pow(2.0, std::stod(value) / 12.0);
+          }
+          else
+          {
+            factor = std::stod(value);
+          }
+
+          distinct.insert(factor);
         }
 
         factors.assign(distinct.begin(), distinct.end());
