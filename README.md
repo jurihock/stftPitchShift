@@ -180,7 +180,7 @@ Both programs C++ and Python provides a similar set of command line options:
 
 Currently only `.wav` files are supported. Please use e.g. [Audacity](http://www.audacityteam.org) or [SoX](http://sox.sourceforge.net) to prepare your audio files for pitch shifting.
 
-To apply multiple pitch shifts at once, separate each factor by a comma, e.g. `-p 0.5,1,2`. Alternatively specify pitch shifting factors as semitones denoted by the + or - prefix, e.g. `-p -12,0,+12`.
+To apply multiple pitch shifts at once, separate each factor by a comma, e.g. `-p 0.5,1,2`. Alternatively specify pitch shifting factors as semitones denoted by the + or - prefix, e.g. `-p -12,0,+12`. For precise pitch corrections append the number of cents after semitones, e.g. `-p -11-100,0,+11+100`.
 
 To enable the formant preservation feature specify a suitable *quefrency* value in milliseconds. Depending on the source signal, begin with a small value like `-q 1`. Generally, the *quefrency* value has to be smaller than the fundamental period, as reciprocal of the fundamental frequency, of the source signal.
 

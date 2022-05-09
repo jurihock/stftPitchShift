@@ -1,6 +1,7 @@
 #include <cmath>
 #include <functional>
 #include <iostream>
+#include <regex>
 #include <set>
 #include <sstream>
 #include <string>
@@ -127,9 +128,28 @@ int main(int argc, char** argv)
 
       if (!values.empty())
       {
-        const auto semitone = [](const std::string& value) -> bool
+        const auto parse = [](const std::string& value) -> bool
         {
-          return (value.front() == '+') || (value.front() == '-') || (std::stod(value) == 0);
+          return (value.front() == '+') || (value.front() == '-') ||
+                 (value.front() == '0'  && (value.find('.') == std::string::npos));
+        };
+
+        const auto semitone = [](const std::string& value) -> double
+        {
+          std::regex regex("([+,-]?\\d+){1}([+,-]\\d+){0,1}");
+          std::smatch matches;
+          std::regex_match(value, matches, regex);
+          std::string match = matches[1];
+          return std::pow(2, std::stod(match) / 12);
+        };
+
+        const auto cent = [](const std::string& value) -> double
+        {
+          std::regex regex("([+,-]?\\d+){1}([+,-]\\d+){0,1}");
+          std::smatch matches;
+          std::regex_match(value, matches, regex);
+          std::string match = (matches[2] == "") ? std::string("0") : matches[2];
+          return std::pow(2, std::stod(match) / 1200);
         };
 
         std::set<double> distinct;
@@ -138,9 +158,9 @@ int main(int argc, char** argv)
         {
           double factor;
 
-          if (semitone(value))
+          if (parse(value))
           {
-            factor = std::pow(2.0, std::stod(value) / 12.0);
+            factor = semitone(value) * cent(value);
           }
           else
           {

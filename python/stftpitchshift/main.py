@@ -6,6 +6,7 @@ from stftpitchshift.stft import stft, istft, spectrogram
 import click
 import matplotlib.pyplot as plot
 import numpy as np
+import re
 
 
 @click.command('stftpitchshift', help='STFT based multi pitch shifting with optional formant preservation', no_args_is_help=True, context_settings=dict(help_option_names=['-h', '--help']))
@@ -20,11 +21,13 @@ import numpy as np
 @click.option('-d', '--debug', is_flag=True, default=False, help='plot spectrograms before and after processing')
 def main(input, output, pitch, quefrency, rms, window, overlap, debug):
 
-    def semitone(value): return value.startswith('+') or value.startswith('-') or not float(value)
+    def parse(value): return value.startswith('+') or value.startswith('-') or (value.startswith('0') and '.' not in value)
+    def semitone(value): return pow(2, float(re.match('([+,-]?\\d+){1}([+,-]\\d+){0,1}', value)[1]) / 12)
+    def cent(value): return pow(2, float(re.match('([+,-]?\\d+){1}([+,-]\\d+){0,1}', value)[2] or 0) / 1200)
 
     x, samplerate = read(input)
 
-    factors = list(set(pow(2, float(factor) / 12) if semitone(factor) else float(factor) for factor in pitch.split(',')))
+    factors = list(set(semitone(factor) * cent(factor) if parse(factor) else float(factor) for factor in pitch.split(',')))
     quefrency = float(quefrency) * 1e-3
     normalization = rms
 
