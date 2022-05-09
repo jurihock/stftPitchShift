@@ -17,7 +17,7 @@ class Stftpitchshift < Formula
   end
 
   test do
-    system "stftpitchshift", "-h"
+    system "stftpitchshift", "--version"
 
     (testpath/"CMakeLists.txt").write("find_package(stftpitchshift)")
     system "cmake", "."
