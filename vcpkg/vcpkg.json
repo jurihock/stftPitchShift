@@ -1,6 +1,6 @@
 {
   "name": "stftpitchshift",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "STFT based multi pitch shifting with optional formant preservation.",
   "license": "MIT",
   "dependencies": [
