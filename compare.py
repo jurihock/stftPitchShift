@@ -18,6 +18,9 @@ def compare(x, y, plot, rtol, atol):
 
     from stftpitchshift.io import read
 
+    labelx = os.path.splitext(os.path.basename(x))[0]
+    labely = os.path.splitext(os.path.basename(y))[0]
+
     x, srx = read(x)
     y, sry = read(y)
 
@@ -28,8 +31,8 @@ def compare(x, y, plot, rtol, atol):
 
         figure, (a, b) = pyplot.subplots(nrows=2, sharex=True)
 
-        a.plot(x, label='x', color='blue', alpha=0.5)
-        a.plot(y, label='y', color='red', alpha=0.5)
+        a.plot(x, label=f'x ({labelx})', color='blue', alpha=0.5)
+        a.plot(y, label=f'y ({labely})', color='red', alpha=0.5)
         b.plot(x - y, label='x - y', color='black', alpha=0.5)
 
         a.legend()
