@@ -1,6 +1,5 @@
 #pragma once
 
-#include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <complex>
@@ -28,56 +27,6 @@ namespace stftpitchshift
       value = factor;
     }
 
-    void cosine(const std::vector<std::complex<T>>& x,
-                std::vector<std::complex<T>>& y) const
-    {
-      assert(x.size() == y.size());
-
-      if (value == 1)
-      {
-        y = x;
-        return;
-      }
-
-      const double PI = std::acos(-1.0);
-
-      const ptrdiff_t N = static_cast<ptrdiff_t>(x.size());
-      const ptrdiff_t M = static_cast<ptrdiff_t>(std::round(N * value));
-
-      for (ptrdiff_t m = 0; m < std::min(M, N); ++m)
-      {
-        const double n = m / value;
-
-        const ptrdiff_t n_ = static_cast<ptrdiff_t>(n);
-        const ptrdiff_t n0 = n_ - (n < n_); // std::floor(n)
-        const ptrdiff_t n1 = n_ + (n > n_); // std::ceil(n)
-
-        if (n0 < 0 || N <= n0)
-        {
-          continue;
-        }
-
-        if (n1 < 0 || N <= n1)
-        {
-          continue;
-        }
-
-        if (n0 == n1)
-        {
-          y[m] = x[n0];
-          continue;
-        }
-
-        const std::complex<T> y0 = x[n0];
-        const std::complex<T> y1 = x[n1];
-
-        const T i = static_cast<T>((n - n0) / (n1 - n0));
-        const T j = static_cast<T>(0.5 - 0.5 * std::cos(i * PI));
-
-        y[m] = y0 * (1 - j) + y1 * j;
-      }
-    }
-
     void linear(const std::vector<std::complex<T>>& x,
                 std::vector<std::complex<T>>& y) const
     {
@@ -89,39 +38,30 @@ namespace stftpitchshift
         return;
       }
 
-      const ptrdiff_t N = static_cast<ptrdiff_t>(x.size());
-      const ptrdiff_t M = static_cast<ptrdiff_t>(std::round(N * value));
+      const ptrdiff_t n = static_cast<ptrdiff_t>(x.size());
+      const ptrdiff_t m = static_cast<ptrdiff_t>(n * value);
 
-      for (ptrdiff_t m = 0; m < std::min(M, N); ++m)
+      const T q = T(n) / T(m);
+
+      for (ptrdiff_t i = 0; i < std::min(n, m); ++i)
       {
-        const double n = m / value;
+        T k = i * q;
 
-        const ptrdiff_t n_ = static_cast<ptrdiff_t>(n);
-        const ptrdiff_t n0 = n_ - (n < n_); // std::floor(n)
-        const ptrdiff_t n1 = n_ + (n > n_); // std::ceil(n)
+        const ptrdiff_t j = static_cast<ptrdiff_t>(std::trunc(k));
 
-        if (n0 < 0 || N <= n0)
+        k = k - j;
+
+        const bool ok = (0 <= j) && (j < n - 1);
+
+        if (!ok)
         {
           continue;
         }
 
-        if (n1 < 0 || N <= n1)
-        {
-          continue;
-        }
+        // TODO cosine interpolation
+        // k = T(0.5) - T(0.5) * std::cos(k * std::acos(T(-1)));
 
-        if (n0 == n1)
-        {
-          y[m] = x[n0];
-          continue;
-        }
-
-        const std::complex<T> y0 = x[n0];
-        const std::complex<T> y1 = x[n1];
-
-        const T i = static_cast<T>((n - n0) / (n1 - n0));
-
-        y[m] = y0 * (1 - i) + y1 * i;
+        y[i] = k * x[j + 1] + (1 - k) * x[j];
       }
     }
 
