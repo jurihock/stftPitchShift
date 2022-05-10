@@ -3,6 +3,9 @@ import numpy as np
 
 def linear(x, factor):
 
+    if factor == 1:
+        return x.copy()
+
     y = np.zeros(x.shape, dtype=x.dtype)
 
     n = len(x)
