@@ -27,6 +27,10 @@ def compare(x, y, plot, rtol, atol):
     assert srx == sry, f'Unequal sample rate {srx} != {sry}'
     assert x.shape == y.shape, f'Unequal array shape {x.shape} != {y.shape}'
 
+    ok = np.allclose(x, y, rtol=rtol, atol=atol)
+
+    face = ':-)' if ok else ':-('
+
     if plot:
 
         figure, (a, b) = pyplot.subplots(nrows=2, sharex=True)
@@ -38,15 +42,14 @@ def compare(x, y, plot, rtol, atol):
         a.legend()
         b.legend()
 
+        figure.canvas.manager.set_window_title(face)
         figure.tight_layout()
 
         pyplot.show()
 
     else:
 
-        ok = np.allclose(x, y, rtol=rtol, atol=atol)
-
-        print(':-)' if ok else ':-(')
+        print(face)
 
 if __name__ == '__main__':
 
