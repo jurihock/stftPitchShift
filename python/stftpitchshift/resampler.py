@@ -19,12 +19,12 @@ def linear(x, factor):
     j = np.trunc(k).astype(int)
     k = k - j
 
-    mask = (0 <= j) & (j < n - 1)
+    ok = (0 <= j) & (j < n - 1)
 
     # TODO cosine interpolation
     # k = 0.5 - 0.5 * np.cos(k * np.pi)
 
-    y[i[mask]] = k[mask] * x[j[mask] + 1] + (1 - k[mask]) * x[j[mask]]
+    y[i[ok]] = k[ok] * x[j[ok] + 1] + (1 - k[ok]) * x[j[ok]]
 
     return y
 
