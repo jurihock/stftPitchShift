@@ -3,8 +3,7 @@ import re
 
 files = dict(
     cpp=os.path.join('cpp', 'StftPitchShift', 'Version.h'),
-    python=os.path.join('python', 'stftpitchshift', '__init__.py'),
-    vcpkg=os.path.join('vcpkg', 'vcpkg.json')
+    python=os.path.join('python', 'stftpitchshift', '__init__.py')
 )
 
 with open('VERSION', 'r') as file:
@@ -46,13 +45,6 @@ with open(files['cpp'], 'r+') as file:
 with open(files['python'], 'r+') as file:
     code = file.read()
     code = re.sub(r'".*"', f'"{new}"', code)
-    file.seek(0)
-    file.write(code)
-    file.truncate()
-
-with open(files['vcpkg'], 'r+') as file:
-    code = file.read()
-    code = re.sub(r'"version": ".*"', f'"version": "{new}"', code)
     file.seek(0)
     file.write(code)
     file.truncate()
