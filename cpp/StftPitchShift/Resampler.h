@@ -37,50 +37,39 @@ namespace stftpitchshift
 
       const T q = T(n) / T(m);
 
-      if (value < 1) // forward loop
+      const auto interpolate = [&](const ptrdiff_t i)
+      {
+        T k = i * q;
+
+        const ptrdiff_t j = static_cast<ptrdiff_t>(std::trunc(k));
+
+        k = k - j;
+
+        const bool ok = (0 <= j) && (j < n - 1);
+
+        if (!ok)
+        {
+          return;
+        }
+
+        // TODO cosine interpolation
+        // k = T(0.5) - T(0.5) * std::cos(k * std::acos(T(-1)));
+
+        y[i] = k * x[j + 1] + (1 - k) * x[j];
+      };
+
+      if (value < 1)
       {
         for (ptrdiff_t i = 0; i < std::min(n, m); ++i)
         {
-          T k = i * q;
-
-          const ptrdiff_t j = static_cast<ptrdiff_t>(std::trunc(k));
-
-          k = k - j;
-
-          const bool ok = (0 <= j) && (j < n - 1);
-
-          if (!ok)
-          {
-            continue;
-          }
-
-          // TODO cosine interpolation
-          // k = T(0.5) - T(0.5) * std::cos(k * std::acos(T(-1)));
-
-          y[i] = k * x[j + 1] + (1 - k) * x[j];
+          interpolate(i);
         }
       }
-      else if (value > 1) // backward loop
+      else if (value > 1)
       {
         for (ptrdiff_t i = std::min(n, m) - 1; i >= 0; --i)
         {
-          T k = i * q;
-
-          const ptrdiff_t j = static_cast<ptrdiff_t>(std::trunc(k));
-
-          k = k - j;
-
-          const bool ok = (0 <= j) && (j < n - 1);
-
-          if (!ok)
-          {
-            continue;
-          }
-
-          // TODO cosine interpolation
-          // k = T(0.5) - T(0.5) * std::cos(k * std::acos(T(-1)));
-
-          y[i] = k * x[j + 1] + (1 - k) * x[j];
+          interpolate(i);
         }
       }
       else
