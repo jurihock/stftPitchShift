@@ -32,36 +32,60 @@ namespace stftpitchshift
     {
       assert(x.size() == y.size());
 
-      if (value == 1)
-      {
-        y = x;
-        return;
-      }
-
       const ptrdiff_t n = static_cast<ptrdiff_t>(x.size());
       const ptrdiff_t m = static_cast<ptrdiff_t>(n * value);
 
       const T q = T(n) / T(m);
 
-      for (ptrdiff_t i = 0; i < std::min(n, m); ++i)
+      if (value < 1) // forward loop
       {
-        T k = i * q;
-
-        const ptrdiff_t j = static_cast<ptrdiff_t>(std::trunc(k));
-
-        k = k - j;
-
-        const bool ok = (0 <= j) && (j < n - 1);
-
-        if (!ok)
+        for (ptrdiff_t i = 0; i < std::min(n, m); ++i)
         {
-          continue;
+          T k = i * q;
+
+          const ptrdiff_t j = static_cast<ptrdiff_t>(std::trunc(k));
+
+          k = k - j;
+
+          const bool ok = (0 <= j) && (j < n - 1);
+
+          if (!ok)
+          {
+            continue;
+          }
+
+          // TODO cosine interpolation
+          // k = T(0.5) - T(0.5) * std::cos(k * std::acos(T(-1)));
+
+          y[i] = k * x[j + 1] + (1 - k) * x[j];
         }
+      }
+      else if (value > 1) // backward loop
+      {
+        for (ptrdiff_t i = std::min(n, m) - 1; i >= 0; --i)
+        {
+          T k = i * q;
 
-        // TODO cosine interpolation
-        // k = T(0.5) - T(0.5) * std::cos(k * std::acos(T(-1)));
+          const ptrdiff_t j = static_cast<ptrdiff_t>(std::trunc(k));
 
-        y[i] = k * x[j + 1] + (1 - k) * x[j];
+          k = k - j;
+
+          const bool ok = (0 <= j) && (j < n - 1);
+
+          if (!ok)
+          {
+            continue;
+          }
+
+          // TODO cosine interpolation
+          // k = T(0.5) - T(0.5) * std::cos(k * std::acos(T(-1)));
+
+          y[i] = k * x[j + 1] + (1 - k) * x[j];
+        }
+      }
+      else
+      {
+        y = x;
       }
     }
 
