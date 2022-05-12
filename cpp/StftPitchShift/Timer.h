@@ -10,23 +10,21 @@
 
 namespace stftpitchshift
 {
+  template<class> struct WellKnownTimerDuration : std::false_type {};
+  template<> struct WellKnownTimerDuration<std::chrono::seconds> : std::true_type {};
+  template<> struct WellKnownTimerDuration<std::chrono::milliseconds> : std::true_type {};
+  template<> struct WellKnownTimerDuration<std::chrono::microseconds> : std::true_type {};
+  template<> struct WellKnownTimerDuration<std::chrono::nanoseconds> : std::true_type {};
+
   template<class T>
   class Timer
   {
-
-  private:
-
-    template<class> struct is_valid_duration : std::false_type {};
-    template<> struct is_valid_duration<std::chrono::seconds> : std::true_type {};
-    template<> struct is_valid_duration<std::chrono::milliseconds> : std::true_type {};
-    template<> struct is_valid_duration<std::chrono::microseconds> : std::true_type {};
-    template<> struct is_valid_duration<std::chrono::nanoseconds> : std::true_type {};
 
   public:
 
     Timer(const size_t capacity = 100000)
     {
-      static_assert(is_valid_duration<T>::value, "s,ms,us,ns");
+      static_assert(WellKnownTimerDuration<T>::value, "s,ms,us,ns");
 
       data.reserve(capacity);
     }
