@@ -14,11 +14,27 @@ namespace stftpitchshift
   class Timer
   {
 
+  private:
+
+    template<class> struct is_valid_duration : std::false_type {};
+    template<> struct is_valid_duration<std::chrono::seconds> : std::true_type {};
+    template<> struct is_valid_duration<std::chrono::milliseconds> : std::true_type {};
+    template<> struct is_valid_duration<std::chrono::microseconds> : std::true_type {};
+    template<> struct is_valid_duration<std::chrono::nanoseconds> : std::true_type {};
+
   public:
 
-    Timer(const size_t capacity = 1000000)
+    Timer(const size_t capacity = 100000)
     {
+      static_assert(is_valid_duration<T>::value, "s,ms,us,ns");
+
       data.reserve(capacity);
+    }
+
+    Timer(const Timer& other)
+    {
+      data.reserve(other.data.capacity());
+      data.assign(other.data.begin(), other.data.end());
     }
 
     void cls()
@@ -28,15 +44,15 @@ namespace stftpitchshift
 
     void tic()
     {
-      timestamp = std::chrono::high_resolution_clock::now();
+      timestamp = std::chrono::steady_clock::now();
     }
 
     void toc()
     {
-      const std::chrono::high_resolution_clock::duration duration =
-        std::chrono::high_resolution_clock::now() - timestamp;
+      const std::chrono::steady_clock::duration duration = std::chrono::steady_clock::now() - timestamp;
+      const double value = std::chrono::duration_cast<T>(duration * 1e+3).count() * 1e-3;
 
-      data.push_back(std::chrono::duration_cast<T>(duration * 1e+3).count() * 1e-3);
+      data.push_back(value);
     }
 
     std::string str()
@@ -59,14 +75,14 @@ namespace stftpitchshift
 
       std::ostringstream result;
       result.precision(3);
-      result << mean << " ± " << stdev << " " << unit;
+      result << mean << " ± " << stdev << " " << unit << " n=" << data.size();
 
       return result.str();
     }
 
   private:
 
-    std::chrono::time_point<std::chrono::high_resolution_clock> timestamp;
+    std::chrono::time_point<std::chrono::steady_clock> timestamp;
     std::vector<double> data;
 
   };
