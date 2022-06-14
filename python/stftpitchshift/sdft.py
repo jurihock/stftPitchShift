@@ -30,14 +30,15 @@ def sdft(samples, dftsize):
 
     deltas = samples - delayline
 
-    dfts = deltas[:, None] * twiddles[:-1]
+    data = deltas[:, None] * twiddles[:-1]
 
     for i in range(1, N):
 
-        dfts[i] += dfts[i - 1]
+        data[i] += data[i - 1]
 
-    dfts *= np.conj(twiddles[1:])
-    dfts = window(dfts)
+    data *= np.conj(twiddles[1:])
+
+    dfts = window(data)
 
     return dfts
 
@@ -46,17 +47,13 @@ def isdft(dfts, latency=1):
 
     N, M = dfts.shape
 
-    if latency == 1:
+    twiddles = np.array([-1 if m % 2 else +1 for m in range(M)]) \
+               if latency == 1 else \
+               np.exp(-1j * np.pi * latency * np.arange(M))
 
-        twiddles = np.array([-1 if m % 2 else +1 for m in range(M)])
+    weight = 2 / (1 - np.cos(np.pi * latency))
 
-    else:
-
-        weight = 2 / (1 - np.cos(np.pi * latency))
-
-        twiddles = weight * np.exp(1j * np.pi * latency * np.arange(M))
-
-    samples = np.sum(np.real(dfts * twiddles), axis=-1)
+    samples = np.sum(np.real(dfts * twiddles * weight), axis=-1)
 
     return samples
 
@@ -87,12 +84,13 @@ if __name__ == '__main__':
 
     roi = (np.min(t), np.max(t), 0, sr / (dftsize * 2))
 
-    # plot.figure()
-    # plot.plot(t, x, alpha=0.5)
-    # plot.plot(t, samples, alpha=0.5)
-
     plot.figure()
     plot.imshow(db.T, extent=roi, cmap='inferno', aspect='auto', interpolation='nearest', origin='lower')
     plot.clim(-120, 0)
+
+    plot.figure()
+    plot.plot(t, x, alpha=0.5)
+    plot.plot(t, samples, alpha=0.5)
+    plot.xlim(0, 0.1)
 
     plot.show()
