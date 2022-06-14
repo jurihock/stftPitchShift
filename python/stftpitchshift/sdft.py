@@ -3,13 +3,13 @@ import numpy as np
 
 def window(x):
 
-    N, M = x.shape
+    M, N = x.shape
 
     left = x[:, :-2]
     right = x[:, +2:]
     middle = x[:, +1:-1]
 
-    y = ((middle + middle) - (left + right)) / (M * 4)
+    y = ((middle + middle) - (left + right)) / (N * 4)
 
     y = np.pad(y, ((0, 0), (1, 1)))
 
@@ -18,22 +18,22 @@ def window(x):
 
 def sdft(samples, dftsize):
 
-    N = samples.size
-    M = dftsize
+    M = samples.size
+    N = dftsize
 
-    n = np.arange(N + 1)[:, None]
-    m = np.arange(M)
+    m = np.arange(M + 1)[:, None]
+    n = np.arange(N)
 
-    twiddles = np.exp(-2j * np.pi * n * m / (M * 2))
+    twiddles = np.exp(-2j * np.pi * m * n / (N * 2))
 
-    delayline = np.resize(np.pad(samples, (M * 2, 0)), samples.shape)
+    delayline = np.resize(np.pad(samples, (N * 2, 0)), samples.shape)
 
     deltas = samples - delayline
 
     data = deltas[:, None] * twiddles[:-1]
 
     # TODO loop vs. accumulate
-    # for i in range(1, N): data[i] += data[i - 1]
+    # for i in range(1, M): data[i] += data[i - 1]
     np.add.accumulate(data, axis=0, out=data)
 
     data *= np.conj(twiddles[1:])
@@ -45,11 +45,11 @@ def sdft(samples, dftsize):
 
 def isdft(dfts, latency=1):
 
-    N, M = dfts.shape
+    M, N = dfts.shape
 
-    twiddles = np.array([-1 if m % 2 else +1 for m in range(M)]) \
+    twiddles = np.array([-1 if n % 2 else +1 for n in np.arange(N)]) \
                if latency == 1 else \
-               np.exp(-1j * np.pi * latency * np.arange(M))
+               np.exp(-1j * np.pi * latency * np.arange(N))
 
     weight = 2 / (1 - np.cos(np.pi * latency))
 
