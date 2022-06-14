@@ -1,7 +1,7 @@
 from stftpitchshift.cepster import lifter
 from stftpitchshift.normalizer import normalize
 from stftpitchshift.pitcher import shiftpitch
-from stftpitchshift.stft import stft, istft, spectrogram
+from stftpitchshift.stft import stft, istft
 from stftpitchshift.vocoder import encode, decode
 
 import numpy as np
