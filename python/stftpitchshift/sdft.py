@@ -32,9 +32,9 @@ def sdft(samples, dftsize):
 
     data = deltas[:, None] * twiddles[:-1]
 
-    for i in range(1, N):
-
-        data[i] += data[i - 1]
+    # TODO loop vs. accumulate
+    # for i in range(1, N): data[i] += data[i - 1]
+    np.add.accumulate(data, axis=0, out=data)
 
     data *= np.conj(twiddles[1:])
 
