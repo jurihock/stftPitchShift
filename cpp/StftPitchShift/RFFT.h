@@ -3,8 +3,109 @@
 #include <StftPitchShift/FFT.h>
 
 #include <cassert>
+#include <map>
 #include <stdexcept>
 #include <string>
+
+namespace stftpitchshift
+{
+  template<class T>
+  struct CRFFT
+  {
+    CRFFT(const size_t fullsize)
+    {
+      const bool is_power_of_two = fullsize && !(fullsize & (fullsize - 1));
+
+      if (!is_power_of_two)
+      {
+        throw std::runtime_error(
+          "The specified frame size " + std::to_string(fullsize) + " is not a power of 2! " +
+          "Please specify values like 1024, 2048, 4096 etc.");
+      }
+
+      size.full = fullsize;
+      size.half = fullsize / 2;
+
+      buffer.resize(size.half);
+
+      coeffs.w.resize(size.half);
+      coeffs.a.resize(size.half);
+      coeffs.b.resize(size.half);
+
+      coeffs.conj.w.resize(size.half);
+      coeffs.conj.a.resize(size.half);
+      coeffs.conj.b.resize(size.half);
+
+      const T pi = T(-2) * std::acos(T(-1));
+
+      for (size_t i = 0; i < size.half; ++i)
+      {
+        coeffs.w[i] = std::polar(T(1), (pi * i) / T(size.half));
+        coeffs.a[i] = imul({ T(0.5), T(0.5) }, -std::polar(T(1), (pi * i) / T(size.full)));
+        coeffs.b[i] = imul({ T(0.5), T(0.5) }, +std::polar(T(1), (pi * i) / T(size.full)));
+
+        coeffs.conj.w[i] = std::conj(coeffs.w[i]);
+        coeffs.conj.a[i] = std::conj(coeffs.a[i]);
+        coeffs.conj.b[i] = std::conj(coeffs.b[i]);
+      }
+
+      coeffs.p.resize(size.half);
+
+      const size_t bits = static_cast<size_t>(std::log2(size.half));
+
+      for (size_t i = 0; i < size.half; ++i)
+      {
+        coeffs.p[i] = rebit(i, bits);
+      }
+    }
+
+    static std::complex<T> imul(const std::complex<T>& x, const std::complex<T>& y)
+    {
+      return // x.r + j * x.i * (y.r + j * y.i)
+      {
+        x.real() - x.imag() * y.imag(),
+        x.imag() * y.real()
+      };
+    }
+
+    static size_t rebit(size_t x, size_t bits)
+    {
+      size_t y = 0; // reversed bit order
+
+      for (size_t i = 0; i < bits; ++i)
+      {
+        y <<= 1;
+        y |= (x & 1);
+        x >>= 1;
+      }
+
+      return y;
+    }
+
+    struct
+    {
+      size_t full = 0;
+      size_t half = 0;
+    }
+    size;
+
+    std::vector<std::complex<T>> buffer;
+
+    struct
+    {
+      std::vector<size_t> p;
+
+      std::vector<std::complex<T>> w, a, b;
+
+      struct
+      {
+        std::vector<std::complex<T>> w, a, b;
+      }
+      conj;
+    }
+    coeffs;
+  };
+}
 
 namespace stftpitchshift
 {
@@ -18,7 +119,7 @@ namespace stftpitchshift
     {
       assert(dft.size() == frame.size() / 2 + 1);
 
-      cache.resize(frame.size());
+      CRFFT<T>& cache = *(getcache(frame.size()).get());
 
       const size_t size = cache.size.half;
 
@@ -46,7 +147,7 @@ namespace stftpitchshift
     {
       assert(frame.size() / 2 + 1 == dft.size());
 
-      cache.resize(frame.size());
+      CRFFT<T>& cache = *(getcache(frame.size()).get());
 
       const size_t size = cache.size.half;
 
@@ -65,106 +166,22 @@ namespace stftpitchshift
 
   private:
 
-    struct
+    std::map<size_t, std::shared_ptr<CRFFT<T>>> caches;
+
+    std::shared_ptr<CRFFT<T>> getcache(const size_t size)
     {
-      struct
+      auto it = caches.find(size);
+
+      if (it != caches.end())
       {
-        size_t full = 0;
-        size_t half = 0;
-      }
-      size;
-
-      std::vector<std::complex<T>> buffer;
-
-      struct
-      {
-        std::vector<size_t> p;
-
-        std::vector<std::complex<T>> w, a, b;
-
-        struct
-        {
-          std::vector<std::complex<T>> w, a, b;
-        }
-        conj;
-      }
-      coeffs;
-
-      void resize(size_t newsize)
-      {
-        if (size.full == newsize)
-        {
-          return;
-        }
-
-        const bool is_power_of_two = newsize && !(newsize & (newsize - 1));
-
-        if (!is_power_of_two)
-        {
-          throw std::runtime_error(
-            "The specified frame size " + std::to_string(newsize) + " is not a power of 2! " +
-            "Please specify values like 1024, 2048, 4096 etc.");
-        }
-
-        size.full = newsize;
-        size.half = newsize / 2;
-
-        buffer.resize(size.half);
-
-        coeffs.w.resize(size.half);
-        coeffs.a.resize(size.half);
-        coeffs.b.resize(size.half);
-
-        coeffs.conj.w.resize(size.half);
-        coeffs.conj.a.resize(size.half);
-        coeffs.conj.b.resize(size.half);
-
-        const T pi = T(-2) * std::acos(T(-1));
-
-        for (size_t i = 0; i < size.half; ++i)
-        {
-          coeffs.w[i] = std::polar(T(1), (pi * i) / T(size.half));
-          coeffs.a[i] = imul({ T(0.5), T(0.5) }, -std::polar(T(1), (pi * i) / T(size.full)));
-          coeffs.b[i] = imul({ T(0.5), T(0.5) }, +std::polar(T(1), (pi * i) / T(size.full)));
-
-          coeffs.conj.w[i] = std::conj(coeffs.w[i]);
-          coeffs.conj.a[i] = std::conj(coeffs.a[i]);
-          coeffs.conj.b[i] = std::conj(coeffs.b[i]);
-        }
-
-        coeffs.p.resize(size.half);
-
-        const size_t bits = static_cast<size_t>(std::log2(size.half));
-
-        for (size_t i = 0; i < size.half; ++i)
-        {
-          coeffs.p[i] = rebit(i, bits);
-        }
-      }
-    }
-    cache;
-
-    inline static std::complex<T> imul(const std::complex<T>& x, const std::complex<T>& y)
-    {
-      return // x.r + j * x.i * (y.r + j * y.i)
-      {
-        x.real() - x.imag() * y.imag(),
-        x.imag() * y.real()
-      };
-    }
-
-    inline static size_t rebit(size_t x, size_t bits)
-    {
-      size_t y = 0; // reversed bit order
-
-      for (size_t i = 0; i < bits; ++i)
-      {
-        y <<= 1;
-        y |= (x & 1);
-        x >>= 1;
+        return it->second;
       }
 
-      return y;
+      auto cache = std::make_shared<CRFFT<T>>(size);
+
+      caches.emplace(size, cache);
+
+      return cache;
     }
 
     static void pack(const std::complex<T>* input, std::complex<T>* const output, const std::complex<T>* a, const std::complex<T>* b, const size_t size)
@@ -177,7 +194,7 @@ namespace stftpitchshift
       }
     }
 
-    void transform(const std::complex<T>* input, std::complex<T>* const output, const size_t* p, const std::complex<T>* w, const size_t size)
+    static void transform(const std::complex<T>* input, std::complex<T>* const output, const size_t* p, const std::complex<T>* w, const size_t size)
     {
       const size_t bits = static_cast<size_t>(std::log2(size));
 
