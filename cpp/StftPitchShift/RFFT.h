@@ -145,7 +145,7 @@ namespace stftpitchshift
 
     void ifft(const std::vector<std::complex<T>>& dft, std::vector<T>& frame)
     {
-      assert(frame.size() / 2 + 1 == dft.size());
+      assert(dft.size() == frame.size() / 2 + 1);
 
       CRFFT<T>& cache = *(getcache(frame.size()).get());
 
