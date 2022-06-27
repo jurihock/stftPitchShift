@@ -2,6 +2,8 @@
 
 #include <StftPitchShift/FFT.h>
 #include <StftPitchShift/RFFT.h>
+
+#include <StftPitchShift/SDFT.h>
 #include <StftPitchShift/STFT.h>
 
 #include <StftPitchShift/StftPitchShiftCore.h>
@@ -140,17 +142,30 @@ void StftPitchShift::shiftpitch(
   const std::vector<double>& factors,
   const double quefrency)
 {
-  STFT<float> stft(fft, framesize, hopsize, chronometry);
   StftPitchShiftCore<float> core(fft, framesize, hopsize, samplerate);
 
   core.factors(factors);
   core.quefrency(quefrency);
   core.normalization(normalization);
 
-  stft(size, input, output, [&](std::vector<std::complex<float>>& dft)
+  if (hopsize == 1)
   {
-    core.shiftpitch(dft);
-  });
+    SDFT<float> sdft(framesize, /* latency */ 1, chronometry);
+
+    sdft(size, input, output, [&](std::vector<std::complex<float>>& dft)
+    {
+      core.shiftpitch(dft);
+    });
+  }
+  else
+  {
+    STFT<float> stft(fft, framesize, hopsize, chronometry);
+
+    stft(size, input, output, [&](std::vector<std::complex<float>>& dft)
+    {
+      core.shiftpitch(dft);
+    });
+  }
 }
 
 void StftPitchShift::shiftpitch(
@@ -160,15 +175,28 @@ void StftPitchShift::shiftpitch(
   const std::vector<double>& factors,
   const double quefrency)
 {
-  STFT<double> stft(fft, framesize, hopsize, chronometry);
   StftPitchShiftCore<double> core(fft, framesize, hopsize, samplerate);
 
   core.factors(factors);
   core.quefrency(quefrency);
   core.normalization(normalization);
 
-  stft(size, input, output, [&](std::vector<std::complex<double>>& dft)
+  if (hopsize == 1)
   {
-    core.shiftpitch(dft);
-  });
+    SDFT<double> sdft(framesize, /* latency */ 1, chronometry);
+
+    sdft(size, input, output, [&](std::vector<std::complex<double>>& dft)
+    {
+      core.shiftpitch(dft);
+    });
+  }
+  else
+  {
+    STFT<double> stft(fft, framesize, hopsize, chronometry);
+
+    stft(size, input, output, [&](std::vector<std::complex<double>>& dft)
+    {
+      core.shiftpitch(dft);
+    });
+  }
 }

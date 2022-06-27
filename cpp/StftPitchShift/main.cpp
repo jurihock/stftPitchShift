@@ -232,7 +232,7 @@ int main(int argc, char** argv)
 
       StftPitchShift stft(
         framesize,
-        framesize / hoprate,
+        hoprate ? framesize / hoprate : 1,
         samplerate,
         normalization,
         chronometry);
