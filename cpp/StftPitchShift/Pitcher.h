@@ -15,8 +15,10 @@ namespace stftpitchshift
 
   public:
 
-    Pitcher(const size_t framesize) :
-      framesize(framesize)
+    Pitcher(const size_t framesize, const double samplerate) :
+      framesize(framesize),
+      samplerate(samplerate),
+      nyquist(samplerate / 2)
     {
     }
 
@@ -57,7 +59,14 @@ namespace stftpitchshift
 
         for (size_t j = 0; j < dft.size(); ++j)
         {
-          buffer[0][j].imag(buffer[0][j].imag() * T(values[0]));
+          const T frequency = buffer[0][j].imag() * T(values[0]);
+
+          buffer[0][j].imag(frequency);
+
+          if (frequency <= 0 || frequency >= nyquist)
+          {
+            buffer[0][j].real(0);
+          }
         }
 
         dft = buffer[0];
@@ -71,7 +80,14 @@ namespace stftpitchshift
 
         for (size_t j = 0; j < dft.size(); ++j)
         {
-          buffer[i][j].imag(buffer[i][j].imag() * T(values[i]));
+          const T frequency = buffer[i][j].imag() * T(values[i]);
+
+          buffer[i][j].imag(frequency);
+
+          if (frequency <= 0 || frequency >= nyquist)
+          {
+            buffer[i][j].real(0);
+          }
         }
       }
 
@@ -98,6 +114,8 @@ namespace stftpitchshift
   private:
 
     const size_t framesize;
+    const double samplerate;
+    const double nyquist;
 
     std::vector<double> values;
 

@@ -3,7 +3,7 @@ from stftpitchshift.resampler import linear as resample
 import numpy as np
 
 
-def shiftpitch(frames, factors):
+def shiftpitch(frames, factors, samplerate):
 
     for i in range(len(frames)):
 
@@ -12,6 +12,8 @@ def shiftpitch(frames, factors):
 
         magnitudes = np.vstack([resample(magnitudes, factor) for factor in factors])
         frequencies = np.vstack([resample(frequencies, factor) * factor for factor in factors])
+
+        magnitudes[(frequencies <= 0) | (frequencies >= samplerate / 2)] = 0
 
         mask = np.argmax(magnitudes, axis=0)
 

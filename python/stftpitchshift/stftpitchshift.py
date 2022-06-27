@@ -60,14 +60,14 @@ class StftPitchShift:
             frames.real /= envelopes
             frames.real[mask] = 0
 
-            frames = shiftpitch(frames, factors)
+            frames = shiftpitch(frames, factors, samplerate)
 
             frames.real *= envelopes
             frames.real[mask] = 0
 
         else:
 
-            frames = shiftpitch(frames, factors)
+            frames = shiftpitch(frames, factors, samplerate)
 
         if normalization:
 

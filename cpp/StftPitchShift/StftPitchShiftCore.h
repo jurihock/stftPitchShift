@@ -38,7 +38,7 @@ namespace stftpitchshift
       hopsize(hopsize),
       samplerate(samplerate),
       vocoder(framesize, hopsize, samplerate),
-      pitcher(framesize),
+      pitcher(framesize, samplerate),
       cepster(fft, framesize, samplerate),
       envelope(framesize / 2 + 1)
     {
