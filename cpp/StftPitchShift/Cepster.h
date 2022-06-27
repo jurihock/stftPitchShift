@@ -41,7 +41,9 @@ namespace stftpitchshift
 
       for (size_t i = 0; i < envelope.size(); ++i)
       {
-        spectrum[i] = std::log10(envelope[i]);
+        const T value = envelope[i];
+
+        spectrum[i] = value ? std::log10(value) : -12;
       }
 
       fft->ifft(spectrum, cepstrum);
@@ -50,7 +52,9 @@ namespace stftpitchshift
 
       for (size_t i = 0; i < envelope.size(); ++i)
       {
-        envelope[i] = std::pow(T(10), spectrum[i].real());
+        const T value = spectrum[i].real();
+
+        envelope[i] = std::pow(T(10), value);
       }
     }
 
