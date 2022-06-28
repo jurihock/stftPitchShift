@@ -163,6 +163,8 @@ Both programs C++ and Python provides a similar set of command line options:
 -q  --quefrency  optional formant lifter quefrency in milliseconds
                  (default 0.0)
 
+-t  --timbre     change timbre not pitch if -q is also specified
+
 -r  --rms        enable spectral rms normalization
 
 -w  --window     sfft window size

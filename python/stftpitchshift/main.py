@@ -17,7 +17,7 @@ import re
 @click.option('-o', '--output', required=True, help='output .wav file name')
 @click.option('-p', '--pitch', default='1.0', show_default=True, help='fractional pitch shifting factors separated by comma')
 @click.option('-q', '--quefrency', default='0.0', show_default=True, help='optional formant lifter quefrency in milliseconds')
-@click.option('-t', '--timbre', is_flag=True, default=False, help='change timbre not pitch if -q is specified too')
+@click.option('-t', '--timbre', is_flag=True, default=False, help='change timbre not pitch if -q is also specified')
 @click.option('-r', '--rms', is_flag=True, default=False, help='enable spectral rms normalization')
 @click.option('-w', '--window', default=1024, show_default=True, help='sfft window size')
 @click.option('-v', '--overlap', default=32, show_default=True, help='stft window overlap')

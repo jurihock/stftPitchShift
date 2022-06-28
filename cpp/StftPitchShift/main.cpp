@@ -49,7 +49,7 @@ int main(int argc, char** argv)
   options.add_options("pitch shifting")
     ("p,pitch", "fractional pitch shifting factors separated by comma", cxxopts::value<std::string>()->default_value("1.0"))
     ("q,quefrency", "optional formant lifter quefrency in milliseconds", cxxopts::value<std::string>()->default_value("0.0"))
-    ("t,timbre", "change timbre not pitch if -q is specified too")
+    ("t,timbre", "change timbre not pitch if -q is also specified")
     ("r,rms", "enable spectral rms normalization");
 
   options.add_options("stft")
