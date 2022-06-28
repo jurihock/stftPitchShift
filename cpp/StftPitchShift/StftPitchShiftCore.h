@@ -8,6 +8,8 @@
 #include <StftPitchShift/Pitcher.h>
 #include <StftPitchShift/Cepster.h>
 
+#include <StftPitchShift/StftPitchShiftMode.h>
+
 namespace stftpitchshift
 {
   template<class T>
@@ -40,7 +42,9 @@ namespace stftpitchshift
       vocoder(framesize, hopsize, samplerate),
       pitcher(framesize, samplerate),
       cepster(fft, framesize, samplerate),
-      envelope(framesize / 2 + 1)
+      envelope(framesize / 2 + 1),
+      timbre(framesize / 2 + 1),
+      shiftmode(StftPitchShiftMode::pitch)
     {
     }
 
@@ -81,6 +85,16 @@ namespace stftpitchshift
       }
     }
 
+    StftPitchShiftMode mode() const
+    {
+      return shiftmode;
+    }
+
+    void mode(const StftPitchShiftMode mode)
+    {
+      shiftmode = mode;
+    }
+
     void shiftpitch(std::vector<std::complex<T>>& dft)
     {
       vocoder.encode(dft);
@@ -90,7 +104,10 @@ namespace stftpitchshift
         normalizer->calibrate(dft);
       }
 
-      if (cepster.quefrency())
+      const bool shiftpitch = (shiftmode == StftPitchShiftMode::pitch);
+      const bool shifttimbre = (shiftmode == StftPitchShiftMode::timbre);
+
+      if (cepster.quefrency() && shiftpitch)
       {
         for (size_t i = 0; i < dft.size(); ++i)
         {
@@ -115,6 +132,36 @@ namespace stftpitchshift
           dft[i].real(ok ? dft[i].real() * envelope[i] : 0);
         }
       }
+      else if (cepster.quefrency() && shifttimbre)
+      {
+        for (size_t i = 0; i < dft.size(); ++i)
+        {
+          envelope[i] = dft[i].real();
+        }
+
+        cepster.lifter(envelope);
+
+        for (size_t i = 0; i < dft.size(); ++i)
+        {
+          const bool ok = std::isnormal(envelope[i]);
+
+          dft[i].real(ok ? dft[i].real() / envelope[i] : 0);
+        }
+
+        for (size_t i = 0; i < dft.size(); ++i)
+        {
+          timbre[i] = { envelope[i], T(1) };
+        }
+
+        pitcher.shiftpitch(timbre);
+
+        for (size_t i = 0; i < dft.size(); ++i)
+        {
+          const bool ok = std::isnormal(timbre[i].real());
+
+          dft[i].real(ok ? dft[i].real() * timbre[i].real() : 0);
+        }
+      }
       else
       {
         pitcher.shiftpitch(dft);
@@ -135,11 +182,14 @@ namespace stftpitchshift
     const size_t hopsize;
     const double samplerate;
 
+    StftPitchShiftMode shiftmode;
+
     Vocoder<T> vocoder;
     Pitcher<T> pitcher;
     Cepster<T> cepster;
 
     std::vector<T> envelope;
+    std::vector<std::complex<T>> timbre;
 
     std::shared_ptr<Normalizer<T>> normalizer;
 

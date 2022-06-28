@@ -49,6 +49,7 @@ int main(int argc, char** argv)
   options.add_options("pitch shifting")
     ("p,pitch", "fractional pitch shifting factors separated by comma", cxxopts::value<std::string>()->default_value("1.0"))
     ("q,quefrency", "optional formant lifter quefrency in milliseconds", cxxopts::value<std::string>()->default_value("0.0"))
+    ("t,timbre", "change timbre not pitch if -q is specified too")
     ("r,rms", "enable spectral rms normalization");
 
   options.add_options("stft")
@@ -75,6 +76,8 @@ int main(int argc, char** argv)
     return OK;
   }
 
+  StftPitchShiftMode mode = StftPitchShiftMode::pitch;
+
   bool chronometry = false;
   bool normalization = false;
 
@@ -89,6 +92,11 @@ int main(int argc, char** argv)
 
   try
   {
+    if (args.count("timbre"))
+    {
+      mode = StftPitchShiftMode::timbre;
+    }
+
     if (args.count("chrono"))
     {
       chronometry = true;
@@ -242,7 +250,8 @@ int main(int argc, char** argv)
         input,
         output,
         factors,
-        quefrency);
+        quefrency,
+        mode);
     }
 
     IO::clip(outdata);
