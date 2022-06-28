@@ -16,6 +16,8 @@ In addition to the base algorithm implementation, it also features spectral [mul
 
 Both sources contain a ready-to-use [command line tool](#usage) as well as a library for custom needs. See more details in the [build](#build) section.
 
+Feel free to check out some [demos](http://jurihock.github.io/stftPitchShiftDemo) as well.
+
 ## Modules
 
 <details>
