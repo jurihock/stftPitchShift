@@ -23,11 +23,12 @@ class StftPitchShift:
         self.hopsize = hopsize
         self.samplerate = samplerate
 
-    def shiftpitch(self, input, factors = 1, quefrency = 0, normalization = False):
+    def shiftpitch(self, input, factors = 1, quefrency = 0, mode = 'pitch', normalization = False):
         '''
         :param input: The input signal.
         :param factors: The fractional pitch shifting factors.
         :param quefrency: The optional formant lifter quefrency in seconds.
+        :param mode: The pitch shifting mode, e.g. pitch or timbre.
         :param normalization Optionally enable spectral rms normalization.
         :return: The output signal of the equal size.
         '''
@@ -51,7 +52,7 @@ class StftPitchShift:
 
             frames0 = frames.copy()
 
-        if quefrency:
+        if quefrency and (mode == 'pitch'):
 
             envelopes = lifter(frames, quefrency)
 
@@ -63,6 +64,20 @@ class StftPitchShift:
             frames = shiftpitch(frames, factors, samplerate)
 
             frames.real *= envelopes
+            frames.real[mask] = 0
+
+        elif quefrency and (mode == 'timbre'):
+
+            envelopes = lifter(frames, quefrency)
+
+            mask = isnotnormal(envelopes)
+
+            frames.real /= envelopes
+            frames.real[mask] = 0
+
+            timbre = shiftpitch(envelopes + 1j, factors, samplerate)
+
+            frames.real *= np.real(timbre)
             frames.real[mask] = 0
 
         else:
