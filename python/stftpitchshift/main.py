@@ -19,7 +19,7 @@ import re
 @click.option('-q', '--quefrency', default='0.0', show_default=True, help='optional formant lifter quefrency in milliseconds')
 @click.option('-t', '--timbre', is_flag=True, default=False, help='change timbre not pitch if -q is also specified')
 @click.option('-r', '--rms', is_flag=True, default=False, help='enable spectral rms normalization')
-@click.option('-w', '--window', default=1024, show_default=True, help='sfft window size')
+@click.option('-w', '--window', default=1024, show_default=True, help='stft window size')
 @click.option('-v', '--overlap', default=32, show_default=True, help='stft window overlap')
 @click.option('-d', '--debug', is_flag=True, default=False, help='plot spectrograms before and after processing')
 def main(input, output, pitch, quefrency, timbre, rms, window, overlap, debug):

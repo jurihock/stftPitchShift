@@ -169,7 +169,7 @@ Both programs C++ and Python provides a similar set of command line options:
 
 -r  --rms        enable spectral rms normalization
 
--w  --window     sfft window size
+-w  --window     stft window size
                  (default 1024)
 
 -v  --overlap    stft window overlap

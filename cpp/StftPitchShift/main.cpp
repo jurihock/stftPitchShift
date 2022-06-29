@@ -53,7 +53,7 @@ int main(int argc, char** argv)
     ("r,rms", "enable spectral rms normalization");
 
   options.add_options("stft")
-    ("w,window", "sfft window size", cxxopts::value<std::string>()->default_value("1024"))
+    ("w,window", "stft window size", cxxopts::value<std::string>()->default_value("1024"))
     ("v,overlap", "stft window overlap", cxxopts::value<std::string>()->default_value("32"));
 
   const auto args = options.parse(argc, argv);
