@@ -13,7 +13,8 @@ namespace stftpitchshift
 
   public:
 
-    Resampler()
+    Resampler() :
+      value(1)
     {
     }
 
@@ -27,8 +28,73 @@ namespace stftpitchshift
       value = factor;
     }
 
+    void linear(std::vector<T>& x) const
+    {
+      linear<T>(x, x);
+    }
+
+    void linear(const std::vector<T>& x,
+                std::vector<T>& y) const
+    {
+      linear<T>(x, y);
+    }
+
+    void linear(std::vector<std::complex<T>>& x) const
+    {
+      linear<std::complex<T>>(x, x);
+    }
+
     void linear(const std::vector<std::complex<T>>& x,
                 std::vector<std::complex<T>>& y) const
+    {
+      linear<std::complex<T>>(x, y);
+    }
+
+    void bilinear(const std::vector<T>& x0,
+                  const std::vector<T>& x1,
+                  std::vector<T>& y) const
+    {
+      assert(x0.size() == y.size());
+      assert(x1.size() == y.size());
+
+      std::vector<T> y0(x0.size());
+      std::vector<T> y1(x1.size());
+
+      linear(x0, y0);
+      linear(x1, y1);
+
+      for (size_t i = 0; i < y.size(); ++i)
+      {
+        y[i] = (y0[i] + y1[i]) / T(2);
+      }
+    }
+
+    void bilinear(const std::vector<std::complex<T>>& x0,
+                  const std::vector<std::complex<T>>& x1,
+                  std::vector<std::complex<T>>& y) const
+    {
+      assert(x0.size() == y.size());
+      assert(x1.size() == y.size());
+
+      std::vector<std::complex<T>> y0(x0.size());
+      std::vector<std::complex<T>> y1(x1.size());
+
+      linear(x0, y0);
+      linear(x1, y1);
+
+      for (size_t i = 0; i < y.size(); ++i)
+      {
+        y[i] = (y0[i] + y1[i]) / T(2);
+      }
+    }
+
+  private:
+
+    double value;
+
+    template<class V>
+    void linear(const std::vector<V>& x,
+                std::vector<V>& y) const
     {
       assert(x.size() == y.size());
 
@@ -60,46 +126,32 @@ namespace stftpitchshift
 
       if (value < 1)
       {
-        for (ptrdiff_t i = 0; i < std::min(n, m); ++i)
+        assert(m < n);
+
+        for (ptrdiff_t i = 0; i < m; ++i)
         {
           interpolate(i);
+        }
+
+        for (ptrdiff_t i = m; i < n; ++i)
+        {
+          y[i] = 0;
         }
       }
       else if (value > 1)
       {
-        for (ptrdiff_t i = std::min(n, m) - 1; i >= 0; --i)
+        assert(m > n);
+
+        for (ptrdiff_t i = n - 1; i >= 0; --i)
         {
           interpolate(i);
         }
       }
-      else
+      else if (x.data() != y.data())
       {
         y = x;
       }
     }
-
-    void bilinear(const std::vector<std::complex<T>>& x0,
-                  const std::vector<std::complex<T>>& x1,
-                  std::vector<std::complex<T>>& y) const
-    {
-      assert(x0.size() == y.size());
-      assert(x1.size() == y.size());
-
-      std::vector<std::complex<T>> y0(x0.size());
-      std::vector<std::complex<T>> y1(x1.size());
-
-      linear(x0, y0);
-      linear(x1, y1);
-
-      for (size_t i = 0; i < y.size(); ++i)
-      {
-        y[i] = (y0[i] + y1[i]) / T(2);
-      }
-    }
-
-  private:
-
-    double value;
 
   };
 }
