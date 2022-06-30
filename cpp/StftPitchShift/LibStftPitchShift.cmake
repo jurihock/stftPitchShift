@@ -41,7 +41,6 @@ set(HEADERS
   "${CMAKE_CURRENT_LIST_DIR}/STFT.h"
   "${CMAKE_CURRENT_LIST_DIR}/StftPitchShift.h"
   "${CMAKE_CURRENT_LIST_DIR}/StftPitchShiftCore.h"
-  "${CMAKE_CURRENT_LIST_DIR}/StftPitchShiftMode.h"
   "${CMAKE_CURRENT_LIST_DIR}/Timer.h"
   "${CMAKE_CURRENT_LIST_DIR}/Version.h"
   "${CMAKE_CURRENT_LIST_DIR}/Vocoder.h"

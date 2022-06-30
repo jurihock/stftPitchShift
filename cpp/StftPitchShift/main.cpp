@@ -49,7 +49,7 @@ int main(int argc, char** argv)
   options.add_options("pitch shifting")
     ("p,pitch", "fractional pitch shifting factors separated by comma", cxxopts::value<std::string>()->default_value("1.0"))
     ("q,quefrency", "optional formant lifter quefrency in milliseconds", cxxopts::value<std::string>()->default_value("0.0"))
-    ("t,timbre", "change timbre not pitch if -q is also specified")
+    ("t,timbre", "fractional timbre shifting factor related to -q", cxxopts::value<std::string>()->default_value("1.0"))
     ("r,rms", "enable spectral rms normalization");
 
   options.add_options("stft")
@@ -76,8 +76,6 @@ int main(int argc, char** argv)
     return OK;
   }
 
-  StftPitchShiftMode mode = StftPitchShiftMode::pitch;
-
   bool chronometry = false;
   bool normalization = false;
 
@@ -86,17 +84,13 @@ int main(int argc, char** argv)
 
   std::vector<double> factors = { 1 };
   double quefrency = 0;
+  double distortion = 1;
 
   size_t framesize = 1024;
   size_t hoprate = 32;
 
   try
   {
-    if (args.count("timbre"))
-    {
-      mode = StftPitchShiftMode::timbre;
-    }
-
     if (args.count("chrono"))
     {
       chronometry = true;
@@ -187,6 +181,11 @@ int main(int argc, char** argv)
       quefrency = std::stod(args["quefrency"].as<std::string>()) * 1e-3f;
     }
 
+    if (args.count("timbre"))
+    {
+      distortion = std::stod(args["timbre"].as<std::string>());
+    }
+
     if (args.count("window"))
     {
       const std::string value = args["window"].as<std::string>();
@@ -251,7 +250,7 @@ int main(int argc, char** argv)
         output,
         factors,
         quefrency,
-        mode);
+        distortion);
     }
 
     IO::clip(outdata);

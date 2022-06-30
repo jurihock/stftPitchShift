@@ -46,7 +46,7 @@ void StftPitchShift::shiftpitch(
   std::vector<float>& output,
   const double factor,
   const double quefrency,
-  const StftPitchShiftMode mode)
+  const double distortion)
 {
   const std::vector<double> factors = { factor };
 
@@ -56,7 +56,7 @@ void StftPitchShift::shiftpitch(
     output.data(),
     factors,
     quefrency,
-    mode);
+    distortion);
 }
 
 void StftPitchShift::shiftpitch(
@@ -64,7 +64,7 @@ void StftPitchShift::shiftpitch(
   std::vector<double>& output,
   const double factor,
   const double quefrency,
-  const StftPitchShiftMode mode)
+  const double distortion)
 {
   const std::vector<double> factors = { factor };
 
@@ -74,7 +74,7 @@ void StftPitchShift::shiftpitch(
     output.data(),
     factors,
     quefrency,
-    mode);
+    distortion);
 }
 
 void StftPitchShift::shiftpitch(
@@ -83,7 +83,7 @@ void StftPitchShift::shiftpitch(
   float* const output,
   const double factor,
   const double quefrency,
-  const StftPitchShiftMode mode)
+  const double distortion)
 {
   const std::vector<double> factors = { factor };
 
@@ -93,7 +93,7 @@ void StftPitchShift::shiftpitch(
     output,
     factors,
     quefrency,
-    mode);
+    distortion);
 }
 
 void StftPitchShift::shiftpitch(
@@ -102,7 +102,7 @@ void StftPitchShift::shiftpitch(
   double* const output,
   const double factor,
   const double quefrency,
-  const StftPitchShiftMode mode)
+  const double distortion)
 {
   const std::vector<double> factors = { factor };
 
@@ -112,7 +112,7 @@ void StftPitchShift::shiftpitch(
     output,
     factors,
     quefrency,
-    mode);
+    distortion);
 }
 
 void StftPitchShift::shiftpitch(
@@ -120,7 +120,7 @@ void StftPitchShift::shiftpitch(
   std::vector<float>& output,
   const std::vector<double>& factors,
   const double quefrency,
-  const StftPitchShiftMode mode)
+  const double distortion)
 {
   shiftpitch(
     input.size(),
@@ -128,7 +128,7 @@ void StftPitchShift::shiftpitch(
     output.data(),
     factors,
     quefrency,
-    mode);
+    distortion);
 }
 
 void StftPitchShift::shiftpitch(
@@ -136,7 +136,7 @@ void StftPitchShift::shiftpitch(
   std::vector<double>& output,
   const std::vector<double>& factors,
   const double quefrency,
-  const StftPitchShiftMode mode)
+  const double distortion)
 {
   shiftpitch(
     input.size(),
@@ -144,7 +144,7 @@ void StftPitchShift::shiftpitch(
     output.data(),
     factors,
     quefrency,
-    mode);
+    distortion);
 }
 
 void StftPitchShift::shiftpitch(
@@ -153,13 +153,13 @@ void StftPitchShift::shiftpitch(
   float* const output,
   const std::vector<double>& factors,
   const double quefrency,
-  const StftPitchShiftMode mode)
+  const double distortion)
 {
   StftPitchShiftCore<float> core(fft, framesize, hopsize, samplerate);
 
   core.factors(factors);
   core.quefrency(quefrency);
-  core.mode(mode);
+  core.distortion(distortion);
   core.normalization(normalization);
 
   if (hopsize == 1)
@@ -188,13 +188,13 @@ void StftPitchShift::shiftpitch(
   double* const output,
   const std::vector<double>& factors,
   const double quefrency,
-  const StftPitchShiftMode mode)
+  const double distortion)
 {
   StftPitchShiftCore<double> core(fft, framesize, hopsize, samplerate);
 
   core.factors(factors);
   core.quefrency(quefrency);
-  core.mode(mode);
+  core.distortion(distortion);
   core.normalization(normalization);
 
   if (hopsize == 1)

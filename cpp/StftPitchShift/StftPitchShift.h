@@ -1,7 +1,6 @@
 #pragma once
 
 #include <StftPitchShift/FFT.h>
-#include <StftPitchShift/StftPitchShiftMode.h>
 
 namespace stftpitchshift
 {
@@ -48,28 +47,28 @@ namespace stftpitchshift
      * @param output The output signal of the equal size.
      * @param factor The fractional pitch shifting factor.
      * @param quefrency The optional formant lifter quefrency in seconds.
-     * @param mode The pitch shifting mode, e.g. pitch or timbre.
+     * @param distortion The fractional timbre shifting factor.
      */
     void shiftpitch(
       const std::vector<float>& input,
       std::vector<float>& output,
       const double factor = 1,
       const double quefrency = 0,
-      const StftPitchShiftMode mode = StftPitchShiftMode::pitch);
+      const double distortion = 1);
 
     /**
      * @param input The input signal.
      * @param output The output signal of the equal size.
      * @param factor The fractional pitch shifting factor.
      * @param quefrency The optional formant lifter quefrency in seconds.
-     * @param mode The pitch shifting mode, e.g. pitch or timbre.
+     * @param distortion The fractional timbre shifting factor.
      */
     void shiftpitch(
       const std::vector<double>& input,
       std::vector<double>& output,
       const double factor = 1,
       const double quefrency = 0,
-      const StftPitchShiftMode mode = StftPitchShiftMode::pitch);
+      const double distortion = 1);
 
     /**
      * @param size The total number of signal values, not bytes.
@@ -77,7 +76,7 @@ namespace stftpitchshift
      * @param output The output signal of the equal size.
      * @param factor The fractional pitch shifting factor.
      * @param quefrency The optional formant lifter quefrency in seconds.
-     * @param mode The pitch shifting mode, e.g. pitch or timbre.
+     * @param distortion The fractional timbre shifting factor.
      */
     void shiftpitch(
       const size_t size,
@@ -85,7 +84,7 @@ namespace stftpitchshift
       float* const output,
       const double factor = 1,
       const double quefrency = 0,
-      const StftPitchShiftMode mode = StftPitchShiftMode::pitch);
+      const double distortion = 1);
 
     /**
      * @param size The total number of signal values, not bytes.
@@ -93,7 +92,7 @@ namespace stftpitchshift
      * @param output The output signal of the equal size.
      * @param factor The fractional pitch shifting factor.
      * @param quefrency The optional formant lifter quefrency in seconds.
-     * @param mode The pitch shifting mode, e.g. pitch or timbre.
+     * @param distortion The fractional timbre shifting factor.
      */
     void shiftpitch(
       const size_t size,
@@ -101,35 +100,35 @@ namespace stftpitchshift
       double* const output,
       const double factor = 1,
       const double quefrency = 0,
-      const StftPitchShiftMode mode = StftPitchShiftMode::pitch);
+      const double distortion = 1);
 
     /**
      * @param input The input signal.
      * @param output The output signal of the equal size.
      * @param factors The fractional pitch shifting factors.
      * @param quefrency The optional formant lifter quefrency in seconds.
-     * @param mode The pitch shifting mode, e.g. pitch or timbre.
+     * @param distortion The fractional timbre shifting factor.
      */
     void shiftpitch(
       const std::vector<float>& input,
       std::vector<float>& output,
       const std::vector<double>& factors,
       const double quefrency = 0,
-      const StftPitchShiftMode mode = StftPitchShiftMode::pitch);
+      const double distortion = 1);
 
     /**
      * @param input The input signal.
      * @param output The output signal of the equal size.
      * @param factors The fractional pitch shifting factors.
      * @param quefrency The optional formant lifter quefrency in seconds.
-     * @param mode The pitch shifting mode, e.g. pitch or timbre.
+     * @param distortion The fractional timbre shifting factor.
      */
     void shiftpitch(
       const std::vector<double>& input,
       std::vector<double>& output,
       const std::vector<double>& factors,
       const double quefrency = 0,
-      const StftPitchShiftMode mode = StftPitchShiftMode::pitch);
+      const double distortion = 1);
 
     /**
      * @param size The total number of signal values, not bytes.
@@ -137,7 +136,7 @@ namespace stftpitchshift
      * @param output The output signal of the equal size.
      * @param factors The fractional pitch shifting factors.
      * @param quefrency The optional formant lifter quefrency in seconds.
-     * @param mode The pitch shifting mode, e.g. pitch or timbre.
+     * @param distortion The fractional timbre shifting factor.
      */
     void shiftpitch(
       const size_t size,
@@ -145,7 +144,7 @@ namespace stftpitchshift
       float* const output,
       const std::vector<double>& factors,
       const double quefrency = 0,
-      const StftPitchShiftMode mode = StftPitchShiftMode::pitch);
+      const double distortion = 1);
 
     /**
      * @param size The total number of signal values, not bytes.
@@ -153,7 +152,7 @@ namespace stftpitchshift
      * @param output The output signal of the equal size.
      * @param factors The fractional pitch shifting factors.
      * @param quefrency The optional formant lifter quefrency in seconds.
-     * @param mode The pitch shifting mode, e.g. pitch or timbre.
+     * @param distortion The fractional timbre shifting factor.
      */
     void shiftpitch(
       const size_t size,
@@ -161,7 +160,7 @@ namespace stftpitchshift
       double* const output,
       const std::vector<double>& factors,
       const double quefrency = 0,
-      const StftPitchShiftMode mode = StftPitchShiftMode::pitch);
+      const double distortion = 1);
 
   private:
 
