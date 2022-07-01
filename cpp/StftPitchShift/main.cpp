@@ -33,6 +33,30 @@ std::vector<std::string> split(const std::string& value, const char delimiter)
   return values;
 }
 
+bool parse(const std::string& value)
+{
+  return (value.front() == '+') || (value.front() == '-') ||
+         (value.front() == '0'  && (value.find('.') == std::string::npos));
+}
+
+double semitone(const std::string& value)
+{
+  std::regex regex("([+,-]?\\d+){1}([+,-]\\d+){0,1}");
+  std::smatch matches;
+  std::regex_match(value, matches, regex);
+  std::string match = matches[1];
+  return std::pow(2, std::stod(match) / 12);
+}
+
+double cent(const std::string& value)
+{
+  std::regex regex("([+,-]?\\d+){1}([+,-]\\d+){0,1}");
+  std::smatch matches;
+  std::regex_match(value, matches, regex);
+  std::string match = (matches[2] == "") ? std::string("0") : matches[2];
+  return std::pow(2, std::stod(match) / 1200);
+}
+
 int main(int argc, char** argv)
 {
   cxxopts::Options options("stftpitchshift", "STFT based multi pitch shifting with optional formant preservation");
@@ -130,30 +154,6 @@ int main(int argc, char** argv)
 
       if (!values.empty())
       {
-        const auto parse = [](const std::string& value) -> bool
-        {
-          return (value.front() == '+') || (value.front() == '-') ||
-                 (value.front() == '0'  && (value.find('.') == std::string::npos));
-        };
-
-        const auto semitone = [](const std::string& value) -> double
-        {
-          std::regex regex("([+,-]?\\d+){1}([+,-]\\d+){0,1}");
-          std::smatch matches;
-          std::regex_match(value, matches, regex);
-          std::string match = matches[1];
-          return std::pow(2, std::stod(match) / 12);
-        };
-
-        const auto cent = [](const std::string& value) -> double
-        {
-          std::regex regex("([+,-]?\\d+){1}([+,-]\\d+){0,1}");
-          std::smatch matches;
-          std::regex_match(value, matches, regex);
-          std::string match = (matches[2] == "") ? std::string("0") : matches[2];
-          return std::pow(2, std::stod(match) / 1200);
-        };
-
         std::set<double> distinct;
 
         for (const std::string& value : values)
@@ -183,7 +183,16 @@ int main(int argc, char** argv)
 
     if (args.count("timbre"))
     {
-      distortion = std::stod(args["timbre"].as<std::string>());
+      const std::string value = args["timbre"].as<std::string>();
+
+      if (parse(value))
+      {
+        distortion = semitone(value) * cent(value);
+      }
+      else
+      {
+        distortion = std::stod(value);
+      }
     }
 
     if (args.count("window"))

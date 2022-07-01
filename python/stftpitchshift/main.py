@@ -32,7 +32,7 @@ def main(input, output, pitch, quefrency, timbre, rms, window, overlap, debug):
 
     factors = list(set(semitone(factor) * cent(factor) if parse(factor) else float(factor) for factor in pitch.split(',')))
     quefrency = float(quefrency) * 1e-3
-    distortion = float(timbre)
+    distortion = semitone(timbre) * cent(timbre) if parse(timbre) else float(timbre)
     normalization = rms
 
     framesize = window
