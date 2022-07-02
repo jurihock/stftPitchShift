@@ -11,7 +11,7 @@ import numpy as np
 import re
 
 
-@click.command('stftpitchshift', help='STFT based multi pitch shifting with optional formant preservation', no_args_is_help=True, context_settings=dict(help_option_names=['-h', '--help']))
+@click.command('stftpitchshift', help='STFT based pitch and timbre shifting', no_args_is_help=True, context_settings=dict(help_option_names=['-h', '--help']))
 @click.version_option(version=version, message='%(version)s')
 @click.option('-i', '--input', required=True, help='input .wav file name')
 @click.option('-o', '--output', required=True, help='output .wav file name')

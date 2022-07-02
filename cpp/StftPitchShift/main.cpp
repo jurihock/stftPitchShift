@@ -59,7 +59,7 @@ double cent(const std::string& value)
 
 int main(int argc, char** argv)
 {
-  cxxopts::Options options("stftpitchshift", "STFT based multi pitch shifting with optional formant preservation");
+  cxxopts::Options options("stftpitchshift", "STFT based pitch and timbre shifting");
 
   options.add_options()
     ("h,help", "print this help")

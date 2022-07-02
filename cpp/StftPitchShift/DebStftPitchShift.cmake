@@ -2,7 +2,7 @@ include("${CMAKE_CURRENT_LIST_DIR}/LibStftPitchShift.cmake")
 include("${CMAKE_CURRENT_LIST_DIR}/TheStftPitchShift.cmake")
 
 set(CPACK_PACKAGE_NAME stftpitchshift)
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "STFT based multi pitch shifting with optional formant preservation.")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "STFT based pitch and timbre shifting")
 set(CPACK_PACKAGE_VENDOR "Juergen Hock")
 set(CPACK_PACKAGE_CONTACT "juergen.hock@jurihock.de")
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Juergen Hock <juergen.hock@jurihock.de>")
