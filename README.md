@@ -8,11 +8,11 @@
 ![tag](https://img.shields.io/github/v/tag/jurihock/stftPitchShift?color=gold)
 ![pypi](https://img.shields.io/pypi/v/stftpitchshift?color=gold)
 
-This is a reimplementation of the Stephan M. Bernsee [smbPitchShift.cpp](https://blogs.zynaptiq.com/bernsee/download), a pitch shifting algorithm using the Short-Time Fourier Transform ([STFT](https://www.audiolabs-erlangen.de/resources/MIR/FMP/C2/C2_STFT-Basic.html)), especially for vocal audio signals.
+*stftPitchShift* is a Short-Time Fourier Transform ([STFT](https://www.audiolabs-erlangen.de/resources/MIR/FMP/C2/C2_STFT-Basic.html)) based pitch and timbre shifting algorithm implementation, originally inspired by the Stephan M. Bernsee's [smbPitchShift.cpp](https://blogs.zynaptiq.com/bernsee/download). 
 
 This repository features two analogical algorithm implementations, [C++](cpp/StftPitchShift) and [Python](python/stftpitchshift). Both contain several [function blocks](#modules) of the same name (but different file extension, of course).
 
-In addition to the base algorithm implementation, it also features spectral [multi pitch shifting](#pitch-shifting) and cepstral [formant preservation](#formant-preservation) extensions.
+In addition to the basic pitch shifting algorithm, it also features spectral [multi pitch shifting](#pitch-shifting) and cepstral [formant preservation](#formant-preservation) extensions.
 
 Both sources contain a ready-to-use [command line tool](#usage) as well as a library for custom needs. See more details in the [build](#build) section.
 
@@ -109,7 +109,7 @@ cmake --build build
 
 Or alternatively just get the packaged library from:
 
-* Vcpkg repository [stftpitchshift](https://vcpkg.info/port/stftpitchshift) or
+* Vcpkg repository [stftpitchshift](https://github.com/microsoft/vcpkg/tree/master/ports/stftpitchshift) or
 * Ubuntu repository [ppa:jurihock/stftpitchshift](https://launchpad.net/~jurihock/+archive/ubuntu/stftpitchshift).
 
 To include this library in your C++ audio project, study the minimal C++ example in the examples folder:
