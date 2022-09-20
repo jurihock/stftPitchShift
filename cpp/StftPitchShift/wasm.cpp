@@ -6,8 +6,6 @@
 
 using namespace stftpitchshift;
 
-const int api = 1; // current wasm api version
-
 void INFO(const std::string& message)
 {
   EM_ASM({ console.info(UTF8ToString($0)); }, message.c_str());
@@ -18,15 +16,61 @@ void ERROR(const std::string& message)
   EM_ASM({ console.error(UTF8ToString($0)); }, message.c_str());
 }
 
+EM_JS(void, shiftpitch_version, (),
+{
+  var size = Module._shiftpitch_version_at(-1);
+  var version = new Array(size);
+
+  for (var i = 0; i < size; i++)
+  {
+    version[i] = Module._shiftpitch_version_at(i);
+  }
+
+  return version.join(".");
+});
+
+EM_JS(void, shiftpitch, (int buffer, int args),
+{
+  var samplerate = buffer.sampleRate;
+  var samples = buffer.length;
+  var channels = buffer.numberOfChannels;
+
+  var meminput = Module._malloc(samples * Float32Array.BYTES_PER_ELEMENT);
+  var memoutput = Module._malloc(samples * Float32Array.BYTES_PER_ELEMENT);
+
+  var input = new Float32Array(Module.HEAPF32.buffer, meminput, samples);
+  var output = new Float32Array(Module.HEAPF32.buffer, memoutput, samples);
+
+  var memargs = allocateUTF8(args ? args : "");
+
+  for (var i = 0; i < channels; i++)
+  {
+    buffer.copyFromChannel(input, i);
+
+    if (!Module._shiftpitch_f32(samplerate, samples, meminput, memoutput, memargs))
+    {
+      break;
+    }
+
+    buffer.copyToChannel(output, i);
+  }
+
+  Module._free(memargs);
+  Module._free(meminput);
+  Module._free(memoutput);
+
+  return buffer;
+});
+
 extern "C"
 {
-  int EMSCRIPTEN_KEEPALIVE version(int index)
+  int EMSCRIPTEN_KEEPALIVE shiftpitch_version_at(int index)
   {
-    std::vector<std::string> version = split(StftPitchShiftVersion, '.');
+    const std::vector<std::string> version = split(StftPitchShiftVersion, '.');
 
     if (index < 0)
     {
-      return api;
+      return version.size();
     }
 
     if (index >= version.size())
@@ -37,7 +81,7 @@ extern "C"
     return std::stoi(version.at(index));
   }
 
-  bool EMSCRIPTEN_KEEPALIVE shiftpitch(double samplerate, int samples, float* input, float* output, char* args)
+  bool EMSCRIPTEN_KEEPALIVE shiftpitch_f32(double samplerate, int samples, float* input, float* output, char* args)
   {
     CLI cli(args);
 
