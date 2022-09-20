@@ -8,9 +8,9 @@ using namespace stftpitchshift;
 
 const int api = 1; // current wasm api version
 
-void LOG(const std::string& message)
+void INFO(const std::string& message)
 {
-  EM_ASM({ console.log(UTF8ToString($0)); }, message.c_str());
+  EM_ASM({ console.info(UTF8ToString($0)); }, message.c_str());
 }
 
 void ERROR(const std::string& message)
@@ -43,13 +43,13 @@ extern "C"
 
     if (cli.help)
     {
-      LOG(cli.usage());
+      INFO(cli.usage());
       return false;
     }
 
     if (cli.version)
     {
-      LOG(StftPitchShiftVersion);
+      INFO(StftPitchShiftVersion);
       return false;
     }
 
