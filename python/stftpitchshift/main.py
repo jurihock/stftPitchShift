@@ -24,15 +24,15 @@ import re
 @click.option('-d', '--debug', is_flag=True, default=False, help='plot spectrograms before and after processing')
 def main(input, output, pitch, quefrency, timbre, rms, window, overlap, debug):
 
-    def parse(value): return value.startswith('+') or value.startswith('-') or (value.startswith('0') and '.' not in value)
+    def semicent(value): return value.startswith('+') or value.startswith('-') or (value.startswith('0') and '.' not in value)
     def semitone(value): return pow(2, float(re.match('([+,-]?\\d+){1}([+,-]\\d+){0,1}', value)[1]) / 12)
     def cent(value): return pow(2, float(re.match('([+,-]?\\d+){1}([+,-]\\d+){0,1}', value)[2] or 0) / 1200)
 
     x, samplerate = read(input)
 
-    factors = list(set(semitone(factor) * cent(factor) if parse(factor) else float(factor) for factor in pitch.split(',')))
+    factors = list(set(semitone(factor) * cent(factor) if semicent(factor) else float(factor) for factor in pitch.split(',')))
     quefrency = float(quefrency) * 1e-3
-    distortion = semitone(timbre) * cent(timbre) if parse(timbre) else float(timbre)
+    distortion = semitone(timbre) * cent(timbre) if semicent(timbre) else float(timbre)
     normalization = rms
 
     framesize = window

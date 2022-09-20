@@ -15,6 +15,8 @@ set_target_properties(${PROJECT_NAME}
 
 target_sources(${PROJECT_NAME}
   PRIVATE "${CMAKE_CURRENT_LIST_DIR}/main.cpp"
+          "${CMAKE_CURRENT_LIST_DIR}/CLI.h"
+          "${CMAKE_CURRENT_LIST_DIR}/ETC.h"
           "${CMAKE_CURRENT_LIST_DIR}/IO.h"
           "${CMAKE_CURRENT_LIST_DIR}/IO.cpp"
 )
