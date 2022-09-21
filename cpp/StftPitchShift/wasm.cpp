@@ -31,6 +31,10 @@ EM_JS(void, shiftpitch_version, (),
 
 EM_JS(void, shiftpitch, (int buffer, int args),
 {
+  console.assert(typeof(buffer) === 'object', buffer);
+  console.assert(Object.prototype.toString.call(buffer).slice(8, -1) === 'AudioBuffer', buffer);
+  console.assert((typeof(args) === 'undefined') || (typeof(args) === 'string'), args);
+
   var samplerate = buffer.sampleRate;
   var samples = buffer.length;
   var channels = buffer.numberOfChannels;
