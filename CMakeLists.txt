@@ -5,7 +5,7 @@ project(StftPitchShiftProject)
 option(VCPKG "Enable vcpkg compatible library only build excluding executable" OFF)
 option(DEB   "Enable deb package build for library and executable" OFF)
 option(BREW  "Enable homebrew package build for library and executable" OFF)
-option(WASM  "Enable web assembly build" ON)
+option(WASM  "Enable web assembly build" OFF)
 
 if(MSVC)
 
