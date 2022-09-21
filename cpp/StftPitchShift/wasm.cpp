@@ -46,6 +46,12 @@ EM_JS(void, shiftpitch, (int buffer, int args),
   console.assert(Object.prototype.toString.call(buffer).slice(8, -1) === 'AudioBuffer', buffer);
   console.assert((typeof(args) === 'undefined') || (typeof(args) === 'string'), args);
 
+  const newbuffer = new AudioBuffer({
+    sampleRate: buffer.sampleRate,
+    length: buffer.length,
+    numberOfChannels: buffer.numberOfChannels
+  });
+
   var samplerate = buffer.sampleRate;
   var samples = buffer.length;
   var channels = buffer.numberOfChannels;
@@ -67,14 +73,14 @@ EM_JS(void, shiftpitch, (int buffer, int args),
       break;
     }
 
-    buffer.copyToChannel(output, i);
+    newbuffer.copyToChannel(output, i);
   }
 
   Module._free(memargs);
   Module._free(meminput);
   Module._free(memoutput);
 
-  return buffer;
+  return newbuffer;
 });
 
 extern "C"
