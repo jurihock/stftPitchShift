@@ -82,18 +82,14 @@ extern "C"
   int EMSCRIPTEN_KEEPALIVE shiftpitch_version_str(char* data, int size)
   {
     const std::string value = StftPitchShiftVersion;
-
     value.copy(data, size);
-
     return value.size();
   }
 
   int EMSCRIPTEN_KEEPALIVE shiftpitch_help_str(char* data, int size)
   {
     const std::string value = CLI("-h").usage();
-
     value.copy(data, size);
-
     return value.size();
   }
 
