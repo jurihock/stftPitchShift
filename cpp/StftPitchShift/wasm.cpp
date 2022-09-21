@@ -18,15 +18,26 @@ void ERROR(const std::string& message)
 
 EM_JS(void, shiftpitch_version, (),
 {
-  var size = Module._shiftpitch_version_at(-1);
-  var version = new Array(size);
+  var size = Module._shiftpitch_version_str(0, 0);
+  var data = Module._malloc(size + 1);
 
-  for (var i = 0; i < size; i++)
-  {
-    version[i] = Module._shiftpitch_version_at(i);
-  }
+  Module._shiftpitch_version_str(data, size);
+  var value = UTF8ToString(data);
+  Module._free(data);
 
-  return version.join(".");
+  return value;
+});
+
+EM_JS(void, shiftpitch_help, (),
+{
+  var size = Module._shiftpitch_help_str(0, 0);
+  var data = Module._malloc(size + 1);
+
+  Module._shiftpitch_help_str(data, size);
+  var value = UTF8ToString(data);
+  Module._free(data);
+
+  return value;
 });
 
 EM_JS(void, shiftpitch, (int buffer, int args),
@@ -68,21 +79,22 @@ EM_JS(void, shiftpitch, (int buffer, int args),
 
 extern "C"
 {
-  int EMSCRIPTEN_KEEPALIVE shiftpitch_version_at(int index)
+  int EMSCRIPTEN_KEEPALIVE shiftpitch_version_str(char* data, int size)
   {
-    const std::vector<std::string> version = split(StftPitchShiftVersion, '.');
+    const std::string value = StftPitchShiftVersion;
 
-    if (index < 0)
-    {
-      return version.size();
-    }
+    value.copy(data, size);
 
-    if (index >= version.size())
-    {
-      return 0;
-    }
+    return value.size();
+  }
 
-    return std::stoi(version.at(index));
+  int EMSCRIPTEN_KEEPALIVE shiftpitch_help_str(char* data, int size)
+  {
+    const std::string value = CLI("-h").usage();
+
+    value.copy(data, size);
+
+    return value.size();
   }
 
   bool EMSCRIPTEN_KEEPALIVE shiftpitch_f32(double samplerate, int samples, float* input, float* output, char* args)
