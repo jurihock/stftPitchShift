@@ -64,16 +64,16 @@ EM_JS(void, shiftpitch, (int buffer, int args),
 
   const memargs = allocateUTF8(args ? args : "");
 
-  for (let i = 0; i < channels; i++)
+  for (let channel = 0; channel < channels; channel++)
   {
-    buffer.copyFromChannel(input, i);
+    buffer.copyFromChannel(input, channel);
 
     if (!Module._shiftpitch_f32(samplerate, samples, meminput, memoutput, memargs))
     {
       break;
     }
 
-    newbuffer.copyToChannel(output, i);
+    newbuffer.copyToChannel(output, channel);
   }
 
   Module._free(memargs);
