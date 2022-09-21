@@ -18,11 +18,11 @@ void ERROR(const std::string& message)
 
 EM_JS(void, shiftpitch_version, (),
 {
-  var size = Module._shiftpitch_version_str(0, 0);
-  var data = Module._malloc(size + 1);
+  const size = Module._shiftpitch_version_str(0, 0);
+  const data = Module._malloc(size + 1);
 
   Module._shiftpitch_version_str(data, size);
-  var value = UTF8ToString(data);
+  const value = UTF8ToString(data);
   Module._free(data);
 
   return value;
@@ -30,11 +30,11 @@ EM_JS(void, shiftpitch_version, (),
 
 EM_JS(void, shiftpitch_help, (),
 {
-  var size = Module._shiftpitch_help_str(0, 0);
-  var data = Module._malloc(size + 1);
+  const size = Module._shiftpitch_help_str(0, 0);
+  const data = Module._malloc(size + 1);
 
   Module._shiftpitch_help_str(data, size);
-  var value = UTF8ToString(data);
+  const value = UTF8ToString(data);
   Module._free(data);
 
   return value;
@@ -52,19 +52,19 @@ EM_JS(void, shiftpitch, (int buffer, int args),
     numberOfChannels: buffer.numberOfChannels
   });
 
-  var samplerate = buffer.sampleRate;
-  var samples = buffer.length;
-  var channels = buffer.numberOfChannels;
+  const samplerate = buffer.sampleRate;
+  const samples = buffer.length;
+  const channels = buffer.numberOfChannels;
 
-  var meminput = Module._malloc(samples * Float32Array.BYTES_PER_ELEMENT);
-  var memoutput = Module._malloc(samples * Float32Array.BYTES_PER_ELEMENT);
+  const meminput = Module._malloc(samples * Float32Array.BYTES_PER_ELEMENT);
+  const memoutput = Module._malloc(samples * Float32Array.BYTES_PER_ELEMENT);
 
-  var input = new Float32Array(Module.HEAPF32.buffer, meminput, samples);
-  var output = new Float32Array(Module.HEAPF32.buffer, memoutput, samples);
+  const input = new Float32Array(Module.HEAPF32.buffer, meminput, samples);
+  const output = new Float32Array(Module.HEAPF32.buffer, memoutput, samples);
 
-  var memargs = allocateUTF8(args ? args : "");
+  const memargs = allocateUTF8(args ? args : "");
 
-  for (var i = 0; i < channels; i++)
+  for (let i = 0; i < channels; i++)
   {
     buffer.copyFromChannel(input, i);
 
