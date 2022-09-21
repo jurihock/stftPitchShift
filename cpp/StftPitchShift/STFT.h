@@ -51,7 +51,7 @@ namespace stftpitchshift
     void operator()(const size_t size, const T* input, T* const output, const std::function<void(std::vector<std::complex<T>>& dft)> callback) const
     {
       // TODO preemptively clear output memory #30
-      std::memset(output, 0, size * sizeof(T));
+      std::fill(output, output + size, T(0));
 
       std::vector<T> frame(framesize);
       std::vector<std::complex<T>> dft(framesize / 2 + 1);
