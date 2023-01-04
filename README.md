@@ -3,8 +3,8 @@
 ![language](https://img.shields.io/badge/language-C%2B%2B-blue)
 ![language](https://img.shields.io/badge/language-Python-blue)
 ![license](https://img.shields.io/github/license/jurihock/stftPitchShift?color=blue)
-![build cpp](https://img.shields.io/github/workflow/status/jurihock/stftPitchShift/cpp?label=build%20cpp)
-![build python](https://img.shields.io/github/workflow/status/jurihock/stftPitchShift/python?label=build%20python)
+![build cpp](https://img.shields.io/github/actions/workflow/status/jurihock/stftPitchShift/cpp.yml?branch=main&label=build%20cpp)
+![build python](https://img.shields.io/github/actions/workflow/status/jurihock/stftPitchShift/python.yml?branch=main&label=build%20python)
 ![tag](https://img.shields.io/github/v/tag/jurihock/stftPitchShift?color=gold)
 ![pypi](https://img.shields.io/pypi/v/stftpitchshift?color=gold)
 
