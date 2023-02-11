@@ -88,6 +88,11 @@ class StftPitchShift:
         frames = decode(frames, framesize, hopsize, samplerate)
 
         output = istft(frames, framesize, hopsize)
-        output.resize(np.shape(input))
+
+        # disable reference count check on resize,
+        # since the output variable owns the data
+        # returned by istft (see also issue #31)
+        output.resize(np.shape(input), refcheck=False)
+        assert np.shape(input) == np.shape(output)
 
         return output
