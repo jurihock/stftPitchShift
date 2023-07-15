@@ -34,6 +34,25 @@ class StftPitchShift:
         :return: The output signal of the equal size.
         '''
 
+        input = np.atleast_1d(input)
+
+        if input.ndim != 1:
+            raise ValueError(f'Invalid number of input dimensions {input.ndim}, ' +
+                             f'expected a one-dimensional array!')
+
+        dtype = input.dtype
+
+        # silently convert integer input to normalized float
+        # according to issue #36
+        if np.issubdtype(dtype, np.integer):
+            a, b = np.iinfo(dtype).min, np.iinfo(dtype).max
+            input = input.astype(float)
+            input = (input - a) / (b - a)
+            input = input * 2 - 1
+        elif not np.issubdtype(dtype, np.floating):
+            raise TypeError(f'Invalid input data type {dtype}, ' +
+                            f'expected {np.floating} or {np.integer}!')
+
         def isnotnormal(x):
             return (np.isinf(x)) | \
                    (np.isnan(x)) | \
@@ -94,5 +113,13 @@ class StftPitchShift:
         # returned by istft (see also issue #31)
         output.resize(np.shape(input), refcheck=False)
         assert np.shape(input) == np.shape(output)
+
+        # silently convert output back to integer
+        # according to issue #36
+        if np.issubdtype(dtype, np.integer):
+            a, b = np.iinfo(dtype).min, np.iinfo(dtype).max
+            output = (output + 1) / 2
+            output = output * (b - a) + a
+            output = output.clip(a, b).astype(dtype)
 
         return output
