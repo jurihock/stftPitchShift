@@ -26,6 +26,9 @@ class StftPitchShift:
 
     def shiftpitch(self, input, factors = 1, quefrency = 0, distortion = 1, normalization = False):
         '''
+        Processes a one-dimensional array of type `numpy.floating` or `numpy.integer`.
+        Returns the resulting array with the same dtype and shape.
+
         :param input: The input signal.
         :param factors: The fractional pitch shifting factors.
         :param quefrency: The optional formant lifter quefrency in seconds.
@@ -36,11 +39,18 @@ class StftPitchShift:
 
         input = np.atleast_1d(input)
 
-        if input.ndim != 1:
-            raise ValueError(f'Invalid number of input dimensions {input.ndim}, ' +
-                             f'expected a one-dimensional array!')
-
         dtype = input.dtype
+        ndim  = input.ndim
+        shape = input.shape
+        size  = input.size
+
+        if ndim == 1:
+            pass
+        elif np.prod(shape) == size:
+            input = input.flatten()
+        else:
+            raise ValueError(f'Invalid input shape {shape}, ' +
+                             f'expected a one-dimensional array!')
 
         # silently convert integer input to normalized float
         # according to issue #36
@@ -111,8 +121,7 @@ class StftPitchShift:
         # disable reference count check on resize,
         # since the output variable owns the data
         # returned by istft (see also issue #31)
-        output.resize(np.shape(input), refcheck=False)
-        assert np.shape(input) == np.shape(output)
+        output.resize(shape, refcheck=False)
 
         # silently convert output back to integer
         # according to issue #36
@@ -121,5 +130,11 @@ class StftPitchShift:
             output = (output + 1) / 2
             output = output * (b - a) + a
             output = output.clip(a, b).astype(dtype)
+        # otherwise restore the original float type
+        elif output.dtype != dtype:
+            output = output.astype(dtype)
+
+        assert output.dtype == dtype
+        assert output.shape == shape
 
         return output
