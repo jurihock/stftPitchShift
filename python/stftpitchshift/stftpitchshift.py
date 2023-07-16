@@ -27,7 +27,7 @@ class StftPitchShift:
     def shiftpitch(self, input, factors = 1, quefrency = 0, distortion = 1, normalization = False):
         '''
         Processes a one-dimensional array of type `numpy.floating` or `numpy.integer`.
-        Returns the resulting array with the same dtype and shape.
+        Returns the resulting array with the same dtype and shape, but at least 1D.
 
         :param input: The input signal.
         :param factors: The fractional pitch shifting factors.
@@ -39,16 +39,14 @@ class StftPitchShift:
 
         input = np.atleast_1d(input)
 
+        # remember input type and shape
+        # to apply to output
         dtype = input.dtype
-        ndim  = input.ndim
         shape = input.shape
-        size  = input.size
 
-        if ndim == 1:
-            pass
-        elif np.prod(shape) == size:
-            input = input.flatten()
-        else:
+        input = np.squeeze(input)
+
+        if input.ndim != 1:
             raise ValueError(f'Invalid input shape {shape}, ' +
                              f'expected a one-dimensional array!')
 
