@@ -104,7 +104,7 @@ def symmetric_window(symmetric_window_size):
 def asymmetric_analysis_window(analysis_window_size, synthesis_window_size):
 
     n = analysis_window_size
-    m = synthesis_window_size / 2
+    m = synthesis_window_size // 2
 
     left = symmetric_window(2 * n - 2 * m)
     right = symmetric_window(2 * m)
@@ -120,7 +120,7 @@ def asymmetric_analysis_window(analysis_window_size, synthesis_window_size):
 def asymmetric_synthesis_window(analysis_window_size, synthesis_window_size):
 
     n = analysis_window_size
-    m = synthesis_window_size / 2
+    m = synthesis_window_size // 2
 
     left = symmetric_window(2 * n - 2 * m)
     right = symmetric_window(2 * m)
