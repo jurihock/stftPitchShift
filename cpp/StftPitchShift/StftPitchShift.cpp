@@ -3,7 +3,6 @@
 #include <StftPitchShift/FFT.h>
 #include <StftPitchShift/RFFT.h>
 
-#include <StftPitchShift/SDFT.h>
 #include <StftPitchShift/STFT.h>
 
 #include <StftPitchShift/StftPitchShiftCore.h>
@@ -162,24 +161,12 @@ void StftPitchShift::shiftpitch(
   core.distortion(distortion);
   core.normalization(normalization);
 
-  if (hopsize == 1)
-  {
-    SDFT<float> sdft(framesize, /* latency */ 1, chronometry);
+  STFT<float> stft(fft, framesize, hopsize, chronometry);
 
-    sdft(size, input, output, [&](std::vector<std::complex<float>>& dft)
-    {
-      core.shiftpitch(dft);
-    });
-  }
-  else
+  stft(size, input, output, [&](std::vector<std::complex<float>>& dft)
   {
-    STFT<float> stft(fft, framesize, hopsize, chronometry);
-
-    stft(size, input, output, [&](std::vector<std::complex<float>>& dft)
-    {
-      core.shiftpitch(dft);
-    });
-  }
+    core.shiftpitch(dft);
+  });
 }
 
 void StftPitchShift::shiftpitch(
@@ -197,22 +184,10 @@ void StftPitchShift::shiftpitch(
   core.distortion(distortion);
   core.normalization(normalization);
 
-  if (hopsize == 1)
-  {
-    SDFT<double> sdft(framesize, /* latency */ 1, chronometry);
+  STFT<double> stft(fft, framesize, hopsize, chronometry);
 
-    sdft(size, input, output, [&](std::vector<std::complex<double>>& dft)
-    {
-      core.shiftpitch(dft);
-    });
-  }
-  else
+  stft(size, input, output, [&](std::vector<std::complex<double>>& dft)
   {
-    STFT<double> stft(fft, framesize, hopsize, chronometry);
-
-    stft(size, input, output, [&](std::vector<std::complex<double>>& dft)
-    {
-      core.shiftpitch(dft);
-    });
-  }
+    core.shiftpitch(dft);
+  });
 }

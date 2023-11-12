@@ -2,7 +2,6 @@ from stftpitchshift import StftPitchShift
 from stftpitchshift import __version__ as version
 from stftpitchshift.io import read, write
 from stftpitchshift.plot import spectrogram
-from stftpitchshift.sdft import sdft
 from stftpitchshift.stft import stft
 
 import click
@@ -55,17 +54,8 @@ def main(input, output, pitch, quefrency, timbre, rms, window, overlap, debug):
 
         for channel in range(channels):
 
-            # STFT
             framesX = stft(x[:, channel], framesize, hopsize)
             framesY = stft(y[:, channel], framesize, hopsize)
-
-            # SDFT
-            # framesX = sdft(x[:, channel], framesize // 2)
-            # framesY = sdft(y[:, channel], framesize // 2)
-
-            # TEST
-            # framesX = stft(x[:, channel], framesize, hopsize)
-            # framesY = sdft(x[:, channel], framesize // 2)
 
             figure = plot.figure(f'Channel {channel+1}/{channels}')
 

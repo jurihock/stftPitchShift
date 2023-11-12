@@ -119,7 +119,7 @@ extern "C"
     {
       StftPitchShift stft(
         cli.framesize,
-        cli.hoprate ? cli.framesize / cli.hoprate : 1,
+        cli.framesize / cli.hoprate,
         samplerate,
         cli.normalization,
         cli.chronometry);
