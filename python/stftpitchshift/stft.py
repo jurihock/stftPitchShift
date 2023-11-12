@@ -3,23 +3,26 @@ from numpy.lib.stride_tricks import sliding_window_view
 import numpy as np
 
 
-def stft(x, framesize, hopsize, dftsize=None):
+def stft(x, framesize, hopsize):
 
     # check input
 
     x = np.atleast_1d(x)
 
-    assert x.ndim == 1, f'Expected 1D array (samples,), got {x.shape}!'
+    assert x.ndim == 1, \
+        f'Expected 1D array (samples,),' + \
+        f' got {x.shape}!'
 
     # construct window
 
-    analysis_window_size = framesize if dftsize is None else \
-                           np.fft.irfft([0] * dftsize).size
+    framesize = np.ravel(framesize)
 
-    synthesis_window_size = framesize
+    analysis_window_size = framesize[0]
+    synthesis_window_size = framesize[-1]
 
     assert analysis_window_size >= synthesis_window_size, \
-        f'Invalid framesize and dftsize combination!'
+        f'Analysis window ({analysis_window_size}) must be greater' + \
+        f' or equal to synthesis window ({synthesis_window_size})!'
 
     W = asymmetric_analysis_window(analysis_window_size, synthesis_window_size) \
         if analysis_window_size != synthesis_window_size else \
@@ -38,23 +41,26 @@ def stft(x, framesize, hopsize, dftsize=None):
     return frames1
 
 
-def istft(frames, framesize, hopsize, dftsize=None):
+def istft(frames, framesize, hopsize):
 
     # check input
 
     frames = np.atleast_2d(frames)
 
-    assert frames.ndim == 2, f'Expected 2D array (samples,frequencies), got {frames.shape}!'
+    assert frames.ndim == 2, \
+        f'Expected 2D array (samples,frequencies),' + \
+        f' got {frames.shape}!'
 
     # construct window
 
-    analysis_window_size = framesize if dftsize is None else \
-                           np.fft.irfft([0] * dftsize).size
+    framesize = np.ravel(framesize)
 
-    synthesis_window_size = framesize
+    analysis_window_size = framesize[0]
+    synthesis_window_size = framesize[-1]
 
     assert analysis_window_size >= synthesis_window_size, \
-        f'Invalid framesize and dftsize combination!'
+        f'Analysis window ({analysis_window_size}) must be greater' + \
+        f' or equal to synthesis window ({synthesis_window_size})!'
 
     A = asymmetric_analysis_window(analysis_window_size, synthesis_window_size) \
         if analysis_window_size != synthesis_window_size else \
@@ -86,36 +92,42 @@ def istft(frames, framesize, hopsize, dftsize=None):
     return y
 
 
-def symmetric_window(n):
+def symmetric_window(symmetric_window_size):
 
-    return 0.5 - 0.5 * np.cos(2 * np.pi * np.arange(n) / n)
+    n = symmetric_window_size
 
+    window = 0.5 - 0.5 * np.cos(2 * np.pi * np.arange(n) / n)
 
-def asymmetric_analysis_window(n, m):
-
-    m //= 2
-
-    left = symmetric_window(2 * n - 2 * m)
-    right = symmetric_window(2 * m)
-
-    weights = np.zeros(n)
-
-    weights[:n-m] = left[:n-m]
-    weights[-m:] = right[-m:]
-
-    return weights
+    return window
 
 
-def asymmetric_synthesis_window(n, m):
+def asymmetric_analysis_window(analysis_window_size, synthesis_window_size):
 
-    m //= 2
+    n = analysis_window_size
+    m = synthesis_window_size / 2
 
     left = symmetric_window(2 * n - 2 * m)
     right = symmetric_window(2 * m)
 
-    weights = np.zeros(n)
+    window = np.zeros(n)
 
-    weights[n-m-m:n-m] = right[:m] / left[n-m-m:n-m]
-    weights[-m:] = right[-m:]
+    window[:n-m] = left[:n-m]
+    window[-m:] = right[-m:]
 
-    return weights
+    return window
+
+
+def asymmetric_synthesis_window(analysis_window_size, synthesis_window_size):
+
+    n = analysis_window_size
+    m = synthesis_window_size / 2
+
+    left = symmetric_window(2 * n - 2 * m)
+    right = symmetric_window(2 * m)
+
+    window = np.zeros(n)
+
+    window[n-m-m:n-m] = right[:m] / left[n-m-m:n-m]
+    window[-m:] = right[-m:]
+
+    return window
