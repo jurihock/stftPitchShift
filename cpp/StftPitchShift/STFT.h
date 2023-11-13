@@ -231,7 +231,7 @@ namespace stftpitchshift
 
       for (size_t i = 0; i < m; ++i)
       {
-        window[i + n - m - m] = right[i] / left[i + n - m - m];
+        window[i + n - m - m] = right[i] * right[i] / left[i + n - m - m];
       }
 
       for (size_t i = 0; i < m; ++i)

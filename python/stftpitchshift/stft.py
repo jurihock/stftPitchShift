@@ -68,7 +68,7 @@ def istft(frames, framesize, hopsize):
 
     S = asymmetric_synthesis_window(analysis_window_size, synthesis_window_size) \
         if analysis_window_size != synthesis_window_size else \
-        symmetric_window(analysis_window_size)
+        symmetric_window(synthesis_window_size)
 
     W = S * hopsize / np.sum(A * S)
 
@@ -127,7 +127,7 @@ def asymmetric_synthesis_window(analysis_window_size, synthesis_window_size):
 
     window = np.zeros(n)
 
-    window[n-m-m:n-m] = right[:m] / left[n-m-m:n-m]
+    window[n-m-m:n-m] = np.square(right[:m]) / left[n-m-m:n-m]
     window[-m:] = right[-m:]
 
     return window
