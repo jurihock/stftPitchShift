@@ -144,8 +144,7 @@ namespace stftpitchshift
     {
       fft->fft(frame, dft);
 
-      // optionally zero dc and nyquist
-      if (false)
+      if (false) // optionally zero dc and nyquist
       {
         dft[0] = 0;
         dft[dft.size() - 1] = 0;
@@ -154,8 +153,7 @@ namespace stftpitchshift
 
     inline void transform(std::vector<std::complex<T>>& dft, std::vector<T>& frame) const
     {
-      // optionally zero dc and nyquist
-      if (true)
+      if (true) // optionally zero dc and nyquist
       {
         dft[0] = 0;
         dft[dft.size() - 1] = 0;
@@ -204,7 +202,7 @@ namespace stftpitchshift
       const auto left = symmetric_window(2 * n - 2 * m);
       const auto right = symmetric_window(2 * m);
 
-      std::vector<T> window(analysis_window_size);
+      std::vector<T> window(n);
 
       for (size_t i = 0; i < n - m; ++i)
       {
@@ -227,11 +225,11 @@ namespace stftpitchshift
       const auto left = symmetric_window(2 * n - 2 * m);
       const auto right = symmetric_window(2 * m);
 
-      std::vector<T> window(analysis_window_size);
+      std::vector<T> window(n);
 
       for (size_t i = 0; i < m; ++i)
       {
-        window[i + n - m - m] = right[i] * right[i] / left[i + n - m - m];
+        window[i + n - m - m] = (right[i] * right[i]) / left[i + n - m - m];
       }
 
       for (size_t i = 0; i < m; ++i)

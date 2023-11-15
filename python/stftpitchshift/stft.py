@@ -33,8 +33,7 @@ def stft(x, framesize, hopsize):
     frames0 = sliding_window_view(x, analysis_window_size, writeable=False)[::hopsize]
     frames1 = np.fft.rfft(frames0 * W, axis=-1, norm='forward')
 
-    # optionally zero dc and nyquist
-    if False:
+    if False: # optionally zero dc and nyquist
         frames1[:,  0] = 0
         frames1[:, -1] = 0
 
@@ -78,8 +77,7 @@ def istft(frames, framesize, hopsize):
 
     y = np.zeros((N), float)
 
-    # optionally zero dc and nyquist
-    if True:
+    if True: # optionally zero dc and nyquist
         frames[:,  0] = 0
         frames[:, -1] = 0
 
