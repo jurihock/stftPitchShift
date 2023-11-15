@@ -1,5 +1,8 @@
 #pragma once
 
+#include <memory>
+#include <vector>
+
 #include <StftPitchShift/FFT.h>
 
 namespace stftpitchshift

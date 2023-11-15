@@ -2,7 +2,6 @@
 
 #include <StftPitchShift/FFT.h>
 #include <StftPitchShift/RFFT.h>
-
 #include <StftPitchShift/STFT.h>
 
 #include <StftPitchShift/StftPitchShiftCore.h>

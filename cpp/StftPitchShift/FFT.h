@@ -1,7 +1,6 @@
 #pragma once
 
 #include <complex>
-#include <memory>
 #include <vector>
 
 namespace stftpitchshift

@@ -3,6 +3,7 @@
 #include <cassert>
 #include <cmath>
 #include <complex>
+#include <memory>
 #include <vector>
 
 #include <StftPitchShift/FFT.h>

@@ -4,6 +4,7 @@
 
 #include <cassert>
 #include <map>
+#include <memory>
 #include <stdexcept>
 #include <string>
 
