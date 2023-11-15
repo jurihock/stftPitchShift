@@ -113,7 +113,6 @@ class StftPitchShift:
             frames = normalize(frames, frames0)
 
         frames = decode(frames, framesize, hopsize, samplerate)
-
         output = istft(frames, framesize, hopsize)
 
         # disable reference count check on resize,

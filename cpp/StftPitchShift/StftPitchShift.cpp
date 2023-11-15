@@ -14,18 +14,52 @@ StftPitchShift::StftPitchShift(
   const double samplerate,
   const bool normalization,
   const bool chronometry) :
-  fft(std::make_shared<RFFT>()),
-  framesize(framesize),
-  hopsize(hopsize),
-  samplerate(samplerate),
-  normalization(normalization),
-  chronometry(chronometry)
+  StftPitchShift(
+    std::make_shared<RFFT>(),
+    std::make_tuple(framesize, framesize),
+    hopsize,
+    samplerate,
+    normalization,
+    chronometry)
+{
+}
+
+StftPitchShift::StftPitchShift(
+  const std::tuple<size_t, size_t> framesize,
+  const size_t hopsize,
+  const double samplerate,
+  const bool normalization,
+  const bool chronometry) :
+  StftPitchShift(
+    std::make_shared<RFFT>(),
+    framesize,
+    hopsize,
+    samplerate,
+    normalization,
+    chronometry)
 {
 }
 
 StftPitchShift::StftPitchShift(
   const std::shared_ptr<FFT> fft,
   const size_t framesize,
+  const size_t hopsize,
+  const double samplerate,
+  const bool normalization,
+  const bool chronometry) :
+  StftPitchShift(
+    fft,
+    std::make_tuple(framesize, framesize),
+    hopsize,
+    samplerate,
+    normalization,
+    chronometry)
+{
+}
+
+StftPitchShift::StftPitchShift(
+  const std::shared_ptr<FFT> fft,
+  const std::tuple<size_t, size_t> framesize,
   const size_t hopsize,
   const double samplerate,
   const bool normalization,

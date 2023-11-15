@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <tuple>
 #include <vector>
 
 #include <StftPitchShift/FFT.h>
@@ -16,7 +17,7 @@ namespace stftpitchshift
   public:
 
     /**
-     * @param framesize The STFT frame size in samples.
+     * @param framesize The STFT frame size in samples (analysis = synthesis).
      * @param hopsize The STFT hop size in samples.
      * @param samplerate The sample rate of the signal in hertz.
      * @param normalization Optionally enable spectral rms normalization.
@@ -30,8 +31,22 @@ namespace stftpitchshift
       const bool chronometry = false);
 
     /**
+     * @param framesize The STFT frame size in samples (analysis >= synthesis).
+     * @param hopsize The STFT hop size in samples.
+     * @param samplerate The sample rate of the signal in hertz.
+     * @param normalization Optionally enable spectral rms normalization.
+     * @param chronometry Optionally enable runtime measurements.
+     */
+    StftPitchShift(
+      const std::tuple<size_t, size_t> framesize,
+      const size_t hopsize,
+      const double samplerate,
+      const bool normalization = false,
+      const bool chronometry = false);
+
+    /**
      * @param fft The custom FFT calculation instance.
-     * @param framesize The STFT frame size in samples.
+     * @param framesize The STFT frame size in samples (analysis = synthesis).
      * @param hopsize The STFT hop size in samples.
      * @param samplerate The sample rate of the signal in hertz.
      * @param normalization Optionally enable spectral rms normalization.
@@ -40,6 +55,22 @@ namespace stftpitchshift
     StftPitchShift(
       const std::shared_ptr<FFT> fft,
       const size_t framesize,
+      const size_t hopsize,
+      const double samplerate,
+      const bool normalization = false,
+      const bool chronometry = false);
+
+    /**
+     * @param fft The custom FFT calculation instance.
+     * @param framesize The STFT frame size in samples (analysis >= synthesis).
+     * @param hopsize The STFT hop size in samples.
+     * @param samplerate The sample rate of the signal in hertz.
+     * @param normalization Optionally enable spectral rms normalization.
+     * @param chronometry Optionally enable runtime measurements.
+     */
+    StftPitchShift(
+      const std::shared_ptr<FFT> fft,
+      const std::tuple<size_t, size_t> framesize,
       const size_t hopsize,
       const double samplerate,
       const bool normalization = false,
@@ -168,7 +199,7 @@ namespace stftpitchshift
   private:
 
     const std::shared_ptr<FFT> fft;
-    const size_t framesize;
+    const std::tuple<size_t, size_t> framesize;
     const size_t hopsize;
     const double samplerate;
     const bool normalization;

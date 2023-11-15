@@ -23,6 +23,18 @@ namespace stftpitchshift
       const double samplerate) :
       StftPitchShiftCore(
         std::make_shared<RFFT>(),
+        std::make_tuple(framesize, framesize),
+        hopsize,
+        samplerate)
+    {
+    }
+
+    StftPitchShiftCore(
+      const std::tuple<size_t, size_t> framesize,
+      const size_t hopsize,
+      const double samplerate) :
+      StftPitchShiftCore(
+        std::make_shared<RFFT>(),
         framesize,
         hopsize,
         samplerate)
@@ -34,14 +46,27 @@ namespace stftpitchshift
       const size_t framesize,
       const size_t hopsize,
       const double samplerate) :
+      StftPitchShiftCore(
+        fft,
+        std::make_tuple(framesize, framesize),
+        hopsize,
+        samplerate)
+    {
+    }
+
+    StftPitchShiftCore(
+      const std::shared_ptr<FFT> fft,
+      const std::tuple<size_t, size_t> framesize,
+      const size_t hopsize,
+      const double samplerate) :
       fft(fft),
       framesize(framesize),
       hopsize(hopsize),
       samplerate(samplerate),
       vocoder(framesize, hopsize, samplerate),
-      pitcher(framesize, samplerate),
-      cepster(fft, framesize, samplerate),
-      envelope(framesize / 2 + 1)
+      pitcher(std::get<0>(framesize), samplerate),
+      cepster(fft, std::get<0>(framesize), samplerate),
+      envelope(std::get<0>(framesize) / 2 + 1)
     {
     }
 
@@ -147,7 +172,7 @@ namespace stftpitchshift
   private:
 
     const std::shared_ptr<FFT> fft;
-    const size_t framesize;
+    const std::tuple<size_t, size_t> framesize;
     const size_t hopsize;
     const double samplerate;
 
