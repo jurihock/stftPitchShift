@@ -65,7 +65,7 @@ def decode(frames, framesize, hopsize, samplerate):
         delta = (i + j) * phaseinc
 
         buffer += delta
-        arg = buffer
+        arg = buffer.copy()
 
         arg -= timeshift #38
 
