@@ -6,7 +6,25 @@
 #include <set>
 #include <sstream>
 #include <string>
+#include <tuple>
 #include <vector>
+
+template<typename T>
+std::string join(const std::tuple<T, T>& values, const char delimiter)
+{
+  std::stringstream buffer;
+
+  if (std::get<0>(values) != std::get<1>(values))
+  {
+    buffer << std::get<0>(values) << delimiter << std::get<1>(values);
+  }
+  else
+  {
+    buffer << std::get<0>(values);
+  }
+
+  return buffer.str();
+}
 
 template<typename T>
 std::string join(const std::vector<T>& values, const char delimiter)
@@ -63,4 +81,24 @@ double cent(const std::string& value)
   std::regex_match(value, matches, regex);
   std::string match = (matches[2] == "") ? std::string("0") : matches[2];
   return std::pow(2, std::stod(match) / 1200);
+}
+
+size_t number(const std::string& value)
+{
+  if (value == "1k")
+  {
+    return 1 * 1024;
+  }
+  else if (value == "2k")
+  {
+    return 2 * 1024;
+  }
+  else if (value == "4k")
+  {
+    return 4 * 1024;
+  }
+  else
+  {
+    return std::stoi(value);
+  }
 }

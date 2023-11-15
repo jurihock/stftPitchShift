@@ -26,7 +26,7 @@ public:
   double quefrency = 0;
   double distortion = 1;
 
-  size_t framesize = 1024;
+  std::tuple<size_t, size_t> framesize = { 1024, 1024 };
   size_t hoprate = 32;
 
   CLI(int argc, char** argv) :
@@ -73,7 +73,7 @@ public:
     buffer << "factors: " << join(factors, ',') << std::endl;
     buffer << "quefrency: " << quefrency << std::endl;
     buffer << "distortion: " << distortion << std::endl;
-    buffer << "framesize: " << framesize << std::endl;
+    buffer << "framesize: " << join(framesize, ',') << std::endl;
     buffer << "hoprate: " << hoprate << std::endl;
 
     return buffer.str();
@@ -201,24 +201,12 @@ private:
 
       if (args.count("window"))
       {
-        const std::string value = args["window"].as<std::string>();
+        const std::vector<std::string> values = split(
+          args["window"].as<std::string>(), ',');
 
-        if (value == "1k")
-        {
-          framesize = 1 * 1024;
-        }
-        else if (value == "2k")
-        {
-          framesize = 2 * 1024;
-        }
-        else if (value == "4k")
-        {
-          framesize = 4 * 1024;
-        }
-        else
-        {
-          framesize = std::stoi(value);
-        }
+        framesize = std::make_tuple(
+          number(values.front()),
+          number(values.back()));
       }
 
       if (args.count("overlap"))

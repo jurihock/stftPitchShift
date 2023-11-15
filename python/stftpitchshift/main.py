@@ -18,14 +18,15 @@ import re
 @click.option('-q', '--quefrency', default='0.0', show_default=True, help='optional formant lifter quefrency in milliseconds')
 @click.option('-t', '--timbre', default='1.0', help='fractional timbre shifting factor related to -q')
 @click.option('-r', '--rms', is_flag=True, default=False, help='enable spectral rms normalization')
-@click.option('-w', '--window', default=1024, show_default=True, help='stft window size')
-@click.option('-v', '--overlap', default=32, show_default=True, help='stft window overlap')
+@click.option('-w', '--window', default='1024', show_default=True, help='stft window size')
+@click.option('-v', '--overlap', default='32', show_default=True, help='stft window overlap')
 @click.option('-d', '--debug', is_flag=True, default=False, help='plot spectrograms before and after processing')
 def main(input, output, pitch, quefrency, timbre, rms, window, overlap, debug):
 
     def semicent(value): return value.startswith('+') or value.startswith('-') or (value.startswith('0') and '.' not in value)
     def semitone(value): return pow(2, float(re.match('([+,-]?\\d+){1}([+,-]\\d+){0,1}', value)[1]) / 12)
-    def cent(value): return pow(2, float(re.match('([+,-]?\\d+){1}([+,-]\\d+){0,1}', value)[2] or 0) / 1200)
+    def cent(value):     return pow(2, float(re.match('([+,-]?\\d+){1}([+,-]\\d+){0,1}', value)[2] or 0) / 1200)
+    def number(value):   return 1*1024 if value == '1k' else 2*1024 if value == '2k' else 4*1024 if value == '4k' else int(value)
 
     x, samplerate = read(input)
 
@@ -34,8 +35,8 @@ def main(input, output, pitch, quefrency, timbre, rms, window, overlap, debug):
     distortion = semitone(timbre) * cent(timbre) if semicent(timbre) else float(timbre)
     normalization = rms
 
-    framesize = window
-    hopsize = window // overlap
+    framesize = list(number(framesize) for framesize in window.split(','))
+    hopsize = framesize[-1] // int(overlap)
 
     pitchshifter = StftPitchShift(framesize, hopsize, samplerate)
 
