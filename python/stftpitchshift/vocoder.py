@@ -10,8 +10,11 @@ def encode(frames, framesize, hopsize, samplerate):
 
     M, N = frames.shape
 
-    phaseinc = 2 * np.pi * hopsize / framesize
-    freqinc = samplerate / framesize
+    analysis_framesize = np.ravel(framesize)[0]
+    synthesis_framesize = np.ravel(framesize)[-1]
+
+    freqinc = samplerate / analysis_framesize
+    phaseinc = 2 * np.pi * hopsize / analysis_framesize
 
     buffer = np.zeros(N)
     data = np.zeros((M, N), complex)
@@ -38,8 +41,15 @@ def decode(frames, framesize, hopsize, samplerate):
 
     M, N = frames.shape
 
-    phaseinc = 2 * np.pi * hopsize / framesize
-    freqinc = samplerate / framesize
+    analysis_framesize = np.ravel(framesize)[0]
+    synthesis_framesize = np.ravel(framesize)[-1]
+
+    freqinc = samplerate / analysis_framesize
+    phaseinc = 2 * np.pi * hopsize / analysis_framesize
+
+    # compensate asymmetric synthesis window by virtual time shifting #38
+    timeshift = 2 * np.pi * synthesis_framesize * np.arange(N) / N \
+        if synthesis_framesize != analysis_framesize else 0
 
     buffer = np.zeros(N)
     data = np.zeros((M, N), complex)
@@ -56,6 +66,8 @@ def decode(frames, framesize, hopsize, samplerate):
 
         buffer += delta
         arg = buffer
+
+        arg -= timeshift #38
 
         data[m] = abs * np.exp(1j * arg)
 
