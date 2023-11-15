@@ -15,10 +15,8 @@ def stft(x, framesize, hopsize):
 
     # construct window
 
-    framesize = np.ravel(framesize)
-
-    analysis_window_size = framesize[0]
-    synthesis_window_size = framesize[-1]
+    analysis_window_size = np.ravel(framesize)[0]
+    synthesis_window_size = np.ravel(framesize)[-1]
 
     assert analysis_window_size >= synthesis_window_size, \
         f'Analysis window ({analysis_window_size}) must be greater' + \
@@ -52,10 +50,8 @@ def istft(frames, framesize, hopsize):
 
     # construct window
 
-    framesize = np.ravel(framesize)
-
-    analysis_window_size = framesize[0]
-    synthesis_window_size = framesize[-1]
+    analysis_window_size = np.ravel(framesize)[0]
+    synthesis_window_size = np.ravel(framesize)[-1]
 
     assert analysis_window_size >= synthesis_window_size, \
         f'Analysis window ({analysis_window_size}) must be greater' + \
