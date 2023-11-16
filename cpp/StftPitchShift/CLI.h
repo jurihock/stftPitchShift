@@ -50,7 +50,7 @@ public:
 
     chars.push_back(0);
 
-    parse(chars.size(), &chars.front(), false);
+    parse(static_cast<int>(chars.size()), &chars.front(), false);
   }
 
   std::string dump()

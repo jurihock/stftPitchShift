@@ -52,7 +52,10 @@ void IO::read(const std::string& path, std::vector<double>& data, double& sample
 
   read(path, buffer, samplerate, channels);
 
-  data.assign(buffer.begin(), buffer.end());
+  data.resize(buffer.size());
+
+  std::transform(buffer.begin(), buffer.end(), data.begin(),
+    [](float value) { return static_cast<double>(value); });
 }
 
 void IO::write(const std::string& path, const std::vector<float>& data, const double samplerate, const size_t channels)
@@ -107,9 +110,10 @@ void IO::write(const std::string& path, const std::vector<float>& data, const do
 
 void IO::write(const std::string& path, const std::vector<double>& data, const double samplerate, const size_t channels)
 {
-  std::vector<float> buffer;
+  std::vector<float> buffer(data.size());
 
-  buffer.assign(data.begin(), data.end());
+  std::transform(data.begin(), data.end(), buffer.begin(),
+    [](double value) { return static_cast<float>(value); });
 
   write(path, buffer, samplerate, channels);
 }
