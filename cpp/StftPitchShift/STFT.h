@@ -92,7 +92,7 @@ namespace stftpitchshift
         for (size_t hop = 0; (hop + synthesis_window_size) < size; hop += hopsize)
         {
           timers.analysis.tic();
-          reject(hop, input, frame, windows.analysis);
+          reject(input + hop, frame, windows.analysis);
           transform(frame, dft);
           timers.analysis.toc();
 
@@ -102,7 +102,7 @@ namespace stftpitchshift
 
           timers.synthesis.tic();
           transform(dft, frame);
-          inject(hop, output, frame, windows.synthesis);
+          inject(output + hop, frame, windows.synthesis);
           timers.synthesis.toc();
         }
         timers.loop.toc();
@@ -116,13 +116,13 @@ namespace stftpitchshift
       {
         for (size_t hop = 0; (hop + synthesis_window_size) < size; hop += hopsize)
         {
-          reject(hop, input, frame, windows.analysis);
+          reject(input + hop, frame, windows.analysis);
           transform(frame, dft);
 
           callback(dft);
 
           transform(dft, frame);
-          inject(hop, output, frame, windows.synthesis);
+          inject(output + hop, frame, windows.synthesis);
         }
       }
     }
@@ -163,19 +163,19 @@ namespace stftpitchshift
       fft->ifft(dft, frame);
     }
 
-    static void reject(const size_t hop, const T* input, std::vector<T>& frame, const std::vector<T>& window)
+    inline void reject(const T* input, std::vector<T>& frame, const std::vector<T>& window) const
     {
       for (size_t i = 0; i < frame.size(); ++i)
       {
-        frame[i] = input[hop + i] * window[i];
+        frame[i] = input[i] * window[i];
       }
     }
 
-    static void inject(const size_t hop, T* const output, const std::vector<T>& frame, const std::vector<T>& window)
+    inline void inject(T* const output, const std::vector<T>& frame, const std::vector<T>& window) const
     {
       for (size_t i = 0; i < frame.size(); ++i)
       {
-        output[hop + i] += frame[i] * window[i];
+        output[i] += frame[i] * window[i];
       }
     }
 
