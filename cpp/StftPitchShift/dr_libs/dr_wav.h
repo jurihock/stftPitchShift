@@ -3559,6 +3559,9 @@ DRWAV_PRIVATE drwav_bool32 drwav_init__internal(drwav* pWav, drwav_chunk_proc on
             metadataBytesRead = drwav__metadata_process_chunk(&metadataParser, &header, drwav_metadata_type_all_including_unknown);
             DRWAV_ASSERT(metadataBytesRead <= header.sizeInBytes);
 
+            /* Fix compile time error variable 'metadataBytesRead' set but not used. */
+            if (metadataBytesRead) {;}
+
             /* Go back to the start of the chunk so we can normalize the position of the cursor. */
             if (drwav__seek_from_start(pWav->onSeek, cursor, pWav->pUserData) == DRWAV_FALSE) {
                 break;  /* Failed to seek. Can't reliable read the remaining chunks. Get out. */
