@@ -99,7 +99,7 @@ void audio_interface_callback(std::span<float> input, std::span<float> output)
     input.end(),
     buffer.input.begin() + analysis_window_size);
 
-  // apply pitch shifting within the STFT routine
+  // apply pitch shifting within the built-in STFT routine
   (*stft)(buffer.input, buffer.output, [&](std::span<std::complex<double>> dft)
   {
     core->shiftpitch(dft);
