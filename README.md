@@ -205,6 +205,11 @@ At the moment the formant preservation doesn't seem to work well along with the 
 * [Discrete-Time Signal Processing](https://www.pearson.com/us/higher-education/program/Oppenheim-Discrete-Time-Signal-Processing-3rd-Edition/PGM212808.html) by Oppenheim & Schafer (chapter 13 in the third edition)
 * [Spectral Music Design](https://global.oup.com/academic/product/spectral-music-design-9780197524015) by Victor Lazzarini (section 6.5.7 in the first edition)
 
+### Asymmetric windows
+
+* [A low delay, variable resolution, perfect reconstruction spectral analysis-synthesis system for speech enhancement](https://ieeexplore.ieee.org/document/7098797) by Dirk Mauler and Rainer Martin
+* [Asymmetric windows in digital signal processing](https://doi.org/10.1016/bs.adcom.2019.07.004) by Robert Rozman
+
 ## Credits
 
 * [cxxopts](https://github.com/jarro2783/cxxopts) by Jarryd Beck
