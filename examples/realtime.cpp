@@ -17,14 +17,14 @@ using namespace stftpitchshift;
 const double samplerate = 44100;
 const size_t overlap = 4;
 
-// analysis and synthesis window size
+// analysis and synthesis window sizes
 // power of two each of them
 // - for best quality: analysis = synthesis
 // - for lower latency: analysis > synthesis
 // - synthesis window size corresponds to the audio frame size and vice versa
 const std::tuple<size_t, size_t> framesize = { 1024, 1024 };
 
-// hop size refers to the synthesis window size
+// hop size is derived from the synthesis window size
 const size_t hopsize = std::get<1>(framesize) / overlap;
 
 // delay buffers for input and output frames
