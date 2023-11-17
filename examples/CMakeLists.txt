@@ -1,18 +1,26 @@
 cmake_minimum_required(VERSION 3.1...3.18)
 
-project(StftPitchShiftExample)
+project(StftPitchShiftExamples)
 
+# basic example of single file processing
 add_executable(example "${CMAKE_CURRENT_LIST_DIR}/example.cpp")
 
-# at least C++ 20 is mandatory
-target_compile_features(example PRIVATE cxx_std_20)
+# advanced example of continuous stream processing
+add_executable(realtime "${CMAKE_CURRENT_LIST_DIR}/realtime.cpp")
 
-# just the case of default build e.g. if LibStftPitchShift.cmake is already included
-target_link_libraries(example stftpitchshift)
+foreach(name example realtime)
 
-# if installed via ppa:jurihock/stftpitchshift on Ubuntu
-# target_link_libraries(example stftpitchshift)
+  # at least C++ 20 is mandatory
+  target_compile_features(${name} PRIVATE cxx_std_20)
 
-# if installed via vcpkg
-# find_package(stftpitchshift CONFIG REQUIRED)
-# target_link_libraries(example stftpitchshift::stftpitchshift)
+  # just the case of default build e.g. if LibStftPitchShift.cmake is already included
+  target_link_libraries(${name} stftpitchshift)
+
+  # if installed via ppa:jurihock/stftpitchshift on Ubuntu
+  # target_link_libraries(${name} stftpitchshift)
+
+  # if installed via vcpkg
+  # find_package(stftpitchshift CONFIG REQUIRED)
+  # target_link_libraries(${name} stftpitchshift::stftpitchshift)
+
+endforeach()
