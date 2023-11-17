@@ -125,9 +125,8 @@ extern "C"
         cli.chronometry);
 
       stft.shiftpitch(
-        samples,
-        input,
-        output,
+        { input,  static_cast<size_t>(samples) },
+        { output, static_cast<size_t>(samples) },
         cli.factors,
         cli.quefrency,
         cli.distortion);

@@ -7,8 +7,7 @@
 
 using namespace stftpitchshift;
 
-const int OK = 0;
-const int NOK = 1;
+const int OK = 0, NOK = 1;
 
 int main(int argc, char** argv)
 {
@@ -61,8 +60,8 @@ int main(int argc, char** argv)
     for (size_t channel = 0; channel < channels; ++channel)
     {
       const size_t size = indata.size() / channels;
-      const double* input = indata.data() + channel * size;
-      double* const output = outdata.data() + channel * size;
+      const std::span<double> input = { indata.data() + channel * size, size };
+      const std::span<double> output = { outdata.data() + channel * size, size };
 
       StftPitchShift stft(
         cli.framesize,
@@ -72,7 +71,6 @@ int main(int argc, char** argv)
         cli.chronometry);
 
       stft.shiftpitch(
-        size,
         input,
         output,
         cli.factors,

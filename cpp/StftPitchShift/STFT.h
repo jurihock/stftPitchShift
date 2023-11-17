@@ -6,6 +6,7 @@
 #include <functional>
 #include <memory>
 #include <numeric>
+#include <span>
 #include <stdexcept>
 #include <string>
 #include <tuple>
@@ -61,18 +62,14 @@ namespace stftpitchshift
         [unitygain](T value) { return value * unitygain; });
     }
 
-    void operator()(const std::vector<T>& input, std::vector<T>& output, const std::function<void(std::vector<std::complex<T>>& dft)> callback) const
+    void operator()(const std::span<T> input, const std::span<T> output, const std::function<void(std::span<std::complex<T>> dft)> callback) const
     {
-      (*this)(input.size(), input.data(), output.data(), callback);
-    }
+      const size_t samples = (std::min)(input.size(), output.size());
 
-    void operator()(const size_t size, const T* input, T* const output, const std::function<void(std::vector<std::complex<T>>& dft)> callback) const
-    {
-      const auto analysis_window_size = std::get<0>(framesize);
-      const auto synthesis_window_size = std::get<1>(framesize);
+      const size_t analysis_window_size = std::get<0>(framesize);
+      const size_t synthesis_window_size = std::get<1>(framesize);
 
-      // TODO preemptively clear output memory #30
-      std::fill(output, output + size, T(0));
+      std::fill(output.begin(), output.end(), T(0)); // clear output #30
 
       std::vector<T> frame(analysis_window_size);
       std::vector<std::complex<T>> dft(analysis_window_size / 2 + 1);
@@ -89,10 +86,10 @@ namespace stftpitchshift
         timers;
 
         timers.loop.tic();
-        for (size_t hop = 0; (hop + synthesis_window_size) < size; hop += hopsize)
+        for (size_t hop = 0; (hop + synthesis_window_size) < samples; hop += hopsize)
         {
           timers.analysis.tic();
-          reject(input + hop, frame, windows.analysis);
+          reject(input.subspan(hop, synthesis_window_size), frame, windows.analysis);
           transform(frame, dft);
           timers.analysis.toc();
 
@@ -102,7 +99,7 @@ namespace stftpitchshift
 
           timers.synthesis.tic();
           transform(dft, frame);
-          inject(output + hop, frame, windows.synthesis);
+          inject(output.subspan(hop, synthesis_window_size), frame, windows.synthesis);
           timers.synthesis.toc();
         }
         timers.loop.toc();
@@ -114,15 +111,15 @@ namespace stftpitchshift
       }
       else
       {
-        for (size_t hop = 0; (hop + synthesis_window_size) < size; hop += hopsize)
+        for (size_t hop = 0; (hop + synthesis_window_size) < samples; hop += hopsize)
         {
-          reject(input + hop, frame, windows.analysis);
+          reject(input.subspan(hop, synthesis_window_size), frame, windows.analysis);
           transform(frame, dft);
 
           callback(dft);
 
           transform(dft, frame);
-          inject(output + hop, frame, windows.synthesis);
+          inject(output.subspan(hop, synthesis_window_size), frame, windows.synthesis);
         }
       }
     }
@@ -141,7 +138,7 @@ namespace stftpitchshift
     }
     windows;
 
-    inline void transform(std::vector<T>& frame, std::vector<std::complex<T>>& dft) const
+    inline void transform(const std::span<T> frame, const std::span<std::complex<T>> dft) const
     {
       fft->fft(frame, dft);
 
@@ -152,7 +149,7 @@ namespace stftpitchshift
       }
     }
 
-    inline void transform(std::vector<std::complex<T>>& dft, std::vector<T>& frame) const
+    inline void transform(const std::span<std::complex<T>> dft, const std::span<T> frame) const
     {
       if (true) // optionally zero dc and nyquist
       {
@@ -163,17 +160,17 @@ namespace stftpitchshift
       fft->ifft(dft, frame);
     }
 
-    inline void reject(const T* input, std::vector<T>& frame, const std::vector<T>& window) const
+    inline void reject(const std::span<T> input, const std::span<T> frame, const std::vector<T>& window) const
     {
-      for (size_t i = 0; i < frame.size(); ++i)
+      for (size_t i = 0; i < window.size(); ++i)
       {
         frame[i] = input[i] * window[i];
       }
     }
 
-    inline void inject(T* const output, const std::vector<T>& frame, const std::vector<T>& window) const
+    inline void inject(const std::span<T> output, const std::span<T> frame, const std::vector<T>& window) const
     {
-      for (size_t i = 0; i < frame.size(); ++i)
+      for (size_t i = 0; i < window.size(); ++i)
       {
         output[i] += frame[i] * window[i];
       }

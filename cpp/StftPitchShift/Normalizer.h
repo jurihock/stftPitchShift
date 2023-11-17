@@ -3,7 +3,7 @@
 #include <cmath>
 #include <complex>
 #include <numeric>
-#include <vector>
+#include <span>
 
 template<class T>
 class Normalizer
@@ -15,12 +15,12 @@ public:
   {
   }
 
-  void calibrate(const std::vector<std::complex<T>>& data)
+  void calibrate(const std::span<std::complex<T>> data)
   {
     target = rms(data);
   }
 
-  void normalize(std::vector<std::complex<T>>& data) const
+  void normalize(const std::span<std::complex<T>> data) const
   {
     const T a = target;
     const T b = rms(data);
@@ -42,7 +42,7 @@ private:
 
   T target;
 
-  static T rms(const std::vector<std::complex<T>>& data)
+  static T rms(const std::span<std::complex<T>> data)
   {
     // without 1/N and sqrt
 

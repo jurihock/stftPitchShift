@@ -117,7 +117,7 @@ namespace stftpitchshift
       }
     }
 
-    void shiftpitch(std::vector<std::complex<T>>& dft)
+    void shiftpitch(const std::span<std::complex<T>> dft)
     {
       vocoder.encode(dft);
 

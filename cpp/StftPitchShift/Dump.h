@@ -3,8 +3,8 @@
 #include <iomanip>
 #include <iostream>
 #include <fstream>
+#include <span>
 #include <sstream>
-#include <vector>
 
 namespace stftpitchshift
 {
@@ -22,7 +22,7 @@ namespace stftpitchshift
     }
 
     template<class T>
-    void operator()(const std::vector<T>& data)
+    void operator()(const std::span<T> data)
     {
       if (fileindex < minindex)
       {

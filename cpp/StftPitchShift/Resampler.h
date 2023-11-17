@@ -1,8 +1,10 @@
 #pragma once
 
+#include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <complex>
+#include <span>
 #include <vector>
 
 namespace stftpitchshift
@@ -28,31 +30,31 @@ namespace stftpitchshift
       value = factor;
     }
 
-    void linear(std::vector<T>& x) const
+    void linear(const std::span<T> x) const
     {
       linear<T>(x, x);
     }
 
-    void linear(const std::vector<T>& x,
-                std::vector<T>& y) const
+    void linear(const std::span<T> x,
+                const std::span<T> y) const
     {
       linear<T>(x, y);
     }
 
-    void linear(std::vector<std::complex<T>>& x) const
+    void linear(const std::span<std::complex<T>> x) const
     {
       linear<std::complex<T>>(x, x);
     }
 
-    void linear(const std::vector<std::complex<T>>& x,
-                std::vector<std::complex<T>>& y) const
+    void linear(const std::span<std::complex<T>> x,
+                const std::span<std::complex<T>> y) const
     {
       linear<std::complex<T>>(x, y);
     }
 
-    void bilinear(const std::vector<T>& x0,
-                  const std::vector<T>& x1,
-                  std::vector<T>& y) const
+    void bilinear(const std::span<T> x0,
+                  const std::span<T> x1,
+                  const std::span<T> y) const
     {
       assert(x0.size() == y.size());
       assert(x1.size() == y.size());
@@ -69,9 +71,9 @@ namespace stftpitchshift
       }
     }
 
-    void bilinear(const std::vector<std::complex<T>>& x0,
-                  const std::vector<std::complex<T>>& x1,
-                  std::vector<std::complex<T>>& y) const
+    void bilinear(const std::span<std::complex<T>> x0,
+                  const std::span<std::complex<T>> x1,
+                  const std::span<std::complex<T>> y) const
     {
       assert(x0.size() == y.size());
       assert(x1.size() == y.size());
@@ -93,8 +95,8 @@ namespace stftpitchshift
     double value;
 
     template<class V>
-    void linear(const std::vector<V>& x,
-                std::vector<V>& y) const
+    void linear(const std::span<V> x,
+                const std::span<V> y) const
     {
       assert(x.size() == y.size());
 
@@ -149,7 +151,7 @@ namespace stftpitchshift
       }
       else if (x.data() != y.data())
       {
-        y = x;
+        std::copy(x.begin(), x.end(), y.begin());
       }
     }
 

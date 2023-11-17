@@ -1,8 +1,10 @@
 #pragma once
 
+#include <algorithm>
 #include <cmath>
 #include <complex>
 #include <limits>
+#include <span>
 #include <vector>
 
 #include <StftPitchShift/Resampler.h>
@@ -41,7 +43,7 @@ namespace stftpitchshift
       }
     }
 
-    void shiftpitch(std::vector<std::complex<T>>& dft)
+    void shiftpitch(const std::span<std::complex<T>> dft)
     {
       if (values.empty())
       {
@@ -69,7 +71,7 @@ namespace stftpitchshift
           }
         }
 
-        dft = buffer[0];
+        std::copy(buffer[0].begin(), buffer[0].end(), dft.begin());
 
         return;
       }

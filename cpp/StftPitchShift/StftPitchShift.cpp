@@ -74,8 +74,8 @@ StftPitchShift::StftPitchShift(
 }
 
 void StftPitchShift::shiftpitch(
-  const std::vector<float>& input,
-  std::vector<float>& output,
+  const std::span<float> input,
+  const std::span<float> output,
   const double factor,
   const double quefrency,
   const double distortion)
@@ -83,44 +83,6 @@ void StftPitchShift::shiftpitch(
   const std::vector<double> factors = { factor };
 
   shiftpitch(
-    input.size(),
-    input.data(),
-    output.data(),
-    factors,
-    quefrency,
-    distortion);
-}
-
-void StftPitchShift::shiftpitch(
-  const std::vector<double>& input,
-  std::vector<double>& output,
-  const double factor,
-  const double quefrency,
-  const double distortion)
-{
-  const std::vector<double> factors = { factor };
-
-  shiftpitch(
-    input.size(),
-    input.data(),
-    output.data(),
-    factors,
-    quefrency,
-    distortion);
-}
-
-void StftPitchShift::shiftpitch(
-  const size_t size,
-  const float* input,
-  float* const output,
-  const double factor,
-  const double quefrency,
-  const double distortion)
-{
-  const std::vector<double> factors = { factor };
-
-  shiftpitch(
-    size,
     input,
     output,
     factors,
@@ -129,9 +91,8 @@ void StftPitchShift::shiftpitch(
 }
 
 void StftPitchShift::shiftpitch(
-  const size_t size,
-  const double* input,
-  double* const output,
+  const std::span<double> input,
+  const std::span<double> output,
   const double factor,
   const double quefrency,
   const double distortion)
@@ -139,7 +100,6 @@ void StftPitchShift::shiftpitch(
   const std::vector<double> factors = { factor };
 
   shiftpitch(
-    size,
     input,
     output,
     factors,
@@ -148,41 +108,8 @@ void StftPitchShift::shiftpitch(
 }
 
 void StftPitchShift::shiftpitch(
-  const std::vector<float>& input,
-  std::vector<float>& output,
-  const std::vector<double>& factors,
-  const double quefrency,
-  const double distortion)
-{
-  shiftpitch(
-    input.size(),
-    input.data(),
-    output.data(),
-    factors,
-    quefrency,
-    distortion);
-}
-
-void StftPitchShift::shiftpitch(
-  const std::vector<double>& input,
-  std::vector<double>& output,
-  const std::vector<double>& factors,
-  const double quefrency,
-  const double distortion)
-{
-  shiftpitch(
-    input.size(),
-    input.data(),
-    output.data(),
-    factors,
-    quefrency,
-    distortion);
-}
-
-void StftPitchShift::shiftpitch(
-  const size_t size,
-  const float* input,
-  float* const output,
+  const std::span<float> input,
+  const std::span<float> output,
   const std::vector<double>& factors,
   const double quefrency,
   const double distortion)
@@ -196,16 +123,15 @@ void StftPitchShift::shiftpitch(
 
   STFT<float> stft(fft, framesize, hopsize, chronometry);
 
-  stft(size, input, output, [&](std::vector<std::complex<float>>& dft)
+  stft(input, output, [&](std::span<std::complex<float>> dft)
   {
     core.shiftpitch(dft);
   });
 }
 
 void StftPitchShift::shiftpitch(
-  const size_t size,
-  const double* input,
-  double* const output,
+  const std::span<double> input,
+  const std::span<double> output,
   const std::vector<double>& factors,
   const double quefrency,
   const double distortion)
@@ -219,7 +145,7 @@ void StftPitchShift::shiftpitch(
 
   STFT<double> stft(fft, framesize, hopsize, chronometry);
 
-  stft(size, input, output, [&](std::vector<std::complex<double>>& dft)
+  stft(input, output, [&](std::span<std::complex<double>> dft)
   {
     core.shiftpitch(dft);
   });

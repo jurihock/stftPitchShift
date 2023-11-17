@@ -14,6 +14,7 @@ add_custom_command(
           -s EXPORTED_RUNTIME_METHODS=allocateUTF8,UTF8ToString
           -s EXPORTED_FUNCTIONS=_malloc,_free
           -O2
+          -std=c++20
   WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
   DEPENDS "${CMAKE_CURRENT_LIST_DIR}/wasm.cpp" VERBATIM)
 

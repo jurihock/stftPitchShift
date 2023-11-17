@@ -4,8 +4,8 @@ project(StftPitchShiftExample)
 
 add_executable(example "${CMAKE_CURRENT_LIST_DIR}/example.cpp")
 
-# at least C++ 11 is mandatory
-target_compile_features(example PRIVATE cxx_std_11)
+# at least C++ 20 is mandatory
+target_compile_features(example PRIVATE cxx_std_20)
 
 # just the case of default build e.g. if LibStftPitchShift.cmake is already included
 target_link_libraries(example stftpitchshift)

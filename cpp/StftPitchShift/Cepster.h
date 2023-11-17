@@ -4,6 +4,7 @@
 #include <cmath>
 #include <complex>
 #include <memory>
+#include <span>
 #include <vector>
 
 #include <StftPitchShift/FFT.h>
@@ -36,7 +37,7 @@ namespace stftpitchshift
       cutoff = static_cast<size_t>(quefrency * samplerate);
     }
 
-    void lifter(std::vector<T>& envelope)
+    void lifter(const std::span<T> envelope)
     {
       assert(envelope.size() == spectrum.size());
 
@@ -71,7 +72,7 @@ namespace stftpitchshift
     std::vector<std::complex<T>> spectrum;
     std::vector<T> cepstrum;
 
-    static void lowpass(std::vector<T>& cepstrum, const size_t cutoff)
+    static void lowpass(const std::span<T> cepstrum, const size_t cutoff)
     {
       for (size_t i = 1; i < std::min(cutoff, cepstrum.size()); ++i)
       {

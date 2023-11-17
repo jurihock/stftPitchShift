@@ -3,6 +3,7 @@
 #include <cassert>
 #include <cmath>
 #include <complex>
+#include <span>
 #include <tuple>
 #include <vector>
 
@@ -40,7 +41,7 @@ namespace stftpitchshift
       }
     }
 
-    void encode(std::vector<std::complex<T>>& dft)
+    void encode(const std::span<std::complex<T>> dft)
     {
       assert(dft.size() == encode_phase_buffer.size());
 
@@ -66,7 +67,7 @@ namespace stftpitchshift
       }
     }
 
-    void decode(std::vector<std::complex<T>>& dft)
+    void decode(const std::span<std::complex<T>> dft)
     {
       assert(dft.size() == decode_phase_buffer.size());
 

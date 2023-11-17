@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <span>
 #include <tuple>
 #include <vector>
 
@@ -84,8 +85,8 @@ namespace stftpitchshift
      * @param distortion The fractional timbre shifting factor.
      */
     void shiftpitch(
-      const std::vector<float>& input,
-      std::vector<float>& output,
+      const std::span<float> input,
+      const std::span<float> output,
       const double factor = 1,
       const double quefrency = 0,
       const double distortion = 1);
@@ -98,40 +99,8 @@ namespace stftpitchshift
      * @param distortion The fractional timbre shifting factor.
      */
     void shiftpitch(
-      const std::vector<double>& input,
-      std::vector<double>& output,
-      const double factor = 1,
-      const double quefrency = 0,
-      const double distortion = 1);
-
-    /**
-     * @param size The total number of signal values, not bytes.
-     * @param input The input signal.
-     * @param output The output signal of the equal size.
-     * @param factor The fractional pitch shifting factor.
-     * @param quefrency The optional formant lifter quefrency in seconds.
-     * @param distortion The fractional timbre shifting factor.
-     */
-    void shiftpitch(
-      const size_t size,
-      const float* input,
-      float* const output,
-      const double factor = 1,
-      const double quefrency = 0,
-      const double distortion = 1);
-
-    /**
-     * @param size The total number of signal values, not bytes.
-     * @param input The input signal.
-     * @param output The output signal of the equal size.
-     * @param factor The fractional pitch shifting factor.
-     * @param quefrency The optional formant lifter quefrency in seconds.
-     * @param distortion The fractional timbre shifting factor.
-     */
-    void shiftpitch(
-      const size_t size,
-      const double* input,
-      double* const output,
+      const std::span<double> input,
+      const std::span<double> output,
       const double factor = 1,
       const double quefrency = 0,
       const double distortion = 1);
@@ -144,8 +113,8 @@ namespace stftpitchshift
      * @param distortion The fractional timbre shifting factor.
      */
     void shiftpitch(
-      const std::vector<float>& input,
-      std::vector<float>& output,
+      const std::span<float> input,
+      const std::span<float> output,
       const std::vector<double>& factors,
       const double quefrency = 0,
       const double distortion = 1);
@@ -158,40 +127,8 @@ namespace stftpitchshift
      * @param distortion The fractional timbre shifting factor.
      */
     void shiftpitch(
-      const std::vector<double>& input,
-      std::vector<double>& output,
-      const std::vector<double>& factors,
-      const double quefrency = 0,
-      const double distortion = 1);
-
-    /**
-     * @param size The total number of signal values, not bytes.
-     * @param input The input signal.
-     * @param output The output signal of the equal size.
-     * @param factors The fractional pitch shifting factors.
-     * @param quefrency The optional formant lifter quefrency in seconds.
-     * @param distortion The fractional timbre shifting factor.
-     */
-    void shiftpitch(
-      const size_t size,
-      const float* input,
-      float* const output,
-      const std::vector<double>& factors,
-      const double quefrency = 0,
-      const double distortion = 1);
-
-    /**
-     * @param size The total number of signal values, not bytes.
-     * @param input The input signal.
-     * @param output The output signal of the equal size.
-     * @param factors The fractional pitch shifting factors.
-     * @param quefrency The optional formant lifter quefrency in seconds.
-     * @param distortion The fractional timbre shifting factor.
-     */
-    void shiftpitch(
-      const size_t size,
-      const double* input,
-      double* const output,
+      const std::span<double> input,
+      const std::span<double> output,
       const std::vector<double>& factors,
       const double quefrency = 0,
       const double distortion = 1);
