@@ -69,8 +69,8 @@ int main()
   {
     std::cout << "processing audio frame " << (i / m + 1) << " of " << (n / m) << std::endl;
 
-    std::span<float> input = std::span(x.data(), m);
-    std::span<float> output = std::span(y.data(), m);
+    std::span<float> input = std::span(x.data()  + i, m);
+    std::span<float> output = std::span(y.data() + i, m);
 
     audio_interface_callback(input, output);
   }
@@ -80,10 +80,10 @@ int main()
 
 void audio_interface_callback(std::span<float> input, std::span<float> output)
 {
-  const auto analysis_window_size = std::get<0>(framesize);
+  const auto analysis_window_size  = std::get<0>(framesize);
   const auto synthesis_window_size = std::get<1>(framesize);
 
-  // this is the expected input and output frame size
+  // these are the expected input and output frame sizes
   assert(input.size()  == synthesis_window_size);
   assert(output.size() == synthesis_window_size);
 
