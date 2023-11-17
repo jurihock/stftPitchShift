@@ -4,5 +4,5 @@
 
 namespace stftpitchshift
 {
-  const std::string StftPitchShiftVersion = "1.5.1";
+  const std::string StftPitchShiftVersion = "2";
 }
