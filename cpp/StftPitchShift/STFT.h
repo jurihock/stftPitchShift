@@ -13,6 +13,8 @@
 #include <vector>
 
 #include <StftPitchShift/FFT.h>
+#include <StftPitchShift/RFFT.h>
+
 #include <StftPitchShift/Timer.h>
 
 namespace stftpitchshift
@@ -23,8 +25,18 @@ namespace stftpitchshift
 
   public:
 
+    STFT(const size_t framesize, const size_t hopsize, const bool chronometry = false) :
+      STFT(std::make_shared<RFFT>(), std::make_tuple(framesize, framesize), hopsize, chronometry)
+    {
+    }
+
     STFT(const std::shared_ptr<FFT> fft, const size_t framesize, const size_t hopsize, const bool chronometry = false) :
       STFT(fft, std::make_tuple(framesize, framesize), hopsize, chronometry)
+    {
+    }
+
+    STFT(const std::tuple<size_t, size_t> framesize, const size_t hopsize, const bool chronometry = false) :
+      STFT(std::make_shared<RFFT>(), framesize, hopsize, chronometry)
     {
     }
 
