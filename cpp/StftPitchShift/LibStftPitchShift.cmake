@@ -14,7 +14,7 @@ set_target_properties(${PROJECT_NAME}
 )
 
 set_target_properties(${PROJECT_NAME}
-  PROPERTIES SOVERSION 1
+  PROPERTIES SOVERSION 2
 )
 
 set_property(
