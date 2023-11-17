@@ -46,33 +46,31 @@ namespace stftpitchshift
 
       if (analysis_window_size == synthesis_window_size)
       {
-        windows.analysis = symmetric_window(analysis_window_size);
-        windows.synthesis = windows.analysis;
+        window.analysis = symmetric_window(analysis_window_size);
+        window.synthesis = window.analysis;
       }
       else
       {
-        windows.analysis  = asymmetric_analysis_window(analysis_window_size, synthesis_window_size);
-        windows.synthesis = asymmetric_synthesis_window(analysis_window_size, synthesis_window_size);
+        window.analysis  = asymmetric_analysis_window(analysis_window_size, synthesis_window_size);
+        window.synthesis = asymmetric_synthesis_window(analysis_window_size, synthesis_window_size);
       }
 
       const T unitygain = hopsize / std::inner_product(
-        windows.analysis.begin(), windows.analysis.end(), windows.synthesis.begin(), T(0));
+        window.analysis.begin(), window.analysis.end(), window.synthesis.begin(), T(0));
 
-      std::transform(windows.synthesis.begin(), windows.synthesis.end(), windows.synthesis.begin(),
+      std::transform(window.synthesis.begin(), window.synthesis.end(), window.synthesis.begin(),
         [unitygain](T value) { return value * unitygain; });
+
+      buffer.size = analysis_window_size;
+      buffer.time.resize(buffer.size);
+      buffer.freq.resize(buffer.size / 2 + 1);
     }
 
-    void operator()(const std::span<T> input, const std::span<T> output, const std::function<void(std::span<std::complex<T>> dft)> callback) const
+    void operator()(const std::span<T> input, const std::span<T> output, const std::function<void(std::span<std::complex<T>> dft)> callback)
     {
       const size_t samples = (std::min)(input.size(), output.size());
 
-      const size_t analysis_window_size = std::get<0>(framesize);
-      const size_t synthesis_window_size = std::get<1>(framesize);
-
       std::fill(output.begin(), output.end(), T(0)); // clear output #30
-
-      std::vector<T> frame(analysis_window_size);
-      std::vector<std::complex<T>> dft(analysis_window_size / 2 + 1);
 
       if (chronometry)
       {
@@ -86,20 +84,23 @@ namespace stftpitchshift
         timers;
 
         timers.loop.tic();
-        for (size_t hop = 0; (hop + synthesis_window_size) < samples; hop += hopsize)
+        for (size_t hop = 0; (hop + buffer.size) < samples; hop += hopsize)
         {
+          const std::span<T> src = input.subspan(hop, buffer.size);
+          const std::span<T> dst = output.subspan(hop, buffer.size);
+
           timers.analysis.tic();
-          reject(input.subspan(hop, synthesis_window_size), frame, windows.analysis);
-          transform(frame, dft);
+          reject(src, buffer.time, window.analysis);
+          transform(buffer.time, buffer.freq);
           timers.analysis.toc();
 
           timers.callback.tic();
-          callback(dft);
+          callback(buffer.freq);
           timers.callback.toc();
 
           timers.synthesis.tic();
-          transform(dft, frame);
-          inject(output.subspan(hop, synthesis_window_size), frame, windows.synthesis);
+          transform(buffer.freq, buffer.time);
+          inject(dst, buffer.time, window.synthesis);
           timers.synthesis.toc();
         }
         timers.loop.toc();
@@ -111,15 +112,18 @@ namespace stftpitchshift
       }
       else
       {
-        for (size_t hop = 0; (hop + synthesis_window_size) < samples; hop += hopsize)
+        for (size_t hop = 0; (hop + buffer.size) < samples; hop += hopsize)
         {
-          reject(input.subspan(hop, synthesis_window_size), frame, windows.analysis);
-          transform(frame, dft);
+          const std::span<T> src = input.subspan(hop, buffer.size);
+          const std::span<T> dst = output.subspan(hop, buffer.size);
 
-          callback(dft);
+          reject(src, buffer.time, window.analysis);
+          transform(buffer.time, buffer.freq);
 
-          transform(dft, frame);
-          inject(output.subspan(hop, synthesis_window_size), frame, windows.synthesis);
+          callback(buffer.freq);
+
+          transform(buffer.freq, buffer.time);
+          inject(dst, buffer.time, window.synthesis);
         }
       }
     }
@@ -136,7 +140,15 @@ namespace stftpitchshift
       std::vector<T> analysis;
       std::vector<T> synthesis;
     }
-    windows;
+    window;
+
+    struct
+    {
+      size_t size;
+      std::vector<T> time;
+      std::vector<std::complex<T>> freq;
+    }
+    buffer;
 
     inline void transform(const std::span<T> frame, const std::span<std::complex<T>> dft) const
     {
@@ -160,7 +172,7 @@ namespace stftpitchshift
       fft->ifft(dft, frame);
     }
 
-    inline void reject(const std::span<T> input, const std::span<T> frame, const std::vector<T>& window) const
+    inline void reject(const std::span<T> input, const std::span<T> frame, const std::span<T> window) const
     {
       for (size_t i = 0; i < window.size(); ++i)
       {
@@ -168,7 +180,7 @@ namespace stftpitchshift
       }
     }
 
-    inline void inject(const std::span<T> output, const std::span<T> frame, const std::vector<T>& window) const
+    inline void inject(const std::span<T> output, const std::span<T> frame, const std::span<T> window) const
     {
       for (size_t i = 0; i < window.size(); ++i)
       {
