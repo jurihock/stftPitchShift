@@ -70,8 +70,6 @@ namespace stftpitchshift
     {
       const size_t samples = (std::min)(input.size(), output.size());
 
-      std::fill(output.begin(), output.end(), T(0)); // clear output #30
-
       if (chronometry)
       {
         struct

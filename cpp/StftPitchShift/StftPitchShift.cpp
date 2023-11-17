@@ -114,6 +114,9 @@ void StftPitchShift::shiftpitch(
   const double quefrency,
   const double distortion)
 {
+  // preemptively clear output #30
+  std::fill(output.begin(), output.end(), float(0));
+
   StftPitchShiftCore<float> core(fft, framesize, hopsize, samplerate);
 
   core.factors(factors);
@@ -136,6 +139,9 @@ void StftPitchShift::shiftpitch(
   const double quefrency,
   const double distortion)
 {
+  // preemptively clear output #30
+  std::fill(output.begin(), output.end(), double(0));
+
   StftPitchShiftCore<double> core(fft, framesize, hopsize, samplerate);
 
   core.factors(factors);
