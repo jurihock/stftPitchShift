@@ -16,7 +16,7 @@ In addition to the basic pitch shifting algorithm, it also features spectral [mu
 
 Both sources contain a ready-to-use [command line tool](#usage) as well as a library for custom needs. See more details in the [build](#build) section.
 
-Feel free to check out some [demos](http://jurihock.github.io/stftPitchShiftDemo) as well.
+Feel free to check out some demos at [stftPitchShiftDemo](http://jurihock.github.io/stftPitchShiftDemo) and the [stftPitchShiftPlugin](https://github.com/jurihock/stftPitchShiftPlugin) as well.
 
 ## Modules
 
