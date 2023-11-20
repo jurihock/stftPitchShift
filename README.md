@@ -12,7 +12,7 @@
 
 This repository features two analogical algorithm implementations, [C++](cpp/StftPitchShift) and [Python](python/stftpitchshift). Both contain several [function blocks](#modules) of the same name (but different file extension, of course).
 
-In addition to the basic pitch shifting algorithm, it also features spectral [multi pitch shifting](#pitch-shifting) and cepstral [formant preservation](#formant-preservation) extensions.
+In addition to the basic pitch shifting algorithm, it also features spectral [poly pitch shifting](#pitch-shifting) and cepstral [formant preservation](#formant-preservation) extensions.
 
 Both sources contain a ready-to-use [command line tool](#usage) as well as a library for custom needs. See more details in the [build](#build) section.
 
@@ -41,7 +41,7 @@ The `decode` function does an inverse transformation back to the original DFT co
 <details>
 <summary><strong>Pitcher</strong></summary>
 
-The *Pitcher* module performs single or multi pitch shifting of the encoded DFT frame depending on the specified fractional factors.
+The *Pitcher* module performs mono or poly pitch shifting of the encoded DFT frame depending on the specified fractional factors.
 </details>
 
 <details>
@@ -70,9 +70,9 @@ As the name of this module already implies, it performs the comprehensive *STFT*
 
 ## Pitch shifting
 
-### Single pitch
+### Mono pitch shifting
 
-Since the *Vocoder* module transforms the original DFT complex values `real + j * imag` into `magnitude + j * frequency` representation, the single pitch shifting is a comparatively easy task. Both `magnitude` and `frequency` vectors are to be resampled according to the desired pitch shifting factor:
+Since the *Vocoder* module transforms the original DFT complex values `real + j * imag` into `magnitude + j * frequency` representation, the mono pitch shifting is a comparatively easy task. Both `magnitude` and `frequency` vectors are to be resampled according to the desired pitch shifting factor:
 
 * The factor `1` means no change.
 * The factor `<1` means downsampling.
@@ -82,13 +82,13 @@ Any fractional resampling factor such as `0.5` requires interpolation. In the si
 
 Due to frequency vector alteration, the resampled frequency values needs also be multiplied by the resampling factor.
 
-### Multi pitch
+### Poly pitch shifting
 
-In terms of multi pitch shifting, multiple differently resampled `magnitude` and `frequency` vectors are to be combined together. For example, the magnitude vectors can easily be averaged. But what about the frequency vectors?
+In terms of poly pitch shifting, multiple differently resampled `magnitude` and `frequency` vectors are to be combined together. For example, the magnitude vectors can easily be averaged. But what about the frequency vectors?
 
 The basic concept of this algorithm extension is to only keep the frequency value of the strongest magnitude value. So the *strongest* magnitude will mask the *weakest* one. Thus, all remaining *masked* components become *inaudible*.
 
-In this way, the multi pitch shifting can be performed *simultaneously* in the same DFT frame. There is no need to build a separate STFT pipeline for different pitch variations to superimpose the synthesized signals in the time domain.
+In this way, the poly pitch shifting can be performed *simultaneously* in the same DFT frame. There is no need to build a separate STFT pipeline for different pitch variations to superimpose the synthesized signals in the time domain.
 
 ## Formant preservation
 
@@ -189,7 +189,7 @@ To apply multiple pitch shifts at once, separate each factor by a comma, e.g. `-
 
 To enable the formant preservation feature specify a suitable *quefrency* value in milliseconds. Depending on the source signal, begin with a small value like `-q 1`. Generally, the *quefrency* value has to be smaller than the fundamental period, as reciprocal of the fundamental frequency, of the source signal.
 
-At the moment the formant preservation doesn't seem to work well along with the multi pitch shifting and smaller pitch shifting factors. Further investigation is therefore necessary...
+At the moment the formant preservation doesn't seem to work well along with the poly pitch shifting and smaller pitch shifting factors. Further investigation is therefore necessary...
 
 ## Further reading
 
