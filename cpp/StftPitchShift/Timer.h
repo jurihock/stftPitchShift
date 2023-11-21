@@ -35,19 +35,47 @@ namespace stftpitchshift
       data.assign(other.data.begin(), other.data.end());
     }
 
+    size_t capacity() const
+    {
+      return data.capacity();
+    }
+
+    size_t size() const
+    {
+      return data.size();
+    }
+
     void cls()
     {
       data.clear();
     }
 
+    double lap() const
+    {
+      if (data.empty())
+      {
+        return 0;
+      }
+
+      const std::chrono::steady_clock::duration duration = std::chrono::steady_clock::now() - timestamp.first;
+      const double value = std::chrono::duration_cast<T>(duration * 1e+3).count() * 1e-3;
+
+      return value;
+    }
+
     void tic()
     {
-      timestamp = std::chrono::steady_clock::now();
+      timestamp.last = std::chrono::steady_clock::now();
+
+      if (data.empty())
+      {
+        timestamp.first = timestamp.last;
+      }
     }
 
     void toc()
     {
-      const std::chrono::steady_clock::duration duration = std::chrono::steady_clock::now() - timestamp;
+      const std::chrono::steady_clock::duration duration = std::chrono::steady_clock::now() - timestamp.last;
       const double value = std::chrono::duration_cast<T>(duration * 1e+3).count() * 1e-3;
 
       data.push_back(value);
@@ -80,7 +108,12 @@ namespace stftpitchshift
 
   private:
 
-    std::chrono::time_point<std::chrono::steady_clock> timestamp;
+    struct
+    {
+      std::chrono::time_point<std::chrono::steady_clock> first, last;
+    }
+    timestamp;
+
     std::vector<double> data;
 
   };
