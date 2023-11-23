@@ -1,6 +1,7 @@
 #pragma once
 
 #include <chrono>
+#include <ios>
 #include <iostream>
 #include <map>
 #include <numeric>
@@ -100,8 +101,9 @@ namespace stftpitchshift
       const double stdev = std::sqrt(sumsum / data.size() - mean * mean);
 
       std::ostringstream result;
+      result.setf(result.flags() | std::ios::fixed);
       result.precision(3);
-      result << mean << " ± " << stdev << " " << unit << " n=" << data.size();
+      result << mean << " \u00b1 " << stdev << " " << unit << " n=" << data.size();
 
       return result.str();
     }
