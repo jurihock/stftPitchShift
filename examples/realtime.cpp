@@ -94,10 +94,11 @@ void audio_interface_callback(std::span<float> input, std::span<float> output)
     buffer.input.begin());
 
   // copy new input samples
-  std::copy(
+  std::transform(
     input.begin(),
     input.end(),
-    buffer.input.begin() + analysis_window_size);
+    buffer.input.begin() + analysis_window_size,
+    [](float value) { return static_cast<double>(value); });
 
   // apply pitch shifting within the built-in STFT routine
   (*stft)(buffer.input, buffer.output, [&](std::span<std::complex<double>> dft)
@@ -106,10 +107,11 @@ void audio_interface_callback(std::span<float> input, std::span<float> output)
   });
 
   // copy new output samples back
-  std::copy(
+  std::transform(
     buffer.output.begin() - synthesis_window_size + analysis_window_size,
     buffer.output.end() - synthesis_window_size,
-    output.begin());
+    output.begin(),
+    [](double value) { return static_cast<float>(value); });
 
   // shift output buffer
   std::copy(
