@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cmath>
+#include <complex>
 
 // Avoid M_PI constants and thus the need to
 // deal with _USE_MATH_DEFINES in Windows builds.
@@ -64,6 +65,15 @@ namespace stftpitchshift
       }
 
       return T(0);
+    }
+
+    /**
+     * Approximates the phase angle of the complex number z.
+     **/
+    template<class T>
+    inline static T atan2(const std::complex<T>& z)
+    {
+      return Arctangent::atan2(z.imag(), z.real());
     }
   }
 }

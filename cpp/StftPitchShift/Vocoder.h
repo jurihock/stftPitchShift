@@ -24,6 +24,8 @@ namespace stftpitchshift
 
     Vocoder(const std::tuple<size_t, size_t> framesize, const size_t hopsize, const double samplerate)
     {
+      const double pi = 2.0 * std::acos(-1.0);
+
       const size_t dftsize = std::get<0>(framesize) / 2 + 1;
 
       stft_freq_inc = samplerate / std::get<0>(framesize);
@@ -99,8 +101,6 @@ namespace stftpitchshift
 
   private:
 
-    const double pi = 2.0 * std::acos(-1.0);
-
     double stft_freq_inc;
     double stft_phase_inc;
 
@@ -108,17 +108,19 @@ namespace stftpitchshift
     std::vector<double> decode_phase_buffer;
     std::vector<double> decode_phase_shift;
 
-    inline double angle(const std::complex<double>& z) const
+    inline static double angle(const std::complex<double>& z)
     {
       #if defined(ENABLE_ARCTANGENT_APPROXIMATION)
-        return Arctangent::atan2(z.imag(), z.real());
+        return Arctangent::atan2(z);
       #else
         return std::arg(z);
       #endif
     }
 
-    inline double wrap(const double phase) const
+    inline static double wrap(const double phase)
     {
+      const double pi = 2.0 * 3.14159265358979323846;
+
       return phase - pi * std::floor(phase / pi + 0.5);
     }
 
