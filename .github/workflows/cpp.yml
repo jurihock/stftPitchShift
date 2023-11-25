@@ -15,6 +15,7 @@ jobs:
       uses: actions/checkout@master
 
     - name: Prep
+      run: sudo apt update
       run: sudo apt install --yes build-essential cmake debhelper devscripts
 
     - name: Build
