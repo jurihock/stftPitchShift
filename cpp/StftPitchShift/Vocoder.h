@@ -7,6 +7,8 @@
 #include <tuple>
 #include <vector>
 
+#include <StftPitchShift/Arctangent.h>
+
 namespace stftpitchshift
 {
   template<class T>
@@ -52,7 +54,7 @@ namespace stftpitchshift
 
       for (size_t i = 0; i < dft.size(); ++i)
       {
-        phase = std::arg(dft[i]);
+        phase = angle(dft[i]);
 
         delta = phase - encode_phase_buffer[i];
         encode_phase_buffer[i] = phase;
@@ -105,6 +107,15 @@ namespace stftpitchshift
     std::vector<double> encode_phase_buffer;
     std::vector<double> decode_phase_buffer;
     std::vector<double> decode_phase_shift;
+
+    inline double angle(const std::complex<double>& z) const
+    {
+      #if defined(ENABLE_ARCTANGENT_APPROXIMATION)
+        return Arctangent::atan2(z.imag(), z.real());
+      #else
+        return std::arg(z);
+      #endif
+    }
 
     inline double wrap(const double phase) const
     {
