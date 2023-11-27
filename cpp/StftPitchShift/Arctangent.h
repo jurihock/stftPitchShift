@@ -21,27 +21,31 @@ namespace stftpitchshift
     {
       if (y == 0 && x == 0)
       {
+        // skip approximation and return
+        // zero instead of NaN in this case
         return T(0);
       }
 
-      const int ys = std::signbit(y);
-      const int xs = std::signbit(x);
+      // extract the sign bits
+      const bool ys = std::signbit(y);
+      const bool xs = std::signbit(x);
 
-      const int q = ((ys & ~xs) << 2) | (xs << 1);
+      // determine the quadrant offset and sign
+      const int q = (ys & ~xs) * 4 + xs * 2;
       const int s = (ys ^ xs) ? -1 : +1;
 
-      const T yx = y * x;
-      const T yy = y * y;
-      const T xx = x * x;
-
+      // calculate the arctangent in the first quadrant
       const T a = T(0.596227);
-      const T b = std::abs(a * yx);
-      const T c = b + yy;
-      const T d = c / (c + b + xx);
-      const T e = q + std::copysign(d, s);
-      const T f = T(1.57079632679489661923);
+      const T b = std::abs(a * y * x);
+      const T c = b + y * y;
+      const T d = b + x * x;
+      const T e = c / (c + d);
 
-      return e * f;
+      // translate it to the proper quadrant
+      const T phi = q + std::copysign(e, s);
+
+      // translate the result from [0, 4) to [0, 2pi)
+      return phi * T(1.57079632679489661923);
     }
 
     template<std::floating_point T>
