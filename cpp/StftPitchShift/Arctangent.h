@@ -27,8 +27,8 @@ namespace stftpitchshift
       }
 
       // extract the sign bits
-      const bool ys = std::signbit(y);
-      const bool xs = std::signbit(x);
+      const int ys = std::signbit(y);
+      const int xs = std::signbit(x);
 
       // determine the quadrant offset and sign
       const int q = (ys & ~xs) * 4 + xs * 2;
