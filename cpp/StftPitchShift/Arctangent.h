@@ -2,44 +2,21 @@
 
 #include <cmath>
 #include <complex>
-
-// Avoid M_PI constants and thus the need to
-// deal with _USE_MATH_DEFINES in Windows builds.
-// https://learn.microsoft.com/cpp/c-runtime-library/math-constants
-#define ARCTANGENT_PI_1 3.14159265358979323846
-#define ARCTANGENT_PI_2 1.57079632679489661923
-#define ARCTANGENT_PI_4 0.785398163397448309616
+#include <concepts>
 
 namespace stftpitchshift
 {
+  /**
+   * Arctangent approximation according to [1].
+   *
+   * [1] Xavier Girones and Carme Julia and Domenec Puig
+   *     Full Quadrant Approximations for the Arctangent Function
+   *     IEEE Signal Processing Magazine (2013)
+   *     https://ieeexplore.ieee.org/document/6375931
+   **/
   namespace Arctangent
   {
-    /**
-     * Approximate the arctangent according to [1].
-     *
-     * [1] Sreeraman Rajan and Sichun Wang and Robert Inkol and Alain Joyal
-     *     Efficient approximations for the arctangent function
-     *     IEEE Signal Processing Magazine (2006)
-     *     https://ieeexplore.ieee.org/document/1628884
-     **/
-    template<class T>
-    inline static T atan(const T q)
-    {
-      return (T(ARCTANGENT_PI_4 + 0.273) - T(0.273) * q) * q;
-    }
-
-    /**
-     * Approximate the arctangent according to [1] and [2].
-     *
-     * [1] Sreeraman Rajan and Sichun Wang and Robert Inkol and Alain Joyal
-     *     Efficient approximations for the arctangent function
-     *     IEEE Signal Processing Magazine (2006)
-     *     https://ieeexplore.ieee.org/document/1628884
-     *
-     * [2] Dmytro Mishkin
-     *     https://github.com/ducha-aiki/fast_atan2
-     **/
-    template<class T>
+    template<std::floating_point T>
     inline static T atan2(const T y, const T x)
     {
       if (y == 0 && x == 0)
@@ -47,30 +24,27 @@ namespace stftpitchshift
         return T(0);
       }
 
-      const auto Y = std::abs(y);
-      const auto X = std::abs(x);
+      const int ys = std::signbit(y);
+      const int xs = std::signbit(x);
 
-      const auto octant = ((x < 0) << 2) + ((y < 0) << 1) + (X <= Y);
+      const int q = ((ys & ~xs) << 2) | (xs << 1);
+      const int s = (ys ^ xs) ? -1 : +1;
 
-      switch (octant)
-      {
-        /* 1 */ case 0: return + Arctangent::atan(Y / X);
-        /* 2 */ case 1: return - Arctangent::atan(X / Y) + T(ARCTANGENT_PI_2);
-        /* 3 */ case 5: return + Arctangent::atan(X / Y) + T(ARCTANGENT_PI_2);
-        /* 4 */ case 4: return - Arctangent::atan(Y / X) + T(ARCTANGENT_PI_1);
-        /* 5 */ case 6: return + Arctangent::atan(Y / X) - T(ARCTANGENT_PI_1);
-        /* 6 */ case 7: return - Arctangent::atan(X / Y) - T(ARCTANGENT_PI_2);
-        /* 7 */ case 3: return + Arctangent::atan(X / Y) - T(ARCTANGENT_PI_2);
-        /* 8 */ case 2: return - Arctangent::atan(Y / X);
-      }
+      const T yx = y * x;
+      const T yy = y * y;
+      const T xx = x * x;
 
-      return T(0);
+      const T a = T(0.596227);
+      const T b = std::abs(a * yx);
+      const T c = b + yy;
+      const T d = c / (c + b + xx);
+      const T e = q + std::copysign(d, s);
+      const T f = T(1.57079632679489661923);
+
+      return e * f;
     }
 
-    /**
-     * Approximates the phase angle of the complex number z.
-     **/
-    template<class T>
+    template<std::floating_point T>
     inline static T atan2(const std::complex<T>& z)
     {
       return Arctangent::atan2(z.imag(), z.real());
