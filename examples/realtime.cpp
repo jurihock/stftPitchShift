@@ -35,7 +35,7 @@ std::shared_ptr<STFT<double>> stft;
 std::shared_ptr<StftPitchShiftCore<double>> core;
 
 // example of an IO callback
-void audio_interface_callback(std::span<float> input, std::span<float> output);
+void audio_interface_callback(std::span<const float> input, std::span<float> output);
 
 int main()
 {
@@ -78,7 +78,7 @@ int main()
   return 0;
 }
 
-void audio_interface_callback(std::span<float> input, std::span<float> output)
+void audio_interface_callback(std::span<const float> input, std::span<float> output)
 {
   const auto analysis_window_size  = std::get<0>(framesize);
   const auto synthesis_window_size = std::get<1>(framesize);
