@@ -15,7 +15,7 @@ public:
   {
   }
 
-  void calibrate(const std::span<std::complex<T>> data)
+  void calibrate(const std::span<const std::complex<T>> data)
   {
     target = rms(data);
   }
@@ -42,7 +42,7 @@ private:
 
   T target;
 
-  static T rms(const std::span<std::complex<T>> data)
+  static T rms(const std::span<const std::complex<T>> data)
   {
     // without 1/N and sqrt
 

@@ -74,7 +74,7 @@ StftPitchShift::StftPitchShift(
 }
 
 void StftPitchShift::shiftpitch(
-  const std::span<float> input,
+  const std::span<const float> input,
   const std::span<float> output,
   const double factor,
   const double quefrency,
@@ -91,7 +91,7 @@ void StftPitchShift::shiftpitch(
 }
 
 void StftPitchShift::shiftpitch(
-  const std::span<double> input,
+  const std::span<const double> input,
   const std::span<double> output,
   const double factor,
   const double quefrency,
@@ -108,7 +108,7 @@ void StftPitchShift::shiftpitch(
 }
 
 void StftPitchShift::shiftpitch(
-  const std::span<float> input,
+  const std::span<const float> input,
   const std::span<float> output,
   const std::vector<double>& factors,
   const double quefrency,
@@ -133,7 +133,7 @@ void StftPitchShift::shiftpitch(
 }
 
 void StftPitchShift::shiftpitch(
-  const std::span<double> input,
+  const std::span<const double> input,
   const std::span<double> output,
   const std::vector<double>& factors,
   const double quefrency,

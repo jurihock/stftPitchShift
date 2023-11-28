@@ -22,7 +22,7 @@ namespace stftpitchshift
     }
 
     template<class T>
-    void operator()(const std::span<T> data)
+    void operator()(const std::span<const T> data)
     {
       if (fileindex < minindex)
       {

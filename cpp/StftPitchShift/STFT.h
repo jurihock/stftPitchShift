@@ -78,7 +78,7 @@ namespace stftpitchshift
       buffer.freq.resize(buffer.size / 2 + 1);
     }
 
-    void operator()(const std::span<T> input, const std::span<T> output, const std::function<void(std::span<std::complex<T>> dft)> callback)
+    void operator()(const std::span<const T> input, const std::span<T> output, const std::function<void(std::span<std::complex<T>> dft)> callback)
     {
       const size_t samples = (std::min)(input.size(), output.size());
 
@@ -96,7 +96,7 @@ namespace stftpitchshift
         timers.loop.tic();
         for (size_t hop = 0; (hop + buffer.size) < samples; hop += hopsize)
         {
-          const std::span<T> src = input.subspan(hop, buffer.size);
+          const std::span<const T> src = input.subspan(hop, buffer.size);
           const std::span<T> dst = output.subspan(hop, buffer.size);
 
           timers.analysis.tic();
@@ -124,7 +124,7 @@ namespace stftpitchshift
       {
         for (size_t hop = 0; (hop + buffer.size) < samples; hop += hopsize)
         {
-          const std::span<T> src = input.subspan(hop, buffer.size);
+          const std::span<const T> src = input.subspan(hop, buffer.size);
           const std::span<T> dst = output.subspan(hop, buffer.size);
 
           reject(src, buffer.time, window.analysis);
@@ -182,7 +182,7 @@ namespace stftpitchshift
       fft->ifft(dft, frame);
     }
 
-    inline void reject(const std::span<T> input, const std::span<T> frame, const std::span<T> window) const
+    inline void reject(const std::span<const T> input, const std::span<T> frame, const std::span<T> window) const
     {
       for (size_t i = 0; i < window.size(); ++i)
       {
@@ -190,7 +190,7 @@ namespace stftpitchshift
       }
     }
 
-    inline void inject(const std::span<T> output, const std::span<T> frame, const std::span<T> window) const
+    inline void inject(const std::span<T> output, const std::span<const T> frame, const std::span<T> window) const
     {
       for (size_t i = 0; i < window.size(); ++i)
       {

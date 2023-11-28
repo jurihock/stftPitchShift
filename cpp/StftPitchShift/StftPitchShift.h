@@ -85,7 +85,7 @@ namespace stftpitchshift
      * @param distortion The fractional timbre shifting factor.
      */
     void shiftpitch(
-      const std::span<float> input,
+      const std::span<const float> input,
       const std::span<float> output,
       const double factor = 1,
       const double quefrency = 0,
@@ -99,7 +99,7 @@ namespace stftpitchshift
      * @param distortion The fractional timbre shifting factor.
      */
     void shiftpitch(
-      const std::span<double> input,
+      const std::span<const double> input,
       const std::span<double> output,
       const double factor = 1,
       const double quefrency = 0,
@@ -113,7 +113,7 @@ namespace stftpitchshift
      * @param distortion The fractional timbre shifting factor.
      */
     void shiftpitch(
-      const std::span<float> input,
+      const std::span<const float> input,
       const std::span<float> output,
       const std::vector<double>& factors,
       const double quefrency = 0,
@@ -127,7 +127,7 @@ namespace stftpitchshift
      * @param distortion The fractional timbre shifting factor.
      */
     void shiftpitch(
-      const std::span<double> input,
+      const std::span<const double> input,
       const std::span<double> output,
       const std::vector<double>& factors,
       const double quefrency = 0,

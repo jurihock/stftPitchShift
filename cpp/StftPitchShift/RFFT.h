@@ -119,7 +119,7 @@ namespace stftpitchshift
 
   public:
 
-    void fft(const std::span<T> frame, const std::span<std::complex<T>> dft)
+    void fft(const std::span<const T> frame, const std::span<std::complex<T>> dft)
     {
       assert(dft.size() == frame.size() / 2 + 1);
 
@@ -147,7 +147,7 @@ namespace stftpitchshift
       }
     }
 
-    void ifft(const std::span<std::complex<T>> dft, const std::span<T> frame)
+    void ifft(const std::span<const std::complex<T>> dft, const std::span<T> frame)
     {
       assert(dft.size() == frame.size() / 2 + 1);
 
@@ -237,22 +237,22 @@ namespace stftpitchshift
 
   public:
 
-    void fft(const std::span<float> frame, const std::span<std::complex<float>> dft) override
+    void fft(const std::span<const float> frame, const std::span<std::complex<float>> dft) override
     {
       precision.f.fft(frame, dft);
     }
 
-    void fft(const std::span<double> frame, const std::span<std::complex<double>> dft) override
+    void fft(const std::span<const double> frame, const std::span<std::complex<double>> dft) override
     {
       precision.d.fft(frame, dft);
     }
 
-    void ifft(const std::span<std::complex<float>> dft, const std::span<float> frame) override
+    void ifft(const std::span<const std::complex<float>> dft, const std::span<float> frame) override
     {
       precision.f.ifft(dft, frame);
     }
 
-    void ifft(const std::span<std::complex<double>> dft, const std::span<double> frame) override
+    void ifft(const std::span<const std::complex<double>> dft, const std::span<double> frame) override
     {
       precision.d.ifft(dft, frame);
     }

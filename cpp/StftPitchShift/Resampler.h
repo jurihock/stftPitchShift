@@ -35,7 +35,7 @@ namespace stftpitchshift
       linear<T>(x, x);
     }
 
-    void linear(const std::span<T> x,
+    void linear(const std::span<const T> x,
                 const std::span<T> y) const
     {
       linear<T>(x, y);
@@ -46,14 +46,14 @@ namespace stftpitchshift
       linear<std::complex<T>>(x, x);
     }
 
-    void linear(const std::span<std::complex<T>> x,
+    void linear(const std::span<const std::complex<T>> x,
                 const std::span<std::complex<T>> y) const
     {
       linear<std::complex<T>>(x, y);
     }
 
-    void bilinear(const std::span<T> x0,
-                  const std::span<T> x1,
+    void bilinear(const std::span<const T> x0,
+                  const std::span<const T> x1,
                   const std::span<T> y) const
     {
       assert(x0.size() == y.size());
@@ -71,8 +71,8 @@ namespace stftpitchshift
       }
     }
 
-    void bilinear(const std::span<std::complex<T>> x0,
-                  const std::span<std::complex<T>> x1,
+    void bilinear(const std::span<const std::complex<T>> x0,
+                  const std::span<const std::complex<T>> x1,
                   const std::span<std::complex<T>> y) const
     {
       assert(x0.size() == y.size());
@@ -95,7 +95,7 @@ namespace stftpitchshift
     double value;
 
     template<class V>
-    void linear(const std::span<V> x,
+    void linear(const std::span<const V> x,
                 const std::span<V> y) const
     {
       assert(x.size() == y.size());
