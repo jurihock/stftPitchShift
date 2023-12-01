@@ -33,14 +33,14 @@ namespace stftpitchshift
 
       encode_phase_buffer.resize(dftsize);
       decode_phase_buffer.resize(dftsize);
-      decode_phase_shift.resize(dftsize);
+      decode_phase_offset.resize(dftsize);
 
       if (std::get<1>(framesize) != std::get<0>(framesize))
       {
         for (size_t i = 0; i < dftsize; ++i)
         {
           // compensate asymmetric synthesis window by virtual time shifting #38
-          decode_phase_shift[i] = pi * i * std::get<1>(framesize) / dftsize;
+          decode_phase_offset[i] = pi * i * std::get<1>(framesize) / dftsize;
         }
       }
     }
@@ -91,7 +91,7 @@ namespace stftpitchshift
         decode_phase_buffer[i] += delta;
         phase = decode_phase_buffer[i];
 
-        phase -= decode_phase_shift[i]; // #38
+        phase -= decode_phase_offset[i]; // #38
 
         dft[i] = std::polar<T>(
           dft[i].real(),
@@ -106,7 +106,7 @@ namespace stftpitchshift
 
     std::vector<double> encode_phase_buffer;
     std::vector<double> decode_phase_buffer;
-    std::vector<double> decode_phase_shift;
+    std::vector<double> decode_phase_offset;
 
     inline static double angle(const std::complex<double>& z)
     {
