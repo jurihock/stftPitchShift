@@ -17,9 +17,9 @@ namespace stftpitchshift
 
   public:
 
-    Pitcher(const size_t framesize, const double samplerate) :
-      framesize(framesize),
+    Pitcher(const double samplerate, const size_t framesize) :
       samplerate(samplerate),
+      framesize(framesize),
       nyquist(samplerate / 2)
     {
     }
@@ -115,8 +115,8 @@ namespace stftpitchshift
 
   private:
 
-    const size_t framesize;
     const double samplerate;
+    const size_t framesize;
     const double nyquist;
 
     std::vector<double> values;

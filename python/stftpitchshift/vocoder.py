@@ -6,7 +6,7 @@ def wrap(x):
     return (x + np.pi) % (2 * np.pi) - np.pi
 
 
-def encode(frames, framesize, hopsize, samplerate):
+def encode(samplerate, frames, framesize, hopsize):
 
     M, N = frames.shape
 
@@ -37,7 +37,7 @@ def encode(frames, framesize, hopsize, samplerate):
     return data
 
 
-def decode(frames, framesize, hopsize, samplerate):
+def decode(samplerate, frames, framesize, hopsize):
 
     M, N = frames.shape
 

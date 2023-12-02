@@ -17,10 +17,10 @@ namespace stftpitchshift
 
   public:
 
-    Cepster(const std::shared_ptr<FFT> fft, const size_t framesize, const double samplerate) :
+    Cepster(const std::shared_ptr<FFT> fft, const double samplerate, const size_t framesize) :
       fft(fft),
-      framesize(framesize),
       samplerate(samplerate),
+      framesize(framesize),
       spectrum(framesize / 2 + 1),
       cepstrum(framesize)
     {
@@ -63,8 +63,8 @@ namespace stftpitchshift
   private:
 
     const std::shared_ptr<FFT> fft;
-    const size_t framesize;
     const double samplerate;
+    const size_t framesize;
 
     double value;
     size_t cutoff;

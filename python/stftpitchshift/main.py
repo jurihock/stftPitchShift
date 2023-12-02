@@ -38,7 +38,7 @@ def main(input, output, pitch, quefrency, timbre, rms, window, overlap, debug):
     framesize = list(number(framesize) for framesize in window.split(','))
     hopsize = framesize[-1] // int(overlap)
 
-    pitchshifter = StftPitchShift(framesize, hopsize, samplerate)
+    pitchshifter = StftPitchShift(samplerate, framesize, hopsize)
 
     channels = x.shape[-1] if x.ndim > 1 else 1
 

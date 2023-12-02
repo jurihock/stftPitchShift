@@ -13,16 +13,16 @@ class StftPitchShift:
     Short-time Fourier transform (STFT) based pitch shifting.
     '''
 
-    def __init__(self, framesize, hopsize, samplerate):
+    def __init__(self, samplerate, framesize, hopsize):
         '''
+        :param samplerate: The sample rate of the signal in hertz.
         :param framesize: The STFT frame size in samples.
         :param hopsize: The STFT hop size in samples.
-        :param samplerate: The sample rate of the signal in hertz.
         '''
 
+        self.samplerate = samplerate
         self.framesize = framesize
         self.hopsize = hopsize
-        self.samplerate = samplerate
 
     def shiftpitch(self, input, factors = 1, quefrency = 0, distortion = 1, normalization = False):
         '''
@@ -66,15 +66,15 @@ class StftPitchShift:
                    (np.isnan(x)) | \
                    (abs(x) < np.finfo(x.dtype).tiny)
 
+        samplerate = self.samplerate
         framesize = self.framesize
         hopsize = self.hopsize
-        samplerate = self.samplerate
 
         factors = np.asarray(factors).flatten()
         quefrency = int(quefrency * samplerate)
 
         frames = stft(input, framesize, hopsize)
-        frames = encode(frames, framesize, hopsize, samplerate)
+        frames = encode(samplerate, frames, framesize, hopsize)
 
         if normalization:
 
@@ -99,20 +99,20 @@ class StftPitchShift:
 
                 mask = isnotnormal(envelopes)
 
-            frames = shiftpitch(frames, factors, samplerate)
+            frames = shiftpitch(samplerate, frames, factors)
 
             frames.real *= envelopes
             frames.real[mask] = 0
 
         else:
 
-            frames = shiftpitch(frames, factors, samplerate)
+            frames = shiftpitch(samplerate, frames, factors)
 
         if normalization:
 
             frames = normalize(frames, frames0)
 
-        frames = decode(frames, framesize, hopsize, samplerate)
+        frames = decode(samplerate, frames, framesize, hopsize)
         output = istft(frames, framesize, hopsize)
 
         # disable reference count check on resize,

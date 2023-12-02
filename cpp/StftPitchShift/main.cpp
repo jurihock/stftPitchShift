@@ -64,9 +64,9 @@ int main(int argc, char** argv)
       const std::span<double> output = { outdata.data() + channel * size, size };
 
       StftPitchShift stft(
+        samplerate,
         cli.framesize,
         std::get<1>(cli.framesize) / cli.hoprate,
-        samplerate,
         cli.normalization,
         cli.chronometry);
 

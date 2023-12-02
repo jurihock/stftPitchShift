@@ -18,54 +18,54 @@ namespace stftpitchshift
   public:
 
     StftPitchShiftCore(
+      const double samplerate,
       const size_t framesize,
-      const size_t hopsize,
-      const double samplerate) :
+      const size_t hopsize) :
       StftPitchShiftCore(
         std::make_shared<RFFT>(),
+        samplerate,
         std::make_tuple(framesize, framesize),
-        hopsize,
-        samplerate)
+        hopsize)
     {
     }
 
     StftPitchShiftCore(
+      const double samplerate,
       const std::tuple<size_t, size_t> framesize,
-      const size_t hopsize,
-      const double samplerate) :
+      const size_t hopsize) :
       StftPitchShiftCore(
         std::make_shared<RFFT>(),
+        samplerate,
         framesize,
-        hopsize,
-        samplerate)
+        hopsize)
     {
     }
 
     StftPitchShiftCore(
       const std::shared_ptr<FFT> fft,
+      const double samplerate,
       const size_t framesize,
-      const size_t hopsize,
-      const double samplerate) :
+      const size_t hopsize) :
       StftPitchShiftCore(
         fft,
+        samplerate,
         std::make_tuple(framesize, framesize),
-        hopsize,
-        samplerate)
+        hopsize)
     {
     }
 
     StftPitchShiftCore(
       const std::shared_ptr<FFT> fft,
+      const double samplerate,
       const std::tuple<size_t, size_t> framesize,
-      const size_t hopsize,
-      const double samplerate) :
+      const size_t hopsize) :
       fft(fft),
+      samplerate(samplerate),
       framesize(framesize),
       hopsize(hopsize),
-      samplerate(samplerate),
-      vocoder(framesize, hopsize, samplerate),
-      pitcher(std::get<0>(framesize), samplerate),
-      cepster(fft, std::get<0>(framesize), samplerate),
+      vocoder(samplerate, framesize, hopsize),
+      pitcher(samplerate, std::get<0>(framesize)),
+      cepster(fft, samplerate, std::get<0>(framesize)),
       envelope(std::get<0>(framesize) / 2 + 1)
     {
     }
@@ -172,9 +172,9 @@ namespace stftpitchshift
   private:
 
     const std::shared_ptr<FFT> fft;
+    const double samplerate;
     const std::tuple<size_t, size_t> framesize;
     const size_t hopsize;
-    const double samplerate;
 
     Vocoder<T> vocoder;
     Pitcher<T> pitcher;

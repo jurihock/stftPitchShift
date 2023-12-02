@@ -4,7 +4,7 @@ using namespace stftpitchshift;
 
 int main()
 {
-  StftPitchShift pitchshifter(1024, 256, 44100);
+  StftPitchShift pitchshifter(44100, 1024, 256);
 
   std::vector<float> x(44100);
   std::vector<float> y(x.size());

@@ -119,7 +119,7 @@ To include this library in your C++ audio project, study the minimal C++ example
 
 using namespace stftpitchshift;
 
-StftPitchShift pitchshifter(1024, 256, 44100);
+StftPitchShift pitchshifter(44100, 1024, 256);
 
 std::vector<float> x(44100);
 std::vector<float> y(x.size());
@@ -142,7 +142,7 @@ Also feel free to explore the Python class `StftPitchShift` in your personal aud
 ```python
 from stftpitchshift import StftPitchShift
 
-pitchshifter = StftPitchShift(1024, 256, 44100)
+pitchshifter = StftPitchShift(44100, 1024, 256)
 
 x = [0] * 44100
 y = pitchshifter.shiftpitch(x, 1)

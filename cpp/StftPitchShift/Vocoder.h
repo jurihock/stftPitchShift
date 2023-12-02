@@ -17,12 +17,12 @@ namespace stftpitchshift
 
   public:
 
-    Vocoder(const size_t framesize, const size_t hopsize, const double samplerate) :
-      Vocoder(std::make_tuple(framesize, framesize), hopsize, samplerate)
+    Vocoder(const double samplerate, const size_t framesize, const size_t hopsize) :
+      Vocoder(samplerate, std::make_tuple(framesize, framesize), hopsize)
     {
     }
 
-    Vocoder(const std::tuple<size_t, size_t> framesize, const size_t hopsize, const double samplerate)
+    Vocoder(const double samplerate, const std::tuple<size_t, size_t> framesize, const size_t hopsize)
     {
       const double pi = 2.0 * std::acos(-1.0);
 

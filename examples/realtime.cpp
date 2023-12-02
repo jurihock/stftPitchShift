@@ -49,7 +49,7 @@ int main()
   buffer.output.resize(total_buffer_size);
 
   stft = std::make_shared<STFT<double>>(framesize, hopsize);
-  core = std::make_shared<StftPitchShiftCore<double>>(framesize, hopsize, samplerate);
+  core = std::make_shared<StftPitchShiftCore<double>>(samplerate, framesize, hopsize);
 
   // set pitch shifting parameters as required
 
