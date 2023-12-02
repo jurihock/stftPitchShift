@@ -67,6 +67,7 @@ int main(int argc, char** argv)
         samplerate,
         cli.framesize,
         std::get<1>(cli.framesize) / cli.hoprate,
+        1, // TODO
         cli.normalization,
         cli.chronometry);
 

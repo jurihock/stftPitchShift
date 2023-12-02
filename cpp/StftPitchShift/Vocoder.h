@@ -17,19 +17,19 @@ namespace stftpitchshift
 
   public:
 
-    Vocoder(const double samplerate, const size_t framesize, const size_t hopsize) :
-      Vocoder(samplerate, std::make_tuple(framesize, framesize), hopsize)
+    Vocoder(const double samplerate, const size_t framesize, const size_t hopsize, const size_t padsize) :
+      Vocoder(samplerate, std::make_tuple(framesize, framesize), hopsize, padsize)
     {
     }
 
-    Vocoder(const double samplerate, const std::tuple<size_t, size_t> framesize, const size_t hopsize)
+    Vocoder(const double samplerate, const std::tuple<size_t, size_t> framesize, const size_t hopsize, const size_t padsize)
     {
       const double pi = 2.0 * std::acos(-1.0);
 
-      const size_t dftsize = std::get<0>(framesize) / 2 + 1;
+      const size_t dftsize = std::get<0>(framesize) * padsize / 2 + 1;
 
-      stft_freq_inc = samplerate / std::get<0>(framesize);
-      stft_phase_inc = pi * hopsize / std::get<0>(framesize);
+      stft_freq_inc = samplerate / (std::get<0>(framesize) * padsize);
+      stft_phase_inc = pi * hopsize / (std::get<0>(framesize) * padsize);
 
       encode_phase_buffer.resize(dftsize);
       decode_phase_buffer.resize(dftsize);

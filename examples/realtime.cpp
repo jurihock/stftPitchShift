@@ -13,9 +13,11 @@ using namespace stftpitchshift;
 
 // basic parameters
 // - samplerate as required
-// - overlap at least 4
+// - STFT overlap factor at least 4
+// - FFT zero padding factor at least 1
 const double samplerate = 44100;
 const size_t overlap = 4;
+const size_t padding = 1;
 
 // analysis and synthesis window sizes
 // power of two each of them
@@ -48,8 +50,8 @@ int main()
   buffer.input.resize(total_buffer_size);
   buffer.output.resize(total_buffer_size);
 
-  stft = std::make_shared<STFT<double>>(framesize, hopsize);
-  core = std::make_shared<StftPitchShiftCore<double>>(samplerate, framesize, hopsize);
+  stft = std::make_shared<STFT<double>>(framesize, hopsize, padding);
+  core = std::make_shared<StftPitchShiftCore<double>>(samplerate, framesize, hopsize, padding);
 
   // set pitch shifting parameters as required
 

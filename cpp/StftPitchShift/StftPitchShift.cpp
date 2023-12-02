@@ -12,6 +12,7 @@ StftPitchShift::StftPitchShift(
   const double samplerate,
   const size_t framesize,
   const size_t hopsize,
+  const size_t padsize,
   const bool normalization,
   const bool chronometry) :
   StftPitchShift(
@@ -19,6 +20,7 @@ StftPitchShift::StftPitchShift(
     samplerate,
     std::make_tuple(framesize, framesize),
     hopsize,
+    padsize,
     normalization,
     chronometry)
 {
@@ -28,6 +30,7 @@ StftPitchShift::StftPitchShift(
   const double samplerate,
   const std::tuple<size_t, size_t> framesize,
   const size_t hopsize,
+  const size_t padsize,
   const bool normalization,
   const bool chronometry) :
   StftPitchShift(
@@ -35,6 +38,7 @@ StftPitchShift::StftPitchShift(
     samplerate,
     framesize,
     hopsize,
+    padsize,
     normalization,
     chronometry)
 {
@@ -45,6 +49,7 @@ StftPitchShift::StftPitchShift(
   const double samplerate,
   const size_t framesize,
   const size_t hopsize,
+  const size_t padsize,
   const bool normalization,
   const bool chronometry) :
   StftPitchShift(
@@ -52,6 +57,7 @@ StftPitchShift::StftPitchShift(
     samplerate,
     std::make_tuple(framesize, framesize),
     hopsize,
+    padsize,
     normalization,
     chronometry)
 {
@@ -62,12 +68,14 @@ StftPitchShift::StftPitchShift(
   const double samplerate,
   const std::tuple<size_t, size_t> framesize,
   const size_t hopsize,
+  const size_t padsize,
   const bool normalization,
   const bool chronometry) :
   fft(fft),
   samplerate(samplerate),
   framesize(framesize),
   hopsize(hopsize),
+  padsize(padsize),
   normalization(normalization),
   chronometry(chronometry)
 {
@@ -117,14 +125,14 @@ void StftPitchShift::shiftpitch(
   // preemptively clear output #30
   std::fill(output.begin(), output.end(), float(0));
 
-  StftPitchShiftCore<float> core(fft, samplerate, framesize, hopsize);
+  StftPitchShiftCore<float> core(fft, samplerate, framesize, hopsize, padsize);
 
   core.factors(factors);
   core.quefrency(quefrency);
   core.distortion(distortion);
   core.normalization(normalization);
 
-  STFT<float> stft(fft, framesize, hopsize, chronometry);
+  STFT<float> stft(fft, framesize, hopsize, padsize, chronometry);
 
   stft(input, output, [&](std::span<std::complex<float>> dft)
   {
@@ -142,14 +150,14 @@ void StftPitchShift::shiftpitch(
   // preemptively clear output #30
   std::fill(output.begin(), output.end(), double(0));
 
-  StftPitchShiftCore<double> core(fft, samplerate, framesize, hopsize);
+  StftPitchShiftCore<double> core(fft, samplerate, framesize, hopsize, padsize);
 
   core.factors(factors);
   core.quefrency(quefrency);
   core.distortion(distortion);
   core.normalization(normalization);
 
-  STFT<double> stft(fft, framesize, hopsize, chronometry);
+  STFT<double> stft(fft, framesize, hopsize, padsize, chronometry);
 
   stft(input, output, [&](std::span<std::complex<double>> dft)
   {

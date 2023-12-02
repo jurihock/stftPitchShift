@@ -25,25 +25,26 @@ namespace stftpitchshift
 
   public:
 
-    STFT(const size_t framesize, const size_t hopsize, const bool chronometry = false) :
-      STFT(std::make_shared<RFFT>(), std::make_tuple(framesize, framesize), hopsize, chronometry)
+    STFT(const size_t framesize, const size_t hopsize, const size_t padsize, const bool chronometry = false) :
+      STFT(std::make_shared<RFFT>(), std::make_tuple(framesize, framesize), hopsize, padsize, chronometry)
     {
     }
 
-    STFT(const std::shared_ptr<FFT> fft, const size_t framesize, const size_t hopsize, const bool chronometry = false) :
-      STFT(fft, std::make_tuple(framesize, framesize), hopsize, chronometry)
+    STFT(const std::shared_ptr<FFT> fft, const size_t framesize, const size_t hopsize, const size_t padsize, const bool chronometry = false) :
+      STFT(fft, std::make_tuple(framesize, framesize), hopsize, padsize, chronometry)
     {
     }
 
-    STFT(const std::tuple<size_t, size_t> framesize, const size_t hopsize, const bool chronometry = false) :
-      STFT(std::make_shared<RFFT>(), framesize, hopsize, chronometry)
+    STFT(const std::tuple<size_t, size_t> framesize, const size_t hopsize, const size_t padsize, const bool chronometry = false) :
+      STFT(std::make_shared<RFFT>(), framesize, hopsize, padsize, chronometry)
     {
     }
 
-    STFT(const std::shared_ptr<FFT> fft, const std::tuple<size_t, size_t> framesize, const size_t hopsize, const bool chronometry = false) :
+    STFT(const std::shared_ptr<FFT> fft, const std::tuple<size_t, size_t> framesize, const size_t hopsize, const size_t padsize, const bool chronometry = false) :
       fft(fft),
       framesize(framesize),
       hopsize(hopsize),
+      padsize(padsize),
       chronometry(chronometry)
     {
       const auto analysis_window_size = std::get<0>(framesize);
@@ -74,8 +75,8 @@ namespace stftpitchshift
         [unitygain](T value) { return value * unitygain; });
 
       buffer.size = analysis_window_size;
-      buffer.time.resize(buffer.size);
-      buffer.freq.resize(buffer.size / 2 + 1);
+      buffer.time.resize(buffer.size * padsize);
+      buffer.freq.resize(buffer.size * padsize / 2 + 1);
     }
 
     void operator()(const std::span<const T> input, const std::span<T> output, const std::function<void(std::span<std::complex<T>> dft)> callback)
@@ -143,6 +144,7 @@ namespace stftpitchshift
     const std::shared_ptr<FFT> fft;
     const std::tuple<size_t, size_t> framesize;
     const size_t hopsize;
+    const size_t padsize;
     const bool chronometry;
 
     struct

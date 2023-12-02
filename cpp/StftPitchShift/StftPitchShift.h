@@ -21,6 +21,7 @@ namespace stftpitchshift
      * @param samplerate The sample rate of the signal in hertz.
      * @param framesize The STFT frame size in samples (analysis = synthesis).
      * @param hopsize The STFT hop size in samples.
+     * @param padsize The FFT zero padding factor.
      * @param normalization Optionally enable spectral rms normalization.
      * @param chronometry Optionally enable runtime measurements.
      */
@@ -28,6 +29,7 @@ namespace stftpitchshift
       const double samplerate,
       const size_t framesize,
       const size_t hopsize,
+      const size_t padsize = 1,
       const bool normalization = false,
       const bool chronometry = false);
 
@@ -35,6 +37,7 @@ namespace stftpitchshift
      * @param samplerate The sample rate of the signal in hertz.
      * @param framesize The STFT frame size in samples (analysis >= synthesis).
      * @param hopsize The STFT hop size in samples.
+     * @param padsize The FFT zero padding factor.
      * @param normalization Optionally enable spectral rms normalization.
      * @param chronometry Optionally enable runtime measurements.
      */
@@ -42,6 +45,7 @@ namespace stftpitchshift
       const double samplerate,
       const std::tuple<size_t, size_t> framesize,
       const size_t hopsize,
+      const size_t padsize = 1,
       const bool normalization = false,
       const bool chronometry = false);
 
@@ -50,6 +54,7 @@ namespace stftpitchshift
      * @param samplerate The sample rate of the signal in hertz.
      * @param framesize The STFT frame size in samples (analysis = synthesis).
      * @param hopsize The STFT hop size in samples.
+     * @param padsize The FFT zero padding factor.
      * @param normalization Optionally enable spectral rms normalization.
      * @param chronometry Optionally enable runtime measurements.
      */
@@ -58,6 +63,7 @@ namespace stftpitchshift
       const double samplerate,
       const size_t framesize,
       const size_t hopsize,
+      const size_t padsize = 1,
       const bool normalization = false,
       const bool chronometry = false);
 
@@ -66,6 +72,7 @@ namespace stftpitchshift
      * @param samplerate The sample rate of the signal in hertz.
      * @param framesize The STFT frame size in samples (analysis >= synthesis).
      * @param hopsize The STFT hop size in samples.
+     * @param padsize The FFT zero padding factor.
      * @param normalization Optionally enable spectral rms normalization.
      * @param chronometry Optionally enable runtime measurements.
      */
@@ -74,6 +81,7 @@ namespace stftpitchshift
       const double samplerate,
       const std::tuple<size_t, size_t> framesize,
       const size_t hopsize,
+      const size_t padsize = 1,
       const bool normalization = false,
       const bool chronometry = false);
 
@@ -139,6 +147,7 @@ namespace stftpitchshift
     const double samplerate;
     const std::tuple<size_t, size_t> framesize;
     const size_t hopsize;
+    const size_t padsize;
     const bool normalization;
     const bool chronometry;
 
