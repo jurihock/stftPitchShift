@@ -8,6 +8,17 @@ def wrap(x):
 
 def encode(frames, framesize, hopsize, samplerate):
 
+    # return encode_orig(frames, framesize, hopsize, samplerate)
+    return encode_tfr(frames, framesize, hopsize, samplerate)
+
+
+def encode_tfr(frames, framesize, hopsize, samplerate):
+
+    return frames
+
+
+def encode_orig(frames, framesize, hopsize, samplerate):
+
     M, N = frames.shape
 
     analysis_framesize = np.ravel(framesize)[0]

@@ -5,6 +5,50 @@ import numpy as np
 
 def stft(x, framesize, hopsize):
 
+    # return stft_orig(x, framesize, hopsize)
+    return stft_tfr(x, framesize, hopsize)
+
+
+def stft_tfr(x, framesize, hopsize):
+
+    import librosa
+
+    x = np.atleast_1d(x)
+    assert x.ndim == 1
+
+    analysis_window_size = np.ravel(framesize)[0]
+    synthesis_window_size = np.ravel(framesize)[-1]
+
+    dftsize = analysis_window_size
+
+    freq, time, magn = librosa.reassigned_spectrogram(
+        x,
+        sr=44100,
+        n_fft=analysis_window_size,
+        hop_length=hopsize,
+        window='hann',
+        center=False,
+        reassign_frequencies=True,
+        reassign_times=True,
+        ref_power=1e-9,
+        fill_nan=False,
+        clip=True)
+
+    freq = freq.T
+    time = time.T
+    magn = magn.T
+
+    freq[np.isnan(freq)] = 0
+    time[np.isnan(time)] = 0
+    magn[np.isnan(magn)] = 0
+
+    magn /= analysis_window_size
+
+    return magn + 1j * freq
+
+
+def stft_orig(x, framesize, hopsize):
+
     # check input
 
     x = np.atleast_1d(x)
