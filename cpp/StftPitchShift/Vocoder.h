@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <complex>
@@ -43,6 +44,12 @@ namespace stftpitchshift
           decode_phase_offset[i] = pi * i * std::get<1>(framesize) / dftsize;
         }
       }
+    }
+
+    void reset()
+    {
+      // zero decode phase buffer according to #45
+      std::fill(decode_phase_buffer.begin(), decode_phase_buffer.end(), 0);
     }
 
     void encode(const std::span<std::complex<T>> dft)
