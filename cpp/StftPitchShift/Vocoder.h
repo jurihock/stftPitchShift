@@ -48,7 +48,8 @@ namespace stftpitchshift
 
     void reset()
     {
-      // zero decode phase buffer according to #45
+      // zero both phase buffers according to #45
+      std::fill(encode_phase_buffer.begin(), encode_phase_buffer.end(), 0);
       std::fill(decode_phase_buffer.begin(), decode_phase_buffer.end(), 0);
     }
 
