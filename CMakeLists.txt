@@ -29,8 +29,23 @@ if(MSVC AND BUILD_SHARED_LIBS)
 
 endif()
 
-if((VCPKG AND DEB) OR (DEB AND BREW) OR (VCPKG AND BREW))
-  message(FATAL_ERROR "Please enable only one option {VCPKG,DEB,BREW}, but not multiple at once!")
+set(NOPT 0)
+
+if(VCPKG)
+  MATH(EXPR NOPT "${NOPT}+1")
+endif()
+if(DEB)
+  MATH(EXPR NOPT "${NOPT}+1")
+endif()
+if(BREW)
+  MATH(EXPR NOPT "${NOPT}+1")
+endif()
+if(WASM)
+  MATH(EXPR NOPT "${NOPT}+1")
+endif()
+
+if(NOPT GREATER 1)
+  message(FATAL_ERROR "Please enable only one option {VCPKG,DEB,BREW,WASM}, but not multiple at once!")
 endif()
 
 if(VCPKG)
