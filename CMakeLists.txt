@@ -7,6 +7,9 @@ option(DEB   "Enable deb package build for library and executable" OFF)
 option(BREW  "Enable homebrew package build for library and executable" OFF)
 option(WASM  "Enable web assembly build" OFF)
 
+option(FASTMATH "Enable fast math"  OFF)
+option(FASTATAN "Enable fast atan2" OFF)
+
 if(MSVC)
 
   # optionally treat warnings as errors

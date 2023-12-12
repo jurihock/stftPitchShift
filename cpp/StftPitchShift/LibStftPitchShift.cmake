@@ -67,6 +67,29 @@ target_compile_features(${PROJECT_NAME}
   PRIVATE cxx_std_20
 )
 
+if(FASTMATH)
+
+  message(STATUS "Enabling fast math")
+
+  if(MSVC)
+    target_compile_options(${PROJECT_NAME}
+      PRIVATE /fp:fast)
+  else()
+    target_compile_options(${PROJECT_NAME}
+      PRIVATE -ffast-math)
+  endif()
+
+endif()
+
+if(FASTATAN)
+
+  message(STATUS "Defining ENABLE_ARCTANGENT_APPROXIMATION")
+
+  target_compile_definitions(${PROJECT_NAME}
+    PRIVATE -DENABLE_ARCTANGENT_APPROXIMATION)
+
+endif()
+
 install(
   TARGETS ${PROJECT_NAME}
   LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
