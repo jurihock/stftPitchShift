@@ -26,7 +26,7 @@ def main(input, output, pitch, quefrency, timbre, rms, window, overlap, debug):
     def semicent(value): return value.startswith('+') or value.startswith('-') or (value.startswith('0') and '.' not in value)
     def semitone(value): return pow(2, float(re.match('([+,-]?\\d+){1}([+,-]\\d+){0,1}', value)[1]) / 12)
     def cent(value):     return pow(2, float(re.match('([+,-]?\\d+){1}([+,-]\\d+){0,1}', value)[2] or 0) / 1200)
-    def number(value):   return 1*1024 if value == '1k' else 2*1024 if value == '2k' else 4*1024 if value == '4k' else int(value)
+    def number(value):   return int(value[:-1]) * 1024 if value.lower().endswith('k') else int(value)
 
     x, samplerate = read(input)
 

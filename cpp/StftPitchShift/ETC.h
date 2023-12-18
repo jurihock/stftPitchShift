@@ -86,20 +86,17 @@ double cent(const std::string& value)
 
 size_t number(const std::string& value)
 {
-  if (value == "1k")
+  if (value.empty())
   {
-    return 1 * 1024;
+    return 0;
   }
-  else if (value == "2k")
+
+  if (value.back() == 'k' || value.back() == 'K')
   {
-    return 2 * 1024;
+    const size_t prefix = value.size() - 1;
+
+    return (prefix ? std::stoi(value.substr(0, prefix)) : 0) * 1024;
   }
-  else if (value == "4k")
-  {
-    return 4 * 1024;
-  }
-  else
-  {
-    return std::stoi(value);
-  }
+
+  return std::stoi(value);
 }
