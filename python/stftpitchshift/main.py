@@ -66,8 +66,8 @@ def main(input, output, pitch, quefrency, timbre, rms, window, overlap, debug):
             spectrogramY = figure.add_subplot(2, 1, 2, title='Output Spectrogram')
             spectrogram(framesY, framesize, hopsize, samplerate)
 
-            spectrogramX.get_shared_x_axes().join(spectrogramX, spectrogramY)
-            spectrogramX.get_shared_y_axes().join(spectrogramX, spectrogramY)
+            spectrogramX.sharex(spectrogramY)
+            spectrogramX.sharey(spectrogramY)
 
             plot.tight_layout()
 
