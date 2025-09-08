@@ -103,7 +103,7 @@ namespace stftpitchshift
 
     bool normalization() const
     {
-      return normalizer;
+      return normalizer.get();
     }
 
     void normalization(const bool normalization)
