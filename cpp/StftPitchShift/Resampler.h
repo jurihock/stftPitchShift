@@ -142,10 +142,8 @@ namespace stftpitchshift
         y[i] = k * x[j + 1] + (T(1) - k) * x[j];
       };
 
-      if (value < 1)
+      if (value < 1 && m < n)
       {
-        assert(m < n);
-
         for (ptrdiff_t i = 0; i < m; ++i)
         {
           interpolate(i);
@@ -156,10 +154,8 @@ namespace stftpitchshift
           y[i] = 0;
         }
       }
-      else if (value > 1)
+      else if (value > 1 && m > n)
       {
-        assert(m > n);
-
         for (ptrdiff_t i = n - 1; i >= 0; --i)
         {
           interpolate(i);
@@ -167,6 +163,8 @@ namespace stftpitchshift
       }
       else if (x.data() != y.data())
       {
+        // treat `m == n` as identity according to #60
+
         std::copy(x.begin(), x.end(), y.begin());
       }
     }
