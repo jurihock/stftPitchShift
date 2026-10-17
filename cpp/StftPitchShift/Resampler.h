@@ -98,7 +98,12 @@ namespace stftpitchshift
     void linear(const std::span<const V> x,
                 const std::span<V> y) const
     {
-      assert(x.size() == y.size());
+      if (x.size() != y.size())
+      {
+        throw std::invalid_argument(
+          "Input and output resampling spans must have equal sizes (" +
+          std::to_string(x.size()) + " != " + std::to_string(y.size()) + ")!");
+      }
 
       const ptrdiff_t n = static_cast<ptrdiff_t>(x.size());
       const ptrdiff_t m = static_cast<ptrdiff_t>(n * value);
