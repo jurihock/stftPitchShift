@@ -105,6 +105,17 @@ namespace stftpitchshift
           std::to_string(x.size()) + " != " + std::to_string(y.size()) + ")!");
       }
 
+      if (x.empty())
+      {
+        return;
+      }
+
+      if (x.size() == 1)
+      {
+        y[0] = x[0];
+        return;
+      }
+
       const ptrdiff_t n = static_cast<ptrdiff_t>(x.size());
       const ptrdiff_t m = static_cast<ptrdiff_t>(n * value);
 
