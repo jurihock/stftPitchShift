@@ -123,7 +123,7 @@ namespace stftpitchshift
         // TODO cosine interpolation
         // k = T(0.5) - T(0.5) * std::cos(k * std::acos(T(-1)));
 
-        y[i] = k * x[j + 1] + (1 - k) * x[j];
+        y[i] = k * x[j + 1] + (T(1) - k) * x[j];
       };
 
       if (value < 1)
