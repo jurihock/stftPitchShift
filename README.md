@@ -8,7 +8,7 @@
 ![tag](https://img.shields.io/github/v/tag/jurihock/stftPitchShift?color=gold)
 ![pypi](https://img.shields.io/pypi/v/stftpitchshift?color=gold)
 
-*stftPitchShift* is a Short-Time Fourier Transform ([STFT](https://www.audiolabs-erlangen.de/resources/MIR/FMP/C2/C2_STFT-Basic.html)) based pitch and timbre shifting algorithm implementation, originally inspired by the Stephan M. Bernsee's [smbPitchShift.cpp](https://blogs.zynaptiq.com/bernsee/download). 
+*stftPitchShift* is a Short-Time Fourier Transform ([STFT](https://www.audiolabs-erlangen.de/resources/MIR/FMP/C2/C2_STFT-Basic.html)) based pitch and timbre shifting algorithm implementation, originally inspired by the Stephan M. Bernsee's [smbPitchShift.cpp](https://blogs.zynaptiq.com/bernsee/download).
 
 This repository features two analogical algorithm implementations, [C++](cpp/StftPitchShift) and [Python](python/stftpitchshift). Both contain several [function blocks](#modules) of the same name (but different file extension, of course).
 
@@ -103,7 +103,7 @@ The vocal formants are represented by the *spectral envelope*, which is given by
 Use [CMake](http://cmake.org) to manually build the C++ library, main and example programs like this:
 
 ```cmd
-cmake -S . -B build
+cmake --fresh -S . -B build
 cmake --build build
 ```
 
