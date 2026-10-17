@@ -129,7 +129,8 @@ namespace stftpitchshift
 
         k = k - j;
 
-        const bool ok = (0 <= j) && (j < n - 1);
+        // don't interpolate DC (j=0) component according to #58
+        const bool ok = (0 < j) && (j < n - 1);
 
         if (!ok)
         {
