@@ -78,7 +78,6 @@ namespace stftpitchshift
     void factors(const std::vector<double>& factors)
     {
       pitcher.factors(factors);
-      vocoder.reset(); // #45
     }
 
     double quefrency() const
