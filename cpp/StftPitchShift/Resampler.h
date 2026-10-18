@@ -4,7 +4,9 @@
 #include <cassert>
 #include <cmath>
 #include <complex>
+#include <cstdlib>
 #include <span>
+#include <stdexcept>
 #include <vector>
 
 namespace stftpitchshift
@@ -119,31 +121,30 @@ namespace stftpitchshift
       const ptrdiff_t n = static_cast<ptrdiff_t>(x.size());
       const ptrdiff_t m = static_cast<ptrdiff_t>(n * value);
 
-      const T q = T(n) / T(m);
-
       const auto interpolate = [&](const ptrdiff_t i)
       {
-        T k = i * q;
+        const auto d = std::div(i * n, m);
+        const auto j = d.quot;
+        const auto r = d.rem;
 
-        const ptrdiff_t j = static_cast<ptrdiff_t>(std::trunc(k));
-
-        k = k - j;
+        const T k = T(r) / T(m);
 
         // don't interpolate DC (j=0) component according to #58
-        const bool ok = (0 < j) && (j < n - 1);
 
-        if (!ok)
+        if ((0 < j) && (j < n - 1))
         {
-          return;
+          // TODO cosine interpolation
+          // k = T(0.5) - T(0.5) * std::cos(k * std::acos(T(-1)));
+
+          y[i] = k * x[j + 1] + (T(1) - k) * x[j];
         }
-
-        // TODO cosine interpolation
-        // k = T(0.5) - T(0.5) * std::cos(k * std::acos(T(-1)));
-
-        y[i] = k * x[j + 1] + (T(1) - k) * x[j];
+        else
+        {
+          y[i] = 0;
+        }
       };
 
-      if (value < 1 && m < n)
+      if (value > 0 && value < 1 && m < n)
       {
         for (ptrdiff_t i = 0; i < m; ++i)
         {
