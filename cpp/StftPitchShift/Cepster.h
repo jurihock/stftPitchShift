@@ -66,8 +66,8 @@ namespace stftpitchshift
     const size_t framesize;
     const double samplerate;
 
-    double value;
-    size_t cutoff;
+    double value  {0};
+    size_t cutoff {0};
 
     std::vector<std::complex<T>> spectrum;
     std::vector<T> cepstrum;
