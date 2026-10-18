@@ -2,6 +2,7 @@
 
 #include <StftPitchShift/FFT.h>
 
+#include <bit>
 #include <cassert>
 #include <complex>
 #include <map>
@@ -18,7 +19,11 @@ namespace stftpitchshift
   {
     CRFFT(const size_t fullsize)
     {
-      const bool is_power_of_two = fullsize && !(fullsize & (fullsize - 1));
+      const bool is_power_of_two =
+        // which is equivalent to `fullsize && !(fullsize & (fullsize - 1))`
+        std::has_single_bit(fullsize) &&
+        // also check the half size which must be greater zero
+        std::has_single_bit(fullsize / 2);
 
       if (!is_power_of_two)
       {
@@ -55,7 +60,7 @@ namespace stftpitchshift
 
       coeffs.p.resize(size.half);
 
-      const size_t bits = static_cast<size_t>(std::log2(size.half));
+      const size_t bits = static_cast<size_t>(std::countr_zero(size.half)); // same as `std::log2(size.half)`
 
       for (size_t i = 0; i < size.half; ++i)
       {
@@ -200,7 +205,7 @@ namespace stftpitchshift
 
     static void transform(const std::complex<T>* input, std::complex<T>* const output, const size_t* p, const std::complex<T>* w, const size_t size)
     {
-      const size_t bits = static_cast<size_t>(std::log2(size));
+      const size_t bits = static_cast<size_t>(std::countr_zero(size)); // same as `std::log2(size)`
 
       for (size_t i = 0; i < size; ++i)
       {
